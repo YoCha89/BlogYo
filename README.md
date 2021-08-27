@@ -1,6 +1,6 @@
-Application frontend d'un portail de consultation de produit financier pour les salariés des d'une banque
+Blog application managing the publication of blogPost and their comments and a account system for users and admin. 
 
-Langage :
+Language used :
 - HTML
 - CSS
 - PHP
