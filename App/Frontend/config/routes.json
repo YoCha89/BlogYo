@@ -1,0 +1,70 @@
+{
+  //connect user account
+  "connect":{
+  	"App":"Frontend",
+  	"Module":"Account",
+  	"Action":"connect",
+    "params":[]
+  },
+  //disconnect
+  "disconnect":{
+  	"App":"Frontend",
+  	"Module":"Account",
+  	"Action":"disconnect"
+  },
+  //blogpost list
+  "blogList":{
+  	"App":"Frontend",
+  	"Module":"Blog",
+  	"Action":"blogList"
+  },
+  //blogpost unique 
+  "seeBlog":{
+  	"App":"Frontend",
+  	"Module":"Blog",
+  	"Action":"seeBlog",
+    "params":[]
+  },
+  //post a comment
+  "postComment":{
+  	"App":"Frontend",
+  	"Module":"Blog",
+  	"Action":"postComment",
+    "params":[]
+  },
+  //modify a comment
+  "modifyComment":{
+  	"App":"Frontend",
+  	"Module":"Blog",
+  	"Action":"modifyComment",
+    "params":[]
+  },
+  //delete a comment
+  "deleteComment":{
+  	"App":"Frontend",
+  	"Module":"Blog",
+  	"Action":"deleteComment",
+    "params":[]
+  },
+  //request a new password
+  "askPass":{
+  	"App":"Frontend",
+  	"Module":"Account",
+  	"Action":"askPass",
+    "params":[]
+  },
+  //contact admin
+  "contactAdmin":{
+  	"App":"Frontend",
+  	"Module":"Account",
+  	"Action":"contactAdmin",
+    "params":[]
+  },
+  //personnal comments list
+  "seeMyComments":{
+  	"App":"Frontend",
+  	"Module":"Blog",
+  	"Action":"seeMyComments",
+    "params":[]
+  }
+}

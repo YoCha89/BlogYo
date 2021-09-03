@@ -1,0 +1,61 @@
+{
+  //create account
+  "createAccount":{
+  	"App":"Backend",
+  	"Module":"Account",
+  	"Action":"createAccount"
+  },
+  //create admin account
+  "createAdminAccount":{
+  	"App":"Backend",
+  	"Module":"Account",
+  	"Action":"createAdminAccount"  	
+  },
+  //connect admin account
+  "connectAdmin":{
+  	"App":"Backend",
+  	"Module":"Account",
+  	"Action":"connectAdmin",
+    "params":[]
+  },
+  //disconnect admin
+  "disconnectAdmin":{
+  	"App":"Backend",
+  	"Module":"Account",
+  	"Action":"disconnectAdmin"
+  },
+  //post a blogpost
+  "postBlog":{
+  	"App":"Backend",
+  	"Module":"Blog",
+  	"Action":"postBlog"
+  },
+  //modify a blogpost
+  "modifyBlog":{
+  	"App":"Backend",
+  	"Module":"Blog",
+  	"Action":"modifyBlog",
+    "params":[]
+  },
+  //delete a blogpost
+  "deleteBlog":{
+  	"App":"Backend",
+  	"Module":"Blog",
+  	"Action":"deleteBlog",
+    "params":[]
+  },
+   //request a new admin password
+  "askPass":{
+  	"App":"Backend",
+  	"Module":"Account",
+  	"Action":"askAdminPass",
+    "params":[]
+  },
+  //give a new password
+  "furnishPass":{
+  	"App":"Backend",
+  	"Module":"Account",
+  	"Action":"furnishPass",
+    "params":[]
+  },
+}
