@@ -20,19 +20,22 @@ abstract class Application
   //Méthode pour instancier le controlleur gérant l'action de la requête
   public function getController()
   {
-
     $router = new Router;
+    $file = __DIR__.'..\\..\\App\\'.$this->name.'\\config\\routes.json';
+    $data = file_get_contents($file);
 
-     foreach ($routes as $route)
+    $routes = json_decode($data);
+
+    foreach ($routes as $route)
       {
         $vars = [];
         
-        if ($route->hasAttribute('vars'))
+        if (isset($route[3]) && $route[3] != null)
         {
-          $vars = explode(',', $route->getAttribute('vars')); 
+          $vars = explode(',', $route[3]); 
         }
 
-        $router->addRoute(new Route($route->getAttribute('url'), $route->getAttribute('module'), $route->getAttribute('action'), $vars));
+        $router->addRoute(new Route($route[0], $route[1], $route[2], $vars));
       }
       
     try
