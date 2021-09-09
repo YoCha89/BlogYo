@@ -1,68 +1,68 @@
 {
   //connect user account
-  "connect":{
-  	"App":"Frontend",
+  "index":{
+  	"url":"/index",
   	"Module":"Account",
-  	"Action":"connect",
+  	"Action":"index",
     "params":[]
   },
   //disconnect
   "disconnect":{
-  	"App":"Frontend",
+  	"url":"/disconnect",
   	"Module":"Account",
   	"Action":"disconnect"
   },
   //blogpost list
   "blogList":{
-  	"App":"Frontend",
+  	"url":"/blog_list",
   	"Module":"Blog",
   	"Action":"blogList"
   },
   //blogpost unique 
   "seeBlog":{
-  	"App":"Frontend",
+  	"url":"/see_blog",
   	"Module":"Blog",
   	"Action":"seeBlog",
     "params":[]
   },
   //post a comment
   "postComment":{
-  	"App":"Frontend",
+  	"url":"/post_comment",
   	"Module":"Blog",
   	"Action":"postComment",
     "params":[]
   },
   //modify a comment
   "modifyComment":{
-  	"App":"Frontend",
+  	"url":"/modify_comment",
   	"Module":"Blog",
   	"Action":"modifyComment",
     "params":[]
   },
   //delete a comment
   "deleteComment":{
-  	"App":"Frontend",
+  	"url":"/delete_comment",
   	"Module":"Blog",
   	"Action":"deleteComment",
     "params":[]
   },
   //request a new password
   "askPass":{
-  	"App":"Frontend",
+  	"url":"/ask_pass",
   	"Module":"Account",
   	"Action":"askPass",
     "params":[]
   },
   //contact admin
   "contactAdmin":{
-  	"App":"Frontend",
+  	"url":"/contact_admin",
   	"Module":"Account",
   	"Action":"contactAdmin",
     "params":[]
   },
   //personnal comments list
   "seeMyComments":{
-  	"App":"Frontend",
+  	"url":"/see_my_comments",
   	"Module":"Blog",
   	"Action":"seeMyComments",
     "params":[]
