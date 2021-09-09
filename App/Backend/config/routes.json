@@ -1,59 +1,59 @@
 {
   //create account
   "createAccount":{
-  	"App":"Backend",
+  	"url":"/create_account",
   	"Module":"Account",
   	"Action":"createAccount"
   },
   //create admin account
   "createAdminAccount":{
-  	"App":"Backend",
+  	"url":"/create_admin_account",
   	"Module":"Account",
   	"Action":"createAdminAccount"  	
   },
   //connect admin account
   "connectAdmin":{
-  	"App":"Backend",
+  	"url":"/connect_admin",
   	"Module":"Account",
   	"Action":"connectAdmin",
     "params":[]
   },
   //disconnect admin
   "disconnectAdmin":{
-  	"App":"Backend",
+  	"url":"/disconnect_admin",
   	"Module":"Account",
   	"Action":"disconnectAdmin"
   },
   //post a blogpost
   "postBlog":{
-  	"App":"Backend",
+  	"url":"/post_blog",
   	"Module":"Blog",
   	"Action":"postBlog"
   },
   //modify a blogpost
   "modifyBlog":{
-  	"App":"Backend",
+  	"url":"/modify_blog",
   	"Module":"Blog",
   	"Action":"modifyBlog",
     "params":[]
   },
   //delete a blogpost
   "deleteBlog":{
-  	"App":"Backend",
+  	"url":"/delete_blog",
   	"Module":"Blog",
   	"Action":"deleteBlog",
     "params":[]
   },
    //request a new admin password
   "askPass":{
-  	"App":"Backend",
+  	"url":"/ask_pass",
   	"Module":"Account",
   	"Action":"askAdminPass",
     "params":[]
   },
   //give a new password
   "furnishPass":{
-  	"App":"Backend",
+  	"url":"/furnish_pass",
   	"Module":"Account",
   	"Action":"furnishPass",
     "params":[]
