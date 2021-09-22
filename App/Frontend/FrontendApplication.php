@@ -2,7 +2,7 @@
 namespace App\Frontend;
  
 use \OCFram\Application;
- 
+
 class FrontendApplication extends Application
 {
   public function __construct()
@@ -14,8 +14,12 @@ class FrontendApplication extends Application
  
   public function run()
   {
+      $controller = $this->getController();
+      $controller->execute();
+      $this->httpResponse->setPage($controller->page());
+      $this->httpResponse->send();  
 
-    //Action to do disconnected
+  /*  //Action to do disconnected
     if ($this->httpRequest->getData('action') == 'index' || $this->httpRequest->getData('action') == 'updatePass')
     {
       $controller = $this->getController();
@@ -25,20 +29,18 @@ class FrontendApplication extends Application
       {
         $this->user->setFlash('Vous devez être déconnecté pour créer un compte');
         $controller = new Modules\Account\AccountController($this, 'Employees', 'seeAccount');
-      }else if ($this->user->getAttribute('auth') == true)// Action to do once connected
-    {
-      $controller = $this->getController();
-    }
+      } else if ($this->user->getAttribute('auth') == true)// Action to do once connected
+      {
+        $controller = $this->getController();
+      }
 
-    else
-    { 
-      //Redirection if not connected
-      $controller = new Modules\Account\EmployeesController($this, 'Account', 'index');
-    }
+      $controller->execute();
 
-    $controller->execute();
-
-    $this->httpResponse->setPage($controller->page());
-    $this->httpResponse->send();
+      $this->httpResponse->setPage($controller->page());
+      $this->httpResponse->send();
+    } else {  
+        //Redirection if not connected
+        $controller = new Modules\Account\AccountController($this, 'Account', 'index');
+    }*/
   }
 }
