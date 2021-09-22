@@ -17,7 +17,7 @@ class FrontendApplication extends Application
       $controller = $this->getController();
       $controller->execute();
       $this->httpResponse->setPage($controller->page());
-      $this->httpResponse->send();
+      $this->httpResponse->send();  
 
   /*  //Action to do disconnected
     if ($this->httpRequest->getData('action') == 'index' || $this->httpRequest->getData('action') == 'updatePass')
