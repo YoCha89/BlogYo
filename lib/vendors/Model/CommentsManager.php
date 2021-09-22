@@ -27,10 +27,13 @@ abstract class CommentsManager extends Manager
   abstract public function getOne($id);
 
   //used to get the Comments list of a specific account
+  abstract public function getComments($id);
+
+  //used to get the Comments list of a specific account
   abstract public function getAccountList($id);
 
-  //counts the number of subscribers
-  abstract public function count($id);
+  //counts the number of comments for a blogPost or from a subscriber
+  abstract public function countA($id);
  
   abstract protected function modify(News $news);
 }

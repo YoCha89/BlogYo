@@ -27,6 +27,7 @@ abstract class Application
 
     $routes = json_decode($data, false);
 
+
     foreach ($routes as $route)
       {
         $vars = [];
@@ -37,6 +38,7 @@ abstract class Application
         }
 
         $router->addRoute(new Route($route->module, $route->action, $route->param));
+
       }
 
     if($this->httpRequest->getData('action') == null){
