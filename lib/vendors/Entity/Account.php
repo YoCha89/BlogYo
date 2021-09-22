@@ -14,6 +14,7 @@ class Account extends Entity
             $secretA,
             $createdAt,
             $updatedAt;
+            $lastConnexion;
 
   const NAME_NOT_VALIDE = 1;
 	const PSEUDO_NOT_VALIDE = 2;
@@ -32,6 +33,11 @@ class Account extends Entity
 
   protected function modifyAccount(){
 
+  }
+
+  //use for directing account data modification toward creation or update
+  protected function isNew(){
+    return isset($this->getId());
   }
 
 
@@ -82,6 +88,12 @@ class Account extends Entity
   {
     return $this->updatedAt;
   }
+
+  public function lastConnexion()
+  {
+    return $this->lastConnexion;
+  }
+
 
  // SETTERS //
   public function setName($name)
@@ -150,5 +162,10 @@ class Account extends Entity
   public function setUpdatedAt(\DateTime $creationDate)
   {
     $this->updatedAt = $updatedAt;
+  }
+
+  public function setLastConnexion(\DateTime $creationDate)
+  {
+    $this->lastConnexion = $lastConnexion;
   }
 }

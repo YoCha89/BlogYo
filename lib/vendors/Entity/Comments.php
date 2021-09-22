@@ -6,6 +6,7 @@ use \OCFram\Entity;
 class Comments extends Entity
 {
 	protected $id,
+            $blogPostId
             $accountId,
             $author,
             $dateP,
@@ -13,7 +14,6 @@ class Comments extends Entity
             $createdAt,
             $updatedAt,
             $validated,
-            $lastConnexion;
 
 
   const CONTENU_INVALIDE = 1;
@@ -39,6 +39,11 @@ protected function modifyComment(){
   public function accountId()
   {
     return $this->accountId;
+  }
+
+  public function blogPostId()
+  {
+    return $this->blogPostId;
   }
 
   public function author()
@@ -75,12 +80,6 @@ protected function modifyComment(){
   {
    return $this->account;
   }
-
-  public function lastConnexion()
-  {
-    return $this->lastConnexion;
-  }
-
 
  // SETTERS //
 
@@ -119,11 +118,6 @@ protected function modifyComment(){
     $this->updatedAt = $updatedAt;
   }
 
-  public function setLastConnexion(\DateTime $creationDate)
-  {
-    $this->lastConnexion = $lastConnexion;
-  }
-
   public function setValidated($validated)
   {
     $this->validated = $validated;
@@ -132,5 +126,10 @@ protected function modifyComment(){
   public function setAccountId($account)
   {
     $this->accountId = $accountId;
+  }
+
+  public function setBlogPostId($blogPost)
+  {
+    $this->accountId = $blogPostId;
   }
 }
