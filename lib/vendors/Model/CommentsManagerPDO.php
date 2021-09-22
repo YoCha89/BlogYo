@@ -18,15 +18,39 @@ class CommentsManagerPDO extends CommentsManager
  
     $request->execute();
   }
- 
-  public function count()
+
+  public function countA($id)
   {
-    return $this->dao->query('SELECT COUNT(*) FROM Comments')->fetchColumn();
+    $request = $this->dao->query('SELECT COUNT(*) FROM Comments WHERE accountId : accountId')->fetchColumn();
+
+    $request->bindValue(':accountId', (int) $accountId, \PDO::PARAM_INT);
+ 
+     return $this->dao->query($request);
   }
  
   public function delete($id)
   {
     $this->dao->exec('DELETE FROM Comments WHERE id = '.(int) $id);
+  }
+
+  public function getComments($id){
+    $request = 'SELECT * FROM Comments WHERE blogPostId : blogPostId ORDER BY createdAt DESC';
+    $request->bindValue(':blogPostId', (int) $blogPostId, \PDO::PARAM_INT);
+ 
+    $request = $this->dao->query($request);
+    $request->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Comments');
+ 
+    $CommentsList = $request->fetchAll();
+ 
+    foreach ($listeComments as $Comments)
+    {
+      $Comments->setCreatedAt(new \DateTime($Comments->createdAt()));
+      $Comments->setUpdatedAt(new \DateTime($Comments->updatedAt()));
+    }
+ 
+    $request->closeCursor();
+ 
+    return $CommentsList; 
   }
  
   public function getAccountList($accountId)
