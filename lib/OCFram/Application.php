@@ -21,12 +21,11 @@ abstract class Application
   public function getController()
   {
     $router = new Router;
-    $file = __DIR__.'/../../App/'.$this->name.'/config/routes.json';
+    $file = dirname(__FILE__).'/../../App/'.$this->name.'/config/routes.json';
 
     $data = file_get_contents($file);
 
-    $routes = json_decode($data, false);
-
+    $routes = json_decode($data, true);
 
     foreach ($routes as $route)
       {
@@ -41,15 +40,14 @@ abstract class Application
 
       }
 
-    if($this->httpRequest->getData('action') == null){
-      include (dirname(__FILE__) . '..\..App\Frontend\Modules\Account\AccountController.php');
+    if($this->httpRequest->getData('action') == null){ 
+      include (dirname(__FILE__) . '\..\..\App\Frontend\Modules\Account\AccountController.php');
       return new AccountController($this, 'Account', 'index');
+      var_dump('pouloulou');die;
     }else{
      try
       {
-        // On récupère la route correspondante à l'URL.
         $matchedRoute = $router->getRoute($this->httpRequest->getData('action'));
-        var_dump($this->httpRequest->getData('action'));die;
       }
       catch (\RuntimeException $e)
       {

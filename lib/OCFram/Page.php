@@ -34,7 +34,7 @@ class Page extends ApplicationComponent
     $content = ob_get_clean();
  
     ob_start();
-      require __DIR__.'/../../App/'.$this->app->name().'/Templates/layout.php';
+      require dirname(__FILE__).'/../../App/'.$this->app->name().'/Templates/layout.php';
     return ob_get_clean();
   }
  

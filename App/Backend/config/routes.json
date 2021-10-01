@@ -1,57 +1,48 @@
 {
-  //create account
   "createAccount":{
   	"url":"/create_account",
   	"Module":"Account",
   	"Action":"createAccount"
   },
-  //create admin account
   "createAdminAccount":{
   	"url":"/create_admin_account",
   	"Module":"Account",
   	"Action":"createAdminAccount"  	
   },
-  //connect admin account
   "connectAdmin":{
   	"url":"/connect_admin",
   	"Module":"Account",
   	"Action":"connectAdmin",
     "params":[]
   },
-  //disconnect admin
   "disconnectAdmin":{
   	"url":"/disconnect_admin",
   	"Module":"Account",
   	"Action":"disconnectAdmin"
   },
-  //post a blogpost
   "postBlog":{
   	"url":"/post_blog",
   	"Module":"Blog",
   	"Action":"postBlog"
   },
-  //modify a blogpost
   "modifyBlog":{
   	"url":"/modify_blog",
   	"Module":"Blog",
   	"Action":"modifyBlog",
     "params":[]
   },
-  //delete a blogpost
   "deleteBlog":{
   	"url":"/delete_blog",
   	"Module":"Blog",
   	"Action":"deleteBlog",
     "params":[]
   },
-   //request a new admin password
   "askPass":{
   	"url":"/ask_pass",
   	"Module":"Account",
   	"Action":"askAdminPass",
     "params":[]
   },
-  //give a new password
   "furnishPass":{
   	"url":"/furnish_pass",
   	"Module":"Account",

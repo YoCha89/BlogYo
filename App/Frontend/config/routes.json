@@ -1,66 +1,56 @@
 {
-  //connect user account
   "index":{
   	"url":"/index",
   	"Module":"Account",
   	"Action":"index",
     "params":[]
   },
-  //disconnect
   "disconnect":{
   	"url":"/disconnect",
   	"Module":"Account",
   	"Action":"disconnect"
   },
-  //blogpost list
   "blogList":{
   	"url":"/blog_list",
   	"Module":"Blog",
   	"Action":"blogList"
   },
-  //blogpost unique 
   "seeBlog":{
   	"url":"/see_blog",
   	"Module":"Blog",
   	"Action":"seeBlog",
     "params":[]
   },
-  //post a comment
   "postComment":{
   	"url":"/post_comment",
   	"Module":"Blog",
   	"Action":"postComment",
     "params":[]
   },
-  //modify a comment
   "modifyComment":{
   	"url":"/modify_comment",
   	"Module":"Blog",
   	"Action":"modifyComment",
     "params":[]
   },
-  //delete a comment
   "deleteComment":{
   	"url":"/delete_comment",
   	"Module":"Blog",
   	"Action":"deleteComment",
     "params":[]
   },
-  //request a new password
   "askPass":{
   	"url":"/ask_pass",
   	"Module":"Account",
   	"Action":"askPass",
     "params":[]
   },
-  //contact admin
   "contactAdmin":{
   	"url":"/contact_admin",
   	"Module":"Account",
   	"Action":"contactAdmin",
     "params":[]
   },
-  //personnal comments list
   "seeMyComments":{
   	"url":"/see_my_comments",
   	"Module":"Blog",

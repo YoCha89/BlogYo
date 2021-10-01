@@ -9,7 +9,7 @@ use \Entity\Account;
 class AccountController extends BackController {
 	//access to connexion form 
 	public function executeIndex (HTTPRequest $request){	
-
+		var_dump('testouillou');die;
 		if ($request->postExists('pseudo'))
     	{
 	     	$passEntered = $request->postData('pass');
@@ -192,14 +192,14 @@ class AccountController extends BackController {
 
 		if($this->app->user()->getAuthenticated() == true){
 			$managerE = $this->managers->getManagerOf('Account');
-	    	$account = $managerE->getAccount($this->app->user()->getId()));
+	    	$account = $managerE->getAccount($this->app->user()->getId());
 			$userMail = $account->email();
 		} else {
-			$userMail = $request->postData('userMail')
+			$userMail = $request->postData('userMail');
 		}
 
 		// creating 2 mail within the mailer
-		$file = __DIR__.'/../../App/'.$this->name.'/config/param.json';
+		$file = dirname(__FILE__).'/../../App/'.$this->name.'/config/param.json';
 
 	    $data = file_get_contents($file);
 
@@ -242,7 +242,7 @@ class AccountController extends BackController {
 			    $this->app->user()->setAttribute('pseudo', $account['pseudo']);
 			    $this->app->user()->setAttribute('firstName', $account['firstName']);
 
-			    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList') 
+			    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList'); 
 		} else {
 			$this->app->user()->setFlash('Entrez au moins un caractère autre q\'un espace pour valider chaque champ');
 			//different redirection based on creration or update of account
