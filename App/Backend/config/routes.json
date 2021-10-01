@@ -1,10 +1,4 @@
 {
-  //create account
-  "createAccount":{
-  	"url":"/create_account",
-  	"Module":"Account",
-  	"Action":"createAccount"
-  },
   //create admin account
   "createAdminAccount":{
   	"url":"/create_admin_account",
@@ -44,9 +38,16 @@
   	"Action":"deleteBlog",
     "params":[]
   },
+  //moderate a comment
+  "moderateComment":{
+    "url":"/moderate_comment",
+    "Module":"Blog",
+    "Action":"moderateComment",
+    "params":[]
+  },
    //request a new admin password
-  "askPass":{
-  	"url":"/ask_pass",
+  "askAdminPass":{
+  	"url":"/ask_admin_pass",
   	"Module":"Account",
   	"Action":"askAdminPass",
     "params":[]
