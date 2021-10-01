@@ -10,8 +10,7 @@ class AccountController extends BackController {
 	//access to connexion form 
 	public function executeIndex (HTTPRequest $request){	
 
-		if ($request->postExists('pseudo'))
-    	{
+		if ($request->postExists('pseudo')) {
 	     	$passEntered = $request->postData('pass');
 	    	$PseudoEntered = $request->postData('pseudo');
 
@@ -20,8 +19,7 @@ class AccountController extends BackController {
 	    	$registeredPass = $account['pass'];
 
 	    	//confirming pass entered
-	    	if(password_verify($passEntered, $registeredPass))
-		    {
+	    	if(password_verify($passEntered, $registeredPass)) {
 			    //setup connexion indicator and other session variable
 			    $this->app->user()->setAuthenticated(true);
 
@@ -34,8 +32,7 @@ class AccountController extends BackController {
 			    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList');
 		    }
 
-		    else
-		    {
+		    else {
 		    	$this->app->user()->setFlash('Votre nom d\'utilisateur ou votre mot de passe sont incorrect.');
 		    }
 	    }
@@ -54,12 +51,12 @@ class AccountController extends BackController {
 
 	    $this->page->addVar('title', 'Créez votre compte');
 
-	    $managerE = $this->managers->getManagerOf('Account');
+	    $managerA = $this->managers->getManagerOf('Account');
 
 		if ($request->postExists('name'))
 		{
 			//checking pseudo availability (must be unique for connexion mgmt)
-			if (!empty ($managerE->checkPseudo($request->postData('pseudo')))){
+			if (!empty ($managerA->checkPseudo($request->postData('pseudo')))){
 				$this->app->user()->setFlash('Ce pseudo n\'est pas disponible.');					  		
 			} else {
 				$uppercase = preg_match('@[A-Z]@', $request->postData('pass'));
@@ -77,7 +74,7 @@ class AccountController extends BackController {
 						$pass = password_hash($request->postData('pass'), PASSWORD_DEFAULT);
 						$secretA = password_hash($request->postData('secretA'), PASSWORD_DEFAULT);
 
-						$this->processForm($request, $pass, $secretQ, $managerE);
+						$this->processForm($request, $pass, $secretQ, $managerA);
 					}
 				}
 			}
@@ -92,7 +89,7 @@ class AccountController extends BackController {
 
 	    $managerE = $this->managers->getManagerOf('Account');
 
-	    $employee = $managerE->getAccount($this->app->user()->getAttribute('id'));
+	    $formAccount = $managerE->getAccount($this->app->user()->getAttribute('id'));
 
 		//checking is first field is empty. If yes, we send account data to put default value in the form
 		if (empty ($request->postData('name'))){
@@ -104,7 +101,7 @@ class AccountController extends BackController {
 				//if a pseudo is found, we check its his pseudo
 				if ($request->postData('pseudo') == $this->app->user()->getAttribute('pseudo')){
 
-					$pass = $employee['pass'];
+					$pass = $formAccount['pass'];
 					$secretA = password_hash($request->postData('secretA'), PASSWORD_DEFAULT);
 
 					$this->processForm($request, $pass, $secretA, $managerE);
@@ -112,7 +109,7 @@ class AccountController extends BackController {
 					$this->app->user()->setFlash('Ce nom d\'utilisateur n\'est pas disponible.');
 				}	
 			} else {//pseudo is new and unique
-				$pass = $employee['pass']; 
+				$pass = $formAccount['pass']; 
 				$secretA = password_hash($request->postData('secretA'), PASSWORD_DEFAULT);
 
 				$this->processForm($request, $pass, $secretA, $managerE);
@@ -238,9 +235,9 @@ class AccountController extends BackController {
 			//connexion if previous step successful
 			    $this->app->user()->setAuthenticated(true);
 
-				$this->app->user()->setAttribute('id', $account['id']);
-			    $this->app->user()->setAttribute('pseudo', $account['pseudo']);
-			    $this->app->user()->setAttribute('firstName', $account['firstName']);
+				$this->app->user()->setAttribute('id', $formAccount['id']);
+			    $this->app->user()->setAttribute('pseudo', $formAccount['pseudo']);
+			    $this->app->user()->setAttribute('firstName', $formAccount['firstName']);
 
 			    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList') 
 		} else {

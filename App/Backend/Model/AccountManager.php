@@ -7,6 +7,8 @@ use \Entity\Account;
 abstract class AccountManager extends Manager
 {
   abstract protected function add(Account $account);
+
+  abstract protected function modify(News $news);
  
   //add or modify 
   public function save(Account $account)
@@ -21,16 +23,24 @@ abstract class AccountManager extends Manager
     }
   }
 
+  //updating user password
+  abstract public function updatePass($id);
+
   abstract public function delete($id);
 
-  //used for connexion and disconnexion
-  abstract public function getOne($id);
+  //used for getting info about an account
+  abstract public function getAccount($id);
+
+  //checking pseudo availability
+  abstract public function checkPseudo($pseudo);
+
+  //used for connexion (id still unknown)
+  abstract public function getAccountPerPseudo($peuso); 
 
   //used to get the account list
   abstract public function getList($id);
 
-  //counts the number of subscribers
+  //counts the number of Accounts
   abstract public function count($id);
  
-  abstract protected function modify(News $news);
 }
