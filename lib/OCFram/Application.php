@@ -1,8 +1,5 @@
 <?php
-
 namespace OCFram;
-
-use App\Frontend\Modules\Account;
  
 abstract class Application
 {
@@ -45,6 +42,7 @@ abstract class Application
       }
 
     if($this->httpRequest->getData('action') == null){
+      include (dirname(__FILE__) . '\..\..\App\Frontend\Modules\Account\AccountController.php');
       return new AccountController($this, 'Account', 'index');
     }else{
      try
