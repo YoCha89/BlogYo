@@ -1,8 +1,8 @@
 <?php
-namespace Model;
+namespace App\Backend\Model;
  
-use \OCFram\Manager;
-use \Entity\Comments;
+use OCFram\Manager;
+use Entity\Comments;
  
 abstract class CommentsManager extends Manager
 {

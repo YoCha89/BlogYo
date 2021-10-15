@@ -1,12 +1,13 @@
 <?php
 namespace App\Frontend\Modules\Account;
 
-use \OCFram\BackController;
-use \OCFram\HTTPRequest;
-use \Entity\Account;
-
+use OCFram\BackController;
+use OCFram\HTTPRequest;
+use Entity\Account;
+use App\Backend\Model\AccountManagerPDO;
 
 class AccountController extends BackController {
+
 	//access to connexion form 
 	public function executeIndex (HTTPRequest $request){
 
@@ -186,7 +187,6 @@ class AccountController extends BackController {
 	   	$name = $request->postData('name');
 		$title = $request->postData('title');
 		$content = $request->postData('content');
-		$attachment = $request->postData('attachment');
 
 		if($this->app->user()->getAuthenticated() == true){
 			$managerE = $this->managers->getManagerOf('Account');

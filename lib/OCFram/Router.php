@@ -15,19 +15,15 @@ class Router
 		}
 	}
 
-	public function getRoute ($url) 
-	{
-		foreach ($this->routes as $route) 
-		{
-			if (($varsValues = $route-> match($url)) !== false)
-			{
-				if ($route -> hasVars())	
-				{
+	public function getRoute ($url){	
+		foreach ($this->routes as $route){
+			$varsValues = $route->match($url);
+			if ($varsValues !== false){				
+				if ($route -> hasVars()){
 					$varsName = $route-> varsNames(); 
 					$listVars = []; 
 
-						foreach($varValues as $key=>$match)
-						{
+						foreach($varValues as $key=>$match){
 							if ($key !==0)
 							{
 								$listVars[$varsName[$key-1]] = $match; 
@@ -35,8 +31,9 @@ class Router
 						}
 
 						$route->setVars($listVars);	 
-				} 
+				}  
 
+				var_dump($route);
 				return $route; 
 			}
 		}

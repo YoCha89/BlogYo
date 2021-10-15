@@ -1,12 +1,9 @@
 {
   "index":{
-  	"url":"/index",
+  	"url":"/",
   	"Module":"Account",
-  	"Action":"index",
-    "params":[]
+  	"Action":"index"
   },
-<<<<<<< HEAD
-=======
   "createAccount":{
     "url":"/create_account",
     "Module":"Account",
@@ -22,7 +19,6 @@
     "Module":"Account",
     "Action":"deleteAccount"
   },
->>>>>>> cad0604fbb2db10ccb82ae264c34103e66b0ea8b
   "disconnect":{
   	"url":"/disconnect",
   	"Module":"Account",

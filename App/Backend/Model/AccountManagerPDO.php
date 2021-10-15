@@ -1,7 +1,7 @@
 <?php
-namespace Model;
+namespace App\Backend\Model;
  
-use \Entity\Account;
+use Entity\Account;
  
 class AccountManagerPDO extends AccountManager
 {
@@ -38,7 +38,7 @@ class AccountManagerPDO extends AccountManager
   }
 
   public function add(Account $account){
-    $sql = $this->dao->prepare('INSERT INTO account SET name = :name, pseudo = :pseudo, email = :email, pass = :pass, secretQ = :secretQ, secretA = :secretA', createdAt = NOW(), updatedAt = null);
+    $sql = $this->dao->prepare('INSERT INTO account SET name = :name, pseudo = :pseudo, email = :email, pass = :pass, secretQ = :secretQ, secretA = :secretA, createdAt = NOW(), updatedAt = null');
   
     $sql->bindValue(':name', $account->name());
     $sql->bindValue(':firstName', $account->firstName());
@@ -87,5 +87,15 @@ class AccountManagerPDO extends AccountManager
 
   public function updatePass($id){
 
+  }
+
+  public function delete($id){
+    
+  }
+  public function getList($id){
+    
+  }
+  public function count($id){
+    
   }
 }

@@ -2,7 +2,7 @@
 
 <div class="form">
 	<div class="blocForm">
-		<form method="post" action="bootstrap.php?action=executeCreateAdminAccount">
+		<form method="post" action="bootstrap.php?action=createAdminAccount">
 
 		<?php if (isset($key2)) {
 

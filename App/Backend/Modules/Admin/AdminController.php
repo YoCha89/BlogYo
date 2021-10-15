@@ -1,9 +1,9 @@
 <?php
 namespace App\Frontend\Modules\Account;
 
-use \OCFram\BackController;
-use \OCFram\HTTPRequest;
-use \Entity\Admin;
+use OCFram\BackController;
+use OCFram\HTTPRequest;
+use Entity\Admin;
 
 
 class AccountController extends BackController
@@ -23,6 +23,8 @@ class AccountController extends BackController
 
 				$this->processForm($request, $clearTmpPass, $cryptedTmpPass, $managerA);
 			}
+		} elseif($request->postExists('pass')){
+
 		}
 	}
 

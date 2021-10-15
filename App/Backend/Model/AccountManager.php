@@ -1,14 +1,14 @@
 <?php
-namespace Model;
+namespace App\Backend\Model;
  
-use \OCFram\Manager;
-use \Entity\Account;
+use OCFram\Manager;
+use Entity\Account;
  
 abstract class AccountManager extends Manager
 {
   abstract protected function add(Account $account);
 
-  abstract protected function modify(News $news);
+  abstract protected function modify(Account $account);
  
   //add or modify 
   public function save(Account $account)

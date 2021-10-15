@@ -1,10 +1,10 @@
 <?php
 namespace App\Frontend\Modules\BlogPost;
 
-use \OCFram\BackController;
-use \OCFram\HTTPRequest;
-use \Entity\Likes;
-use \Entity\Comments;
+use OCFram\BackController;
+use OCFram\HTTPRequest;
+use Entity\Likes;
+use Entity\Comments;
 
 class BlogPostController extends BackController
 {
@@ -81,7 +81,7 @@ class BlogPostController extends BackController
 
             $this->page->addVar('blogPost', $blogPost);
             $this->page->addVar('accountId', $accountId);
-            $this->page->addVar('firstName', $firstName);
+            $this->page->addVar('pseudo', $pseudo);
         }  
     }
 
@@ -105,7 +105,7 @@ class BlogPostController extends BackController
 
                 $this->app->user()->setFlash('Votre commentaire a été enregistré. Il sera validé ou rejeté aprés un court délai !');
 
-                $this->app->httpResponse()->redirect('bootstrap.php?action=executeSeeBlog&id='.$request->getdata('id'));
+                $this->app->httpResponse()->redirect('bootstrap.php?action=seeBlog&id='.$request->getdata('id'));
 
             } else {
 
@@ -126,7 +126,7 @@ class BlogPostController extends BackController
         $managerC = $this->managers->getManagerOf('Comment');
         $managerC->delete($request->getdata('id'));
 
-        $this->app->httpResponse()->redirect('bootstrap.php?action=executeBlogList&id='.$request->getdata('id'));
+        $this->app->httpResponse()->redirect('bootstrap.php?action=seeBlog&id='.$request->getdata('id'));
     }
 
         public function executeSeeMyComments (HTTPRequest $request)

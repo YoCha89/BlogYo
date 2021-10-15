@@ -1,7 +1,7 @@
 <?php
 namespace Model;
  
-use \Entity\Admin;
+use Entity\Admin;
  
 class AdminManagerPDO extends AdminManager
 {

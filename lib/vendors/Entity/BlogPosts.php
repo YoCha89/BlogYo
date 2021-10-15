@@ -1,7 +1,7 @@
 <?php
 namespace Entity;
 
-use \OCFram\Entity;
+use OCFram\Entity;
 
 class BlogPosts extends Entity
 {

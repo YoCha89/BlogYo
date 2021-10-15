@@ -1,9 +1,9 @@
 <?php
 namespace App\Backend\Modules\BlogPost;
 
-use \OCFram\BackController;
-use \OCFram\HTTPRequest;
-use \Entity\BloPost;
+use OCFram\BackController;
+use OCFram\HTTPRequest;
+use Entity\BloPost;
 
 class BlogPostController extends BackController (HTTPRequest $request){
 
@@ -47,6 +47,7 @@ class BlogPostController extends BackController (HTTPRequest $request){
     $managerB = $this->managers->getManagerOf('blogPost');
     //modKey is a hidden field of the modify form to check if the user is submitting the form or is arriving on the view. Checking the actual field content won't wor for we'll put old values as default values
     if ($request->postExists('modKey')){
+        
         $blogPost = new Blogpost ([
         'adminId' => $this->app->user()->getAttribute('id'),
         'author' => $this->app->user()->getAttribute('pseudo'),
@@ -87,7 +88,6 @@ class BlogPostController extends BackController (HTTPRequest $request){
   }
 
   public function executeModerateComments(){
-    $managerB = $this->managers->getManagerOf('blogPost');
     $managerC = $this->managers->getManagerOf('comments');
 
     if ($request->postExists('verdicts')){

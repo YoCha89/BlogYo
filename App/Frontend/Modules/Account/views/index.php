@@ -3,7 +3,7 @@
 
 	<div class="form">
 		<div id="option1">
-			<form method="post" action="bootstrap.php?action=executeIndex">
+			<form method="post" action="bootstrap.php?action=index">
 				<div class="champ">
 					<label for="pseudo">Pseudo :</label>
 					<input type="text" name="pseudo"><br/>
@@ -29,7 +29,7 @@
 		<div id="option2">
 			<div id="blocOubli">
 				<p>En cas d'oublie, entrez votre pseudo avant de valider</p><br/>
-				<form method="post" action="bootstrap.php?action=executeAskPass ">
+				<form method="post" action="bootstrap.php?action=askPass ">
 					<div class="champ">
 						<label for="pseudo">Pseudo :</label><br/>
 						<input type="text" name="pseudo">
@@ -45,7 +45,7 @@
 			<div id="blocCrea"><!--Bloc de création de compte-->
 				<p>Vous n'avez pas encore de compte ?</p><br/>
 				<p>Créez votre compte dès maintenant !</p><br/>
-				<form method="post" action="bootstrap.php?action=executeCreateAccount ">
+				<form method="post" action="bootstrap.php?action=createAccount ">
 					<br/><button type="submit" class="boutonOp2">Créer mon compte</button>
 				</form>
 			</div>

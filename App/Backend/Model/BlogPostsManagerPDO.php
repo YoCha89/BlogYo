@@ -1,7 +1,7 @@
 <?php
-adminIdspace Model;
+namespace Model;
  
-use \Entity\BlogPosts;
+use Entity\BlogPosts;
  
 class BlogPostsManagerPDO extends BlogPostsManager
 {

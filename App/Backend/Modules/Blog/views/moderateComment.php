@@ -1,6 +1,6 @@
 
 
-<form method="post" action="bootstrap.php?action=executePostBlog">
+<form method="post" action="bootstrap.php?action=postBlog">
 <?php
 
 if(isset($comments)){

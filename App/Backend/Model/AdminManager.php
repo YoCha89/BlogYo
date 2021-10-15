@@ -1,8 +1,8 @@
 <?php
 namespace Model;
  
-use \OCFram\Manager;
-use \Entity\Account;
+use OCFram\Manager;
+use Entity\Account;
  
 abstract class AccountManager extends Manager
 {

@@ -21,8 +21,7 @@ class Route
  
   public function match($url)
   {
-    if (preg_match('`^'.$this->url.'$`', $url, $matches))
-    {
+    if ($url == $this->action){
       return $matches;
     }
     else

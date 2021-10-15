@@ -2,7 +2,7 @@
 
 <div class="form">
 	<div class="blocForm">
-		<form method="post" action="bootstrap.php?action=executeCreateAccount">
+		<form method="post" action="bootstrap.php?action=createAccount">
 			<?=isset($erreurs) && in_array(\Entity\Account::NOM_INVALIDE, $erreurs) ? 'Veuillez saisir un nom.<br />' : ''?>
 			<div class="champ">
 				<label for="name">Nom :</label>
