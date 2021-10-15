@@ -40,7 +40,11 @@ abstract class Application
 
       }
 
+<<<<<<< HEAD
     if($this->httpRequest->getData('action') == null){ 
+=======
+    if($this->httpRequest->getData('action') == null){
+>>>>>>> cad0604fbb2db10ccb82ae264c34103e66b0ea8b
       include (dirname(__FILE__) . '\..\..\App\Frontend\Modules\Account\AccountController.php');
       return new AccountController($this, 'Account', 'index');
       var_dump('pouloulou');die;

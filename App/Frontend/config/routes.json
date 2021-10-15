@@ -5,6 +5,24 @@
   	"Action":"index",
     "params":[]
   },
+<<<<<<< HEAD
+=======
+  "createAccount":{
+    "url":"/create_account",
+    "Module":"Account",
+    "Action":"createAccount"
+  },
+  "modifyAccount":{
+    "url":"/modify_account",
+    "Module":"Account",
+    "Action":"modifyAccount"
+  },
+  "deleteAccount":{
+    "url":"/delete_account",
+    "Module":"Account",
+    "Action":"deleteAccount"
+  },
+>>>>>>> cad0604fbb2db10ccb82ae264c34103e66b0ea8b
   "disconnect":{
   	"url":"/disconnect",
   	"Module":"Account",

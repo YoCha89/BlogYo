@@ -1,9 +1,13 @@
 {
+<<<<<<< HEAD
   "createAccount":{
   	"url":"/create_account",
   	"Module":"Account",
   	"Action":"createAccount"
   },
+=======
+  //create admin account
+>>>>>>> cad0604fbb2db10ccb82ae264c34103e66b0ea8b
   "createAdminAccount":{
   	"url":"/create_admin_account",
   	"Module":"Account",
@@ -37,8 +41,21 @@
   	"Action":"deleteBlog",
     "params":[]
   },
+<<<<<<< HEAD
   "askPass":{
   	"url":"/ask_pass",
+=======
+  //moderate a comment
+  "moderateComment":{
+    "url":"/moderate_comment",
+    "Module":"Blog",
+    "Action":"moderateComment",
+    "params":[]
+  },
+   //request a new admin password
+  "askAdminPass":{
+  	"url":"/ask_admin_pass",
+>>>>>>> cad0604fbb2db10ccb82ae264c34103e66b0ea8b
   	"Module":"Account",
   	"Action":"askAdminPass",
     "params":[]
