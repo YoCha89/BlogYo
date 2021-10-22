@@ -21,6 +21,8 @@ abstract class Application
 
   public function getController()
   {
+
+    var_dump($this->httpRequest->getData('action'));
     if($this->httpRequest->getData('action') == null){
 
       return new AccountController($this, 'Account', 'index');
@@ -62,7 +64,7 @@ abstract class Application
         {
           $matchedRoute->setVar(getData('var'));
         }
-        /*var_dump($matchedRoute);*/
+        
         $controllerClass = 'App\\'.$this->name.'\\Modules\\'.$matchedRoute->module().'\\'.$matchedRoute->module().'Controller';
         return new $controllerClass($this, $matchedRoute->module(), $matchedRoute->action());     
       }

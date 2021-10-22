@@ -1,5 +1,5 @@
 <?php
-namespace Entity;
+namespace App\Backend\Entity;
 
 use OCFram\Entity;
 
@@ -7,11 +7,11 @@ class BlogPosts extends Entity
 {
 	protected $id,
             $adminId,
+            $content,
             $dateP,
             $title,
-            $content,
-            $media,
             $slug,
+            $media,
             $createdAt,
             $updatedAt;
 
@@ -32,54 +32,54 @@ protected function modifyBlogPost(){
 }
 
   // GETTERS //
-  public function id()
+  public function getId()
   {
     return $this->id;
   }
 
-  public function adminId()
+  public function getAdminId()
   {
     return $this->adminId;
   }
 
-  public function dateP()
+  public function getDateP()
   {
    return $this->dateP;
   }
 
-  public function content()
+  public function getContent()
   {
    return $this->content;
   }
 
-  public function title()
+  public function getTitle()
   {
    return $this->title;
   }
 
-  public function createdAt()
+  public function getCreatedAt()
   {
     return $this->createdAt;
   }
 
-  public function updatedAt()
+  public function getUpdatedAt()
   {
     return $this->updatedAt;
   }
 
-  public function media()
+  public function getMedia()
   {
    return $this->media;
   }
 
-  public function slug()
+  public function getSlug()
   {
    return $this->slug;
   }
 
  // SETTERS //
 
-  public function setadminId($adminId)
+  public function setAdminId($adminId)
   {
     $this->adminId = $adminId;
   }
@@ -99,7 +99,7 @@ protected function modifyBlogPost(){
     $this->content = $content;
   }
 
-  public function setContent($title)
+  public function setTitle($title)
   {
     if (!is_string($title) || empty($title))
     {

@@ -1,5 +1,5 @@
 <?php
-namespace Entity;
+namespace App\Backend\Entity;
 
 use OCFram\Entity;
 
@@ -13,7 +13,7 @@ class Account extends Entity
             $secretQ,
             $secretA,
             $createdAt,
-            $updatedAt;
+            $updatedAt,
             $lastConnexion;
 
   const NAME_NOT_VALIDE = 1;
@@ -36,66 +36,72 @@ class Account extends Entity
   }
 
   //use for directing account data modification toward creation or update
-  protected function isNew(){
-    return isset($this->getId());
+  public function isNew(){
+    return null !== $this->getId();
   }
 
-
-
+  public function isValid(){
+    return empty($this->id);
+  }
 
   // GETTERS //
-  public function id()
+  public function getId()
   {
     return $this->id;
   }
 
-  public function name()
+  public function getName()
   {
    return $this->name;
   }
 
-  public function pseudo()
+  public function getPseudo()
   {
     return $this->pseudo;
   }
 
-  public function email()
+  public function getEmail()
   {
    return $this->email;
   }
 
-  public function pass()
+  public function getPass()
   {
     return $this->pass;
   }
 
-   public function secretQ()
+   public function getSecretQ()
   {
     return $this->secretQ;
   }
 
-   public function secretA()
+   public function getSecretA()
   {
     return $this->secretA;
   }
 
-  public function createdAt()
+  public function getCreatedAt()
   {
     return $this->createdAt;
   }
 
-  public function updatedAt()
+  public function getUpdatedAt()
   {
     return $this->updatedAt;
   }
 
-  public function lastConnexion()
+  public function getLastConnexion()
   {
     return $this->lastConnexion;
   }
 
 
  // SETTERS //
+  public function setId($id)
+  {
+    $this->id = $id;
+  }
+
   public function setName($name)
   {
     if (!is_string($name) || empty($name))

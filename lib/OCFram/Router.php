@@ -32,8 +32,6 @@ class Router
 
 						$route->setVars($listVars);	 
 				}  
-
-				var_dump($route);
 				return $route; 
 			}
 		}
