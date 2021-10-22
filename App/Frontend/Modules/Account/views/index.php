@@ -29,7 +29,7 @@
 		<div id="option2">
 			<div id="blocOubli">
 				<p>En cas d'oublie, entrez votre pseudo avant de valider</p><br/>
-				<form method="post" action="bootstrap.php?action=askPass ">
+				<form method="post" action="bootstrap.php?action=askPass">
 					<div class="champ">
 						<label for="pseudo">Pseudo :</label><br/>
 						<input type="text" name="pseudo">

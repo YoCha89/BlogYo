@@ -64,6 +64,7 @@ class AccountController extends BackController {
 				$uppercase = preg_match('@[A-Z]@', $request->postData('pass'));
 				$lowercase = preg_match('@[a-z]@', $request->postData('pass'));
 				$number    = preg_match('@[0-9]@', $request->postData('pass'));
+				$password = $request->postData('pass');
 
 				if(!$uppercase || !$lowercase || !$number || strlen($password) < 8) {
 					$this->app->user()->setFlash('Votre mot de passe doit contenir au moins 8 caractères dont 1 majuscule, 1 minuscule, un nombre et un caractère spécial.');
@@ -144,6 +145,7 @@ class AccountController extends BackController {
 				$uppercase = preg_match('@[A-Z]@', $request->postData('pass'));
 				$lowercase = preg_match('@[a-z]@', $request->postData('pass'));
 				$number    = preg_match('@[0-9]@', $request->postData('pass'));
+				$newPass = $request->postData('newPass');
 
 				if(!$uppercase || !$lowercase || !$number || strlen($newPass) < 8) {
 					$this->app->user()->setFlash('Votre mot de passe doit contenir au moins 8 caractères dont 1 majuscule, 1 minuscule, un nombre et un caractère spécial.');

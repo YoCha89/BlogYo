@@ -14,7 +14,7 @@ $appLoader->register();
 $modelLoader = new SplClassLoader('Model', dirname(__FILE__).'/../App/Backend');
 $modelLoader->register();
  
-$entityLoader = new SplClassLoader('Entity', dirname(__FILE__).'/../lib/vendors');
+$entityLoader = new SplClassLoader('Entity', dirname(__FILE__).'/../App/Backend');
 $entityLoader->register();
 
 $accountLoader = new SplClassLoader('App', dirname(__FILE__).'/..');

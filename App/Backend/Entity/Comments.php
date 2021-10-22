@@ -1,19 +1,19 @@
 <?php
-namespace Entity;
+namespace App\Backend\Entity;
 
 use OCFram\Entity;
 
 class Comments extends Entity
 {
 	protected $id,
-            $blogPostId
+            $blogPostId,
             $accountId,
             $author,
             $dateP,
             $content,
             $createdAt,
             $updatedAt,
-            $validated,
+            $validated;
 
 
   const CONTENU_INVALIDE = 1;
@@ -31,52 +31,52 @@ protected function modifyComment(){
 }
 
   // GETTERS //
-  public function id()
+  public function getId()
   {
     return $this->id;
   }
 
-  public function accountId()
+  public function getAccountId()
   {
     return $this->accountId;
   }
 
-  public function blogPostId()
+  public function getBlogPostId()
   {
     return $this->blogPostId;
   }
 
-  public function author()
+  public function getAuthor()
   {
     return $this->author;
   }
 
-  public function dateP()
+  public function getDateP()
   {
    return $this->dateP;
   }
 
-  public function content()
+  public function getContent()
   {
    return $this->content;
   }
 
-  public function createdAt()
+  public function getCreatedAt()
   {
     return $this->createdAt;
   }
 
-  public function updatedAt()
+  public function getUpdatedAt()
   {
     return $this->updatedAt;
   }
 
-  public function validated()
+  public function getValidated()
   {
    return $this->validated;
   }
 
-  public function account()
+  public function getAccount()
   {
    return $this->account;
   }

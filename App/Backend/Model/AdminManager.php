@@ -32,5 +32,5 @@ abstract class AccountManager extends Manager
   //counts the number of subscribers
   abstract public function count($id);
  
-  abstract protected function modify(News $news);
+  abstract protected function modify(Admin $admin);
 }

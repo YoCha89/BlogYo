@@ -1,10 +1,11 @@
 <?php
-namespace Model;
+namespace App\Backend\Model;
  
 use OCFram\Manager;
 use Entity\BlogPosts;
- 
-abstract class BlogPostsManager extends Manager
+use Entity\Comments;
+
+abstract class BlogPostManager extends Manager
 {
   abstract protected function add(BlogPosts $BlogPosts);
  
@@ -24,13 +25,13 @@ abstract class BlogPostsManager extends Manager
   abstract public function delete($id);
 
   //used for connexion and disconnexion
-  abstract public function getOne($id);
+  abstract public function getUnique($id);
 
   //used to get the BlogPosts list
   abstract public function getList($id);
 
   //counts the number of subscribers
-  abstract public function count($id);
+  abstract public function count();
  
-  abstract protected function modify(News $news);
+  abstract protected function modify(BlogPosts $blogPosts);
 }

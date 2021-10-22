@@ -1,5 +1,5 @@
 <?php
-namespace Entity;
+namespace App\Backend\Entity;
 
 use OCFram\Entity;
 
@@ -31,37 +31,37 @@ class Admin extends Entity
   }
 
   // GETTERS //
-  public function id()
+  public function getId()
   {
     return $this->id;
   }
 
-  public function name()
+  public function getName()
   {
    return $this->name;
   }
 
-  public function pseudo()
+  public function getPseudo()
   {
     return $this->pseudo;
   }
 
-  public function email()
+  public function getPmail()
   {
    return $this->email;
   }
 
-  public function pass()
+  public function getPass()
   {
     return $this->pass;
   }
 
-  public function createdAt()
+  public function getCreatedAt()
   {
     return $this->createdAt;
   }
 
-  public function updatedAt()
+  public function getUpdatedAt()
   {
     return $this->updatedAt;
   }

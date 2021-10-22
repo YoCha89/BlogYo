@@ -1,12 +1,14 @@
 <?php
-namespace App\Frontend\Modules\BlogPost;
+namespace App\Frontend\Modules\Blog;
 
 use OCFram\BackController;
 use OCFram\HTTPRequest;
 use Entity\Likes;
 use Entity\Comments;
+use Entity\BlogPost;
+use App\Backend\Model\BlogPostManagerPDO;
 
-class BlogPostController extends BackController
+class BlogController extends BackController
 {
     public function executeBlogList (HTTPRequest $request)
     {
@@ -14,7 +16,6 @@ class BlogPostController extends BackController
         $this->page->addVar('title', 'Articles');
 
         $managerB = $this->managers->getManagerOf('BlogPost');
-
         $listBlogPost = $managerB->getList();
 
         $this->page->addVar('listBlogPost', $listBlogPost);
@@ -52,8 +53,8 @@ class BlogPostController extends BackController
             'accountId' => $this->app->user()->getAttribute('id'),
             'author' => $this->app->user()->getAttribute('pseudo'),
             'blogPostId' => $request->getData('id'),
-            'content' => $request->postData('content')
-            'validated' => null;
+            'content' => $request->postData('content'),
+            'validated' => null
             ]);
 
             $managerC = $this->managers->getManagerOf('comments');
@@ -93,8 +94,8 @@ class BlogPostController extends BackController
             'accountId' => $this->app->user()->getAttribute('id'),
             'author' => $this->app->user()->getAttribute('pseudo'),
             'blogPostId' => $request->getData('id'),
-            'content' => $request->postData('content')
-            'validated' => null;
+            'content' => $request->postData('content'),
+            'validated' => null
             ]);
 
             $managerC = $this->managers->getManagerOf('comments');

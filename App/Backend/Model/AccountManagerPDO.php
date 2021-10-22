@@ -8,7 +8,7 @@ class AccountManagerPDO extends AccountManager
    //used for connexion (id still unknown)
   public function getAccountPerPseudo($peuso){
 
-    $sql =$this->dao->prepare('SELECT id, name, pseudo, email, pass, secretQ, secretA FROM account WHERE pseudo = :pseudo');
+    $sql =$this->dao->prepare('SELECT id, name, pseudo, email, pass, secret_q, secret_a FROM account WHERE pseudo = :pseudo');
 
     $sql->bindValue(':pseudo', $pseudo);
 
@@ -24,7 +24,7 @@ class AccountManagerPDO extends AccountManager
 
   public function getAccount($id)
   {
-    $sql =$this->dao->prepare('SELECT id, name, pseudo, email, pass, secretQ, secretA FROM account WHERE id = :id');
+    $sql =$this->dao->prepare('SELECT id, name, pseudo, email, pass, secret_q, secret_a FROM account WHERE id = :id');
     
     $sql->bindValue(':id', (int)$id, \PDO::PARAM_INT);
     $sql->execute();
@@ -38,14 +38,14 @@ class AccountManagerPDO extends AccountManager
   }
 
   public function add(Account $account){
-    $sql = $this->dao->prepare('INSERT INTO account SET name = :name, pseudo = :pseudo, email = :email, pass = :pass, secretQ = :secretQ, secretA = :secretA, createdAt = NOW(), updatedAt = null');
+    $sql = $this->dao->prepare('INSERT INTO account SET name = :name, pseudo = :pseudo, email = :email, pass = :pass, secret_q = :secret_q, secret_a = :secret_a, createdAt = NOW(), updatedAt = null');
   
-    $sql->bindValue(':name', $account->name());
-    $sql->bindValue(':firstName', $account->firstName());
-    $sql->bindValue(':userName', $account->userName());
-    $sql->bindValue(':pass', $account->pass());
-    $sql->bindValue(':secretQ', $account->secretQ());
-    $sql->bindValue(':secretA', $account->secretA());
+    $sql->bindValue(':name', $account->getName());
+    $sql->bindValue(':firstName', $account->getFirstName());
+    $sql->bindValue(':userName', $account->getUserName());
+    $sql->bindValue(':pass', $account->getPass());
+    $sql->bindValue(':secret_q', $account->getSecretQ());
+    $sql->bindValue(':secret_a', $account->getSecretA());
 
     $sql->execute();
   
@@ -57,15 +57,15 @@ class AccountManagerPDO extends AccountManager
   public function modify(Account $account)
   { 
 
-    $sql = $this->dao->prepare('UPDATE employees SET name = :name, pseudo = :pseudo, email = :email, pass = :pass, secretQ = :secretQ, secretA = :secretA, updatedAt = NOW() WHERE id= :id');
+    $sql = $this->dao->prepare('UPDATE account SET name = :name, pseudo = :pseudo, email = :email, pass = :pass, secret_q = :secret_q, secret_a = :secret_a, updatedAt = NOW() WHERE id= :id');
     
-      $sql->bindValue(':id', $account->id(), \PDO::PARAM_INT);
-      $sql->bindValue(':name', $account->name());
-      $sql->bindValue(':pseudo', $account->pseudo());
-      $sql->bindValue(':email', $account->email());
-      $sql->bindValue(':pass', $account->pass());
-      $sql->bindValue(':secretQ', $account->secretQ());
-      $sql->bindValue(':secretA', $account->secretA());
+      $sql->bindValue(':id', $account->getId(), \PDO::PARAM_INT);
+      $sql->bindValue(':name', $account->getName());
+      $sql->bindValue(':pseudo', $account->getPseudo());
+      $sql->bindValue(':email', $account->getEmail());
+      $sql->bindValue(':pass', $account->getPass());
+      $sql->bindValue(':secret_q', $account->getSecretQ());
+      $sql->bindValue(':secret_a', $account->getSecretA());
  
       $sql->execute();
 

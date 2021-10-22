@@ -24,7 +24,7 @@ abstract class CommentsManager extends Manager
   abstract public function delete($id);
 
   //used for connexion and disconnexion
-  abstract public function getOne($id);
+  abstract public function getUnique($id);
 
   //used to get the Comments list of a specific account
   abstract public function getComments($id);
@@ -35,5 +35,5 @@ abstract class CommentsManager extends Manager
   //counts the number of comments for a blogPost or from a subscriber
   abstract public function countA($id);
  
-  abstract protected function modify(News $news);
+  abstract protected function modify(Comments $comments);
 }
