@@ -125,8 +125,8 @@ class Comments extends Entity
     $this->accountId = $accountId;
   }
 
-  public function setBlogPostId($blogPost)
+  public function setBlogPostId($blogPostId)
   {
-    $this->accountId = $blogPostId;
+    $this->blogPostId = $blogPostId;
   }
 }

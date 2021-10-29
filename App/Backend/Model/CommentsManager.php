@@ -2,7 +2,7 @@
 namespace App\Backend\Model;
  
 use OCFram\Manager;
-use Entity\Comments;
+use App\Backend\Entity\Comments;
  
 abstract class CommentsManager extends Manager
 {
