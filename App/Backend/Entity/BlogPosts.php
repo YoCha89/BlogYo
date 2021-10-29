@@ -19,17 +19,13 @@ class BlogPosts extends Entity
   const CONTENT_NOT_VALIDE = 1;
   const TITLE_NOT_VALIDE = 2;
 
-protected function createBlogPost(){
-
-}
-
-protected function suppressBlogPost(){
-
-}
-
-protected function modifyBlogPost(){
-
-}
+  public function isValid(){
+    if (!empty($this->getAdminId()) && !empty($this->getDateP()) && !empty($this->getContent()) && !empty($this->getTitle()) && !empty($this->getCreatedAt()) && !empty($this->getSlug())){
+      return true;
+    }else{
+      return false;
+    }
+  }
 
   // GETTERS //
   public function getId()

@@ -8,7 +8,7 @@ class BlogPostManagerPDO extends BlogPostManager
 {
   protected function add(BlogPosts $BlogPosts)
   {
-    $request = $this->dao->prepare('INSERT INTO BlogPosts SET admin_id = :admin_id, date_p = :date_p, title = :title, content = :content, media = :media, slug = :slug, created_at = NOW(), updated_at = NOW()');
+    $request = $this->dao->prepare('INSERT INTO blog_posts SET admin_id = :admin_id, date_p = :date_p, title = :title, content = :content, media = :media, slug = :slug, created_at = NOW(), updated_at = NOW()');
     
     $request->bindValue(':admin_id', $BlogPosts->adminId());
     $request->bindValue(':date_p', $BlogPosts->dateP());
@@ -22,17 +22,17 @@ class BlogPostManagerPDO extends BlogPostManager
  
   public function count()
   {
-    return $this->dao->query('SELECT COUNT(*) FROM BlogPosts')->fetchColumn();
+    return $this->dao->query('SELECT COUNT(*) FROM blog_posts')->fetchColumn();
   }
  
   public function delete($id)
   {
-    $this->dao->exec('DELETE FROM BlogPosts WHERE id = '.(int) $id);
+    $this->dao->exec('DELETE FROM blog_posts WHERE id = '.(int) $id);
   }
  
   public function getList($debut = -1, $limite = -1)
   {
-    $request = 'SELECT id, admin_id, media, date_p, title, content, slug FROM BlogPosts ORDER BY id DESC';
+    $request = 'SELECT id, admin_id, media, date_p, title, content, slug, created_at FROM blog_posts ORDER BY id DESC';
  
     if ($debut != -1 || $limite != -1)
     {
@@ -42,17 +42,17 @@ class BlogPostManagerPDO extends BlogPostManager
     $request = $this->dao->query($request);
     $request->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\BlogPosts');
  
-    $BlogPostsList = $request->fetchAll();
- 
-    foreach ($listeBlogPosts as $BlogPosts)
+    $blogPostsList = $request->fetchAll();
+
+   /* foreach ($blogPostsList as $blogPost)
     {
-      $BlogPosts->setCreatedAt(new \DateTime($BlogPosts->createdAt()));
-      $BlogPosts->setUpdatedAt(new \DateTime($BlogPosts->updatedAt()));
-    }
+      $blogPost->setCreatedAt(new \DateTime($blogPost->getCreatedAt()));
+      $blogPost->setUpdatedAt(new \DateTime($blogPost->getUpdatedAt()));
+    }*/
  
     $request->closeCursor();
  
-    return $BlogPostsList;
+    return $blogPostsList;
   }
  
   public function getUnique($id)
@@ -62,21 +62,22 @@ class BlogPostManagerPDO extends BlogPostManager
     $request->execute();
  
     $request->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\BlogPosts');
- 
-    if ($BlogPosts = $request->fetch())
+    $blogPost=$request->fetch();
+    
+    /*if ($blogPost)
     {
-      $BlogPosts->setCreatedAt(new \DateTime($BlogPosts->createdAt()));
-      $BlogPosts->setUpdatedAt(new \DateTime($BlogPosts->updatedAt()));
+      $blogPost->setCreatedAt(new \DateTime($blogPost->getCreatedAt()));
+      $blogPost->setUpdatedAt(new \DateTime($blogPost->getUpdatedAt()));
  
-      return $BlogPosts;
-    }
+      return $blogPost;
+    }*/
  
-    return null;
+    return $blogPost;
   }
  
   protected function modify(BlogPosts $BlogPosts)
   {
-    $request = $this->dao->prepare('UPDATE BlogPosts SET admin_id = :admin_id, date_p = :date_p, title = :title, content = :content, media = :media, slug = :slug, updated_at = NOW() WHERE id = :id');
+    $request = $this->dao->prepare('UPDATE blog_posts SET admin_id = :admin_id, date_p = :date_p, title = :title, content = :content, media = :media, slug = :slug, updated_at = NOW() WHERE id = :id');
     
     $request->bindValue(':admin_id', $BlogPosts->adminId());
     $request->bindValue(':date_p', $BlogPosts->dateP());

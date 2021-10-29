@@ -30,7 +30,7 @@ abstract class CommentsManager extends Manager
   abstract public function getComments($id);
 
   //used to get the Comments list of a specific account
-  abstract public function getAccountList($id);
+  abstract public function getCommentsList($id);
 
   //counts the number of comments for a blogPost or from a subscriber
   abstract public function countA($id);

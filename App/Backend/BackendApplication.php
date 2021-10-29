@@ -22,8 +22,9 @@ class BackendApplication extends Application
 		}
 
 		else
-		{
-			 $controller = new Modules\Connexion\UsersController($this, 'Connexion', 'index');
+		{	
+			//with no define action in request, redirection towards index
+			$controller = $this->getcontroller();
 		}
 		
 		$controller->execute(); 

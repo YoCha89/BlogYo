@@ -16,8 +16,8 @@
 
 			<?=isset($erreurs) && in_array(\Entity\Account::ALIAS_INVALIDE, $erreurs) ? 'Veuillez saisir un nom d\'utilisateur.<br />' : ''?>
 			<div class="champ">
-				<label for="mail">Email :</label>
-				<input type="text" name="mail"><br/>
+				<label for="email">Email :</label>
+				<input type="text" name="email"><br/>
 			</div>
 
 			<hr>

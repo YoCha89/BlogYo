@@ -4,8 +4,8 @@ namespace App\Frontend\Modules\Blog;
 use OCFram\BackController;
 use OCFram\HTTPRequest;
 use Entity\Likes;
-use Entity\Comments;
-use Entity\BlogPost;
+use App\Backend\Entity\Comments;
+use App\Backend\Entity\BlogPost;
 use App\Backend\Model\BlogPostManagerPDO;
 
 class BlogController extends BackController
@@ -26,22 +26,23 @@ class BlogController extends BackController
         $managerB = $this->managers->getManagerOf('BlogPost');
         $managerC = $this->managers->getManagerOf('Comments');
 
-        $blogs = $managerB->getUnique($request->getdata('id'));
-
+        $blogPost = $managerB->getUnique($request->getdata('id'));
+        $leadParagraphe = substr($blogPost['content'], 0, 300) . '...';
         $listComments = $managerC-> getComments($request->getdata('id'));
 
         $comments=[];
         foreach ($listComments as $comment){
-            if($comment->getValidated() == true){
+            if($comment['validated'] == true){
                 array_push($comments, $comment);
             }
         }
 
         $commentsNumber = count($comments);
 
-        $this->page->addVar('title', $BlogPost['title']); 
-        $this->page->addVar('BlogPost', $BlogPost);       
-        $this->page->addVar('Comments', $Comments);
+        $this->page->addVar('title', $blogPost['title']); 
+        $this->page->addVar('blogPost', $blogPost);     
+        $this->page->addVar('leadParagraphe', $leadParagraphe);   
+        $this->page->addVar('comments', $comments);
         $this->page->addVar('commentsNumber', $commentsNumber);
     }
 
@@ -49,13 +50,21 @@ class BlogController extends BackController
     {
         if ($request->postExists('content'))
         {
+            if ($this->app->user()->isAuthenticated() == false){
+                $author = $request->postData('author');
+            }else{
+                $author = $this->app->user()->getAttribute('pseudo');
+            }
+
+            $blogP = $request->getData('id');
+
             $comment = new Comments ([
-            'accountId' => $this->app->user()->getAttribute('id'),
-            'author' => $this->app->user()->getAttribute('pseudo'),
-            'blogPostId' => $request->getData('id'),
-            'content' => $request->postData('content'),
-            'validated' => null
-            ]);
+                'accountId' => $this->app->user()->getAttribute('id'),
+                'author' => $author,
+                'blogPostId' => $blogP,
+                'content' => $request->postData('content'),
+            ]);  
+// var_dump($blogP, $author);die;
 
             $managerC = $this->managers->getManagerOf('comments');
 

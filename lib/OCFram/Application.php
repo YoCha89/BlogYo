@@ -21,21 +21,31 @@ abstract class Application
 
   public function getController()
   {
-
-    var_dump($this->httpRequest->getData('action'));
-    if($this->httpRequest->getData('action') == null){
+    $action = $this->httpRequest->getData('action');
+    
+    if($action == null){
 
       return new AccountController($this, 'Account', 'index');
 
     } else {
-      $router = new Router;
-      $file = dirname(__FILE__).'/../../App/'.$this->name.'/config/routes.json';
+      // $test = preg_match('/back/', $action);
+      // var_dump($action);
+      if(preg_match('/back/', $action) == 0){
+        $router = new Router;
+        $file = dirname(__FILE__).'/../../App/Frontend/config/routes.json';
 
-      $data = file_get_contents($file);
+        $data = file_get_contents($file);
 
-      $routes = json_decode($data, true);
+        $routes = json_decode($data, true);
+      }else{
+        $router = new Router;
+        $file = dirname(__FILE__).'/../../App/Backend/config/routes.json';
 
+        $data = file_get_contents($file);
 
+        $routes = json_decode($data, true);
+      }
+// var_dump($routes);
       foreach ($routes as $route)
         {
           $vars = [];

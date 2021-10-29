@@ -13,22 +13,19 @@ class FrontendApplication extends Application
   }
  
   public function run()
-  {
-      $controller = $this->getController();
-      $controller->execute();
-      $this->httpResponse->setPage($controller->page());
-      $this->httpResponse->send();  
+  {   
+    $controller = $this->getController();
+    $controller->execute();
+    $this->httpResponse->setPage($controller->page());
+    $this->httpResponse->send();  
 
-  /*  //Action to do disconnected
-    if ($this->httpRequest->getData('action') == 'index' || $this->httpRequest->getData('action') == 'updatePass')
-    {
+/*    //Action to do disconnected
+    if ($this->httpRequest->getData('action') == 'index' || $this->httpRequest->getData('action') == 'askPass' || $this->httpRequest->getData('action') == 'blogList' || $this->httpRequest->getData('action') == 'seeBlog'){
       $controller = $this->getController();
-    }else if ($this->httpRequest->getData('action') == 'createAccount')//CreateAccount -> not to do if connected  
-    {
+    }else if ($this->httpRequest->getData('action') == 'createAccount'){
       if ($this->user->getAttribute('auth') == true)
       {
         $this->user->setFlash('Vous devez être déconnecté pour créer un compte');
-        $controller = new Modules\Account\AccountController($this, 'Employees', 'seeAccount');
       } else if ($this->user->getAttribute('auth') == true)// Action to do once connected
       {
         $controller = $this->getController();
