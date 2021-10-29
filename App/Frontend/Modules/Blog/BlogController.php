@@ -52,29 +52,30 @@ class BlogController extends BackController
         {
             if ($this->app->user()->isAuthenticated() == false){
                 $author = $request->postData('author');
+                $accountId = null;
             }else{
                 $author = $this->app->user()->getAttribute('pseudo');
+                $accountId = $this->app->user()->getAttribute('id');
             }
 
             $blogP = $request->getData('id');
 
             $comment = new Comments ([
-                'accountId' => $this->app->user()->getAttribute('id'),
+                'accountId' => $accountId,
                 'author' => $author,
                 'blogPostId' => $blogP,
                 'content' => $request->postData('content'),
             ]);  
-// var_dump($blogP, $author);die;
 
             $managerC = $this->managers->getManagerOf('comments');
 
             if($comment->isValid())
             {
-                $managerC->addComment($comment);
+                $managerC->save($comment);
 
                 $this->app->user()->setFlash('Votre commentaire a été enregistré. Il sera validé ou rejeté aprés un court délai !');
 
-                $this->app->httpResponse()->redirect('bootstrap.php?action=executeSeeBlog&id='.$request->getdata('id'));
+                $this->app->httpResponse()->redirect('bootstrap.php?action=seeBlog&id='.$request->getdata('id'));
 
             } else {
 
@@ -111,7 +112,7 @@ class BlogController extends BackController
 
             if($comment->isValid())
             {
-                $managerC->addComment($comment);
+                $managerC->save($comment);
 
                 $this->app->user()->setFlash('Votre commentaire a été enregistré. Il sera validé ou rejeté aprés un court délai !');
 

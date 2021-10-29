@@ -1,20 +1,18 @@
 <?php
 namespace App\Backend\Model;
  
-use Entity\Comments;
+use App\Backend\Entity\Comments;
  
 class CommentsManagerPDO extends CommentsManager
 {
   protected function add(Comments $comments)
   {
-    $request = $this->dao->prepare('INSERT INTO comments SET account_id = :account_id, date_p = :date_p, author = :author, content = :content, last_connexion = :last_connexion, validated = :validated, created_at = NOW(), updated_at = NOW()');
+    $request = $this->dao->prepare('INSERT INTO comments SET account_id = :account_id, author = :author, content = :content, blog_post_id = :blog_post_id, created_at = NOW()');
     
-    $request->bindValue(':account_id', $comments->accountId());
-    $request->bindValue(':date_p', $comments->dateP());
-    $request->bindValue(':author', $comments->author());
-    $request->bindValue(':content', $comments->content());
-    $request->bindValue(':last_connexion', $comments->lastConnexion());
-    $request->bindValue(':validated', $comments->validated());
+    $request->bindValue(':account_id', $comments->getAccountId());
+    $request->bindValue(':blog_post_id', $comments->getblogPostId());
+    $request->bindValue(':author', $comments->getAuthor());
+    $request->bindValue(':content', $comments->getContent());
  
     $request->execute();
   }
@@ -97,12 +95,12 @@ class CommentsManagerPDO extends CommentsManager
   {
     $request = $this->dao->prepare('UPDATE comments SET account_id = :account_id, date_p = :date_p, author = :author, content = :content, last_connexion = :last_connexion, validated = :validated, updated_at = NOW() WHERE id = :id');
     
-    $request->bindValue(':account_id', $comments->accountId());
-    $request->bindValue(':date_p', $comments->dateP());
-    $request->bindValue(':author', $comments->author());
-    $request->bindValue(':content', $comments->content());
-    $request->bindValue(':last_connexion', $comments->lastConnexion());
-    $request->bindValue(':validated', $comments->validated());
+    $request->bindValue(':account_id', $comments->getAccountId());
+    $request->bindValue(':last_connexion', $comments->getLastConnexion());
+    $request->bindValue(':date_p', $comments->getDateP());
+    $request->bindValue(':author', $comments->getAuthor());
+    $request->bindValue(':content', $comments->getContent());
+    $request->bindValue(':validated', $comments->getValidated());
     $request->bindValue(':id', $comments->id(), \PDO::PARAM_INT);
  
     $request->execute();
