@@ -1,59 +1,59 @@
 {
-  "createAdminAccount":{
-  	"url":"/create_admin_account",
+  "backCreateAdminAccount":{
+  	"url":"/back_create_admin_account",
   	"Module":"Admin",
-  	"Action":"createAdminAccount"  	
+  	"Action":"backCreateAdminAccount"  	
   },
-  "connectAdmin":{
-  	"url":"/connect_admin",
+  "backConnectAdmin":{
+  	"url":"/back_connect_admin",
   	"Module":"Admin",
-  	"Action":"connectAdmin",
+  	"Action":"backConnectAdmin",
     "params":[]
   },
-  "disconnectAdmin":{
-  	"url":"/disconnect_admin",
+  "backDisconnectAdmin":{
+  	"url":"/back_disconnect_admin",
   	"Module":"Admin",
-  	"Action":"disconnectAdmin"
+  	"Action":"backDisconnectAdmin"
   },
-  "postBlog":{
-  	"url":"/post_blog",
+  "backPostBlog":{
+  	"url":"/back_post_blog",
   	"Module":"Blog",
-  	"Action":"postBlog"
+  	"Action":"backPostBlog"
   },
-  "modifyBlog":{
-  	"url":"/modify_blog",
+  "backModifyBlog":{
+  	"url":"/back_modify_blog",
   	"Module":"Blog",
-  	"Action":"modifyBlog",
+  	"Action":"backModifyBlog",
     "params":[]
   },
-  "deleteBlog":{
-  	"url":"/delete_blog",
+  "backDeleteBlog":{
+  	"url":"/back_delete_blog",
   	"Module":"Blog",
-  	"Action":"deleteBlog",
+  	"Action":"backDeleteBlog",
     "params":[]
   },
-  "askPass":{
-  	"url":"/ask_pass",
+  "backAskPass":{
+  	"url":"/back_ask_pass",
     "Module":"Admin",
-    "Action":"moderateComment",
+    "Action":"backAskPass",
     "params":[]
   },
-  "moderateComment":{
-    "url":"/moderate_comment",
+  "backModerateComment":{
+    "url":"/back_moderate_comment",
     "Module":"Blog",
-    "Action":"moderateComment",
+    "Action":"backModerateComment",
     "params":[]
   },
-  "askAdminPass":{
-  	"url":"/ask_admin_pass",
+  "backSeeAdmin":{
+  	"url":"/back_see_admin",
   	"Module":"Admin",
-  	"Action":"askAdminPass",
+  	"Action":"backSeeAdmin",
     "params":[]
   },
-  "furnishPass":{
-  	"url":"/furnish_pass",
+  "backFurnishPass":{
+  	"url":"/back_furnish_pass",
   	"Module":"Admin",
-  	"Action":"furnishPass",
+  	"Action":"backFurnishPass",
     "params":[]
   },
 }

@@ -1,19 +1,19 @@
 <?php
-namespace Model;
+namespace App\Backend\Model;
  
 use OCFram\Manager;
-use Entity\Account;
+use App\Backend\Entity\Admin;
  
-abstract class AccountManager extends Manager
+abstract class AdminManager extends Manager
 {
-  abstract protected function add(Account $account);
+  abstract protected function add(Admin $admin);
  
   //add or modify 
-  public function save(Account $account)
+  public function save(Admin $admin)
   {
-    if ($account->isValid())
+    if ($admin->isValid())
     {
-      $account->isNew() ? $this->add($account) : $this->modify($account);
+      $admin->isNew() ? $this->add($admin) : $this->modify($admin);
     }
     else
     {
@@ -24,13 +24,15 @@ abstract class AccountManager extends Manager
   abstract public function delete($id);
 
   //used for connexion and disconnexion
-  abstract public function getOne($id);
+  abstract public function getUnique($id);
 
-  //used to get the account list
+  //used to get the admin list
   abstract public function getList($id);
 
-  //counts the number of subscribers
-  abstract public function count($id);
+  //counts the number of admin
+  abstract public function count();
  
   abstract protected function modify(Admin $admin);
+
+  abstract public function checkPseudo($pseudo);
 }

@@ -23,25 +23,17 @@ class Account extends Entity
 	const SECRET_QUESTION_NOT_VALIDE = 5;
 	const SECRET_ANSWER_NOT_VALIDE = 6;
 
-  protected function createAccount(){
-
-  }
-
-  protected function suppressAccount(){
-
-  }
-
-  protected function modifyAccount(){
-
-  }
-
   //use for directing account data modification toward creation or update
   public function isNew(){
     return null !== $this->getId();
   }
 
   public function isValid(){
-    return empty($this->id);
+    if (!empty($this->getName()) && !empty($this->getPseudo()) && !empty($this->getPass()) && !empty($this->getEmail()) && !empty($this->getSecretQ()) && !empty($this->getSecretA())){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   // GETTERS //
@@ -117,14 +109,14 @@ class Account extends Entity
     {
       $this->erreurs[] = self::PSEUDO_NOT_VALIDE;
     }
-    $this->firstName = $firstName;
+    $this->pseudo = $pseudo;
   }
 
   public function setEmail($email)
   {
     if (!is_string($email) || empty($email))
     {
-      if(!preg_match("/^([w-.]+)@((?:[w]+.)+)([a-zA-Z]{2,4})/i", $email)){
+      if(!preg_match("/^([w\-.]+)@((?:[w]+.)+)([a-zA-Z]{2,4})/i", $email)){
         $this->erreurs[] = self::EMAIL_NOT_VALIDE;
       }
     }
@@ -135,7 +127,7 @@ class Account extends Entity
   {
     if (!is_string($pass) || empty($pass))
     {
-      if(!preg_match("/^([w-.]+)@((?:[w]+.)+)([a-zA-Z]{2,4})/i", $pass)){
+      if(!preg_match("/^([w\-.]+)@((?:[w]+.)+)([a-zA-Z]{2,4})/i", $pass)){
         $this->erreurs[] = self::PASS_NOT_VALIDE;
       }
     }

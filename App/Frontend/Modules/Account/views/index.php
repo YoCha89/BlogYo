@@ -18,7 +18,7 @@
 			<div id="separeVert"></div>
 			<hr id="separeHori">
 
-			<form method="post" action="bootstrap.php?action=seeBlog"><!--Bloc de connexion-->
+			<form method="post" action="bootstrap.php?action=blogList"><!--Bloc de connexion-->
 				<button type="submit" class="bouton">Continuer hors connexion</button>
 			</form>
 		</div>

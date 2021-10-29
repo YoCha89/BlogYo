@@ -1,12 +1,12 @@
 <?php
 namespace App\Backend\Model;
  
-use Entity\Account;
+use App\Backend\Entity\Account;
  
 class AccountManagerPDO extends AccountManager
 {
    //used for connexion (id still unknown)
-  public function getAccountPerPseudo($peuso){
+  public function getAccountPerPseudo($pseudo){
 
     $sql =$this->dao->prepare('SELECT id, name, pseudo, email, pass, secret_q, secret_a FROM account WHERE pseudo = :pseudo');
 
@@ -38,11 +38,11 @@ class AccountManagerPDO extends AccountManager
   }
 
   public function add(Account $account){
-    $sql = $this->dao->prepare('INSERT INTO account SET name = :name, pseudo = :pseudo, email = :email, pass = :pass, secret_q = :secret_q, secret_a = :secret_a, createdAt = NOW(), updatedAt = null');
+    $sql = $this->dao->prepare('INSERT INTO account SET name = :name, pseudo = :pseudo, email = :email, pass = :pass, secret_q = :secret_q, secret_a = :secret_a, created_at = NOW(), updated_at = null');
   
     $sql->bindValue(':name', $account->getName());
-    $sql->bindValue(':firstName', $account->getFirstName());
-    $sql->bindValue(':userName', $account->getUserName());
+    $sql->bindValue(':pseudo', $account->getPseudo());
+    $sql->bindValue(':email', $account->getEmail());
     $sql->bindValue(':pass', $account->getPass());
     $sql->bindValue(':secret_q', $account->getSecretQ());
     $sql->bindValue(':secret_a', $account->getSecretA());
@@ -57,7 +57,7 @@ class AccountManagerPDO extends AccountManager
   public function modify(Account $account)
   { 
 
-    $sql = $this->dao->prepare('UPDATE account SET name = :name, pseudo = :pseudo, email = :email, pass = :pass, secret_q = :secret_q, secret_a = :secret_a, updatedAt = NOW() WHERE id= :id');
+    $sql = $this->dao->prepare('UPDATE account SET name = :name, pseudo = :pseudo, email = :email, pass = :pass, secret_q = :secret_q, secret_a = :secret_a, updated_at = NOW() WHERE id= :id');
     
       $sql->bindValue(':id', $account->getId(), \PDO::PARAM_INT);
       $sql->bindValue(':name', $account->getName());
@@ -75,7 +75,7 @@ class AccountManagerPDO extends AccountManager
   public function checkPseudo($pseudo)
   {
     $sql =$this->dao->prepare('SELECT pseudo FROM account WHERE pseudo = :pseudo');
-      $sql->bindValue(':pseudo', $pseudo);
+    $sql->bindValue(':pseudo', $pseudo);
     $sql->execute();
 
     $pseudo = $sql->fetch();
@@ -85,8 +85,17 @@ class AccountManagerPDO extends AccountManager
     return $pseudo;
   }
 
-  public function updatePass($id){
+  public function updatePass($id, $pass){
 
+    $sql->bindValue(':id', $account->getId(), \PDO::PARAM_INT);
+    $sql = $this->dao->prepare('UPDATE account SET pass = :pass, updated_at = NOW() WHERE id= :id');
+
+    $sql->bindValue(':id', $id, \PDO::PARAM_INT);
+    $sql->bindValue(':pass', $pass->getPass());
+    
+    $sql->execute();
+
+    $sql->closeCursor();
   }
 
   public function delete($id){

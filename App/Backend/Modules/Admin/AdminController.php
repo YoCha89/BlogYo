@@ -8,9 +8,44 @@ use Entity\Admin;
 
 class AccountController extends BackController
 {
+	//Admin connexion
+	public function executeBackConnectAdmin (HTTPRequest $request){
 
-	//Create an account
-	public function executeCreateAdminAccount (HTTPRequest $request) {
+		if ($request->postExists('pseudo')) {
+			
+	     	$passEntered = $request->postData('pass');
+	    	$PseudoEntered = $request->postData('pseudo');
+
+	    	$managerA = $this->managers->getManagerOf('Admin');
+	    	$admin = $managerA->getAAdminPerPseudo($PseudoEntered);
+
+	    	if(!empty($admin)){
+		    	$registeredPass = $admin['pass'];
+
+		    	//confirming pass entered
+		    	if(password_verify($passEntered, $registeredPass)) {
+				    //setup connexion indicator and other session variable
+				    $this->app->user()->setAuthenticated(true);
+				    $this->app->user()->setAdmin(true);
+
+					$this->app->user()->setAttribute('id', $admin['id']);
+				    $this->app->user()->setAttribute('pseudo', $admin['pseudo']);
+
+				    $this->app->user()->setFlash('Vous êtes connecté, nous sommes ravis de votre retour !');
+
+				    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList');
+			    }
+
+			    else {
+			    	$this->app->user()->setFlash('Votre nom d\'utilisateur ou votre mot de passe sont incorrect.');
+			    }	    		
+	    	}else{
+	    		$this->app->httpResponse()->redirect('bootstrap.php?action=backConnectAdmin');
+	    	}
+	    }
+	}
+	//Create an admin account
+	public function executeBackCreateAdminAccount (HTTPRequest $request) {
 		 $this->page->addVar('title', 'Nouveau compte'); 
 
 		if ($request->postExists('newMail')) {
@@ -28,7 +63,7 @@ class AccountController extends BackController
 		}
 	}
 
-	public function executeModifyAdminAccount (HTTPRequest $request) {
+	public function executeBackModifyAdminAccount (HTTPRequest $request) {
 		$id = $this->app->user()->getAttribute('id');
 		$managerA = $this->managers->getManagerOf('Admin');
 
@@ -64,20 +99,20 @@ class AccountController extends BackController
 		}
 	}
 
-	public function executeDisconnectAdmin (HTTPRequest $request)
+	public function executeBackDisconnectAdmin (HTTPRequest $request)
 	{
 	
 	}
 
 
 	//Ask for a new account password
-	public function executeAskAdminPass (HTTPRequest $request)
+	public function executeBackAskAdminPass (HTTPRequest $request)
 	{
 		
 	}
 
 	//Ask for a new account password
-	public function executeFurnishPass (HTTPRequest $request)
+	public function executeBackFurnishPass (HTTPRequest $request)
 	{
 		
 	}
@@ -111,6 +146,7 @@ class AccountController extends BackController
 
 			//connexion if previous step successful
 			    $this->app->user()->setAuthenticated(true);
+				$this->app->user()->setAdmin(true);
 
 				$this->app->user()->setAttribute('id', $admin['id']);
 			    $this->app->user()->setAttribute('pseudo', $admin['pseudo']);

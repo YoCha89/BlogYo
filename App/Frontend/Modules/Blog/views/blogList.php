@@ -4,13 +4,13 @@ le châpo ;
 et un lien vers le blog post. -->
 
 <?php
-if ($this->app->user()->isAdmin() == true) {?>
+if ($this->app->user()->isAdmin() == true) { ?>
 	<div class="Add">
 		<form method="post" action="bootstrap.php?action=postBlog?>">
 			<button type="submit" class="bouton">Éditer</button>
 		</form>
 	</div>	
-<?php}?>
+<?php } ?>
 
 
 
@@ -36,7 +36,7 @@ foreach ($listBlogPost as $blogPost) {
 				</form>
 			</div>
 			<?php
-			if ($this->app->user()->isAdmin() == true) {?>
+			if ($this->app->user()->isAdmin() == true) { ?>
 				<div class="edition">
 					<form method="post" action="bootstrap.php?action=modifyBlog&id=<?=$blogPost['id']?>">
 						<button type="submit" class="bouton">Éditer</button>
@@ -45,7 +45,7 @@ foreach ($listBlogPost as $blogPost) {
 						<button type="submit" class="bouton">Supprimer</button>
 					</form>
 				</div>				
-			<?php}?>
+			<?php } ?>
 
 		</div>
 	</div>

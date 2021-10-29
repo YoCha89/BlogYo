@@ -1,18 +1,34 @@
 <?php
-namespace Model;
+namespace App\Backend\Model;
  
-use Entity\Admin;
+use App\Backend\Entity\Admin;
  
 class AdminManagerPDO extends AdminManager
 {
-  protected function add(Admin $Admin)
+  public function getAdminPerPseudo($pseudo){
+
+    $sql =$this->dao->prepare('SELECT id, name, pseudo, email, pass FROM admin WHERE pseudo = :pseudo');
+
+    $sql->bindValue(':pseudo', $pseudo);
+
+    $sql->execute();
+
+    $sql->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Admin');
+    $admin = $sql->fetch();
+
+    $sql->closeCursor();
+
+    return $admin;     
+  }
+
+  protected function add(Admin $admin)
   {
-    $request = $this->dao->prepare('INSERT INTO Admin SET name = :name, pseudo = :pseudo, pass = :pass, email = :email, createdAt = NOW(), updatedAt = NOW()');
+    $request = $this->dao->prepare('INSERT INTO admin SET name = :name, pseudo = :pseudo, pass = :pass, email = :email, created_at = NOW(), updated_at = NOW()');
  
-    $request->bindValue(':pseudo', $Admin->pseudo());
-    $request->bindValue(':name', $Admin->name());
-    $request->bindValue(':pass', $Admin->pass());
-    $request->bindValue(':email', $Admin->email());
+    $request->bindValue(':pseudo', $Admin->getPseudo());
+    $request->bindValue(':name', $Admin->getName());
+    $request->bindValue(':pass', $Admin->getPass());
+    $request->bindValue(':email', $Admin->getEmail());
  
     $request->execute();
   }
@@ -24,12 +40,12 @@ class AdminManagerPDO extends AdminManager
  
   public function delete($id)
   {
-    $this->dao->exec('DELETE FROM Admin WHERE id = '.(int) $id);
+    $this->dao->exec('DELETE FROM admin WHERE id = '.(int) $id);
   }
  
   public function getList($debut = -1, $limite = -1)
   {
-    $sql = 'SELECT id, name, pseudo, pass, email, createdAt, updatedAt FROM Admin ORDER BY id DESC';
+    $sql = 'SELECT id, name, pseudo, pass, email, created_at, updated_at FROM Admin ORDER BY id DESC';
  
     if ($debut != -1 || $limite != -1)
     {
@@ -43,8 +59,8 @@ class AdminManagerPDO extends AdminManager
  
     foreach ($listeAdmin as $Admin)
     {
-      $Admin->setCreatedAt(new \DateTime($Admin->createdAt()));
-      $Admin->setUpdatedAt(new \DateTime($Admin->updatedAt()));
+      $Admin->setCreated_at(new \DateTime($Admin->created_at()));
+      $Admin->setUpdated_at(new \DateTime($Admin->updated_at()));
     }
  
     $request->closeCursor();
@@ -54,7 +70,7 @@ class AdminManagerPDO extends AdminManager
  
   public function getUnique($id)
   {
-    $request = $this->dao->prepare('SELECT id, name, pseudo, pass, email, createdAt, updatedAt FROM Admin WHERE id = :id');
+    $request = $this->dao->prepare('SELECT id, name, pseudo, pass, email, created_at, updated_at FROM admin WHERE id = :id');
     $request->bindValue(':id', (int) $id, \PDO::PARAM_INT);
     $request->execute();
  
@@ -62,8 +78,8 @@ class AdminManagerPDO extends AdminManager
  
     if ($Admin = $request->fetch())
     {
-      $Admin->setCreatedAt(new \DateTime($Admin->createdAt()));
-      $Admin->setUpdatedAt(new \DateTime($Admin->updatedAt()));
+      $Admin->setCreated_at(new \DateTime($Admin->created_at()));
+      $Admin->setUpdated_at(new \DateTime($Admin->updated_at()));
  
       return $Admin;
     }
@@ -71,16 +87,29 @@ class AdminManagerPDO extends AdminManager
     return null;
   }
  
-  protected function modify(Admin $Admin)
+  protected function modify(Admin $admin)
   {
-    $request = $this->dao->prepare('UPDATE Admin SET name = :name, pseudo = :pseudo, pass = :pass, email = :email, updatedAt = NOW() WHERE id = :id');
+    $request = $this->dao->prepare('UPDATE admin SET name = :name, pseudo = :pseudo, pass = :pass, email = :email, updated_at = NOW() WHERE id = :id');
  
-    $request->bindValue(':pseudo', $Admin->pseudo());
-    $request->bindValue(':name', $Admin->name());
-    $request->bindValue(':pass', $Admin->pass());
-    $request->bindValue(':email', $Admin->email());
+    $request->bindValue(':pseudo', $Admin->getPseudo());
+    $request->bindValue(':name', $Admin->getName());
+    $request->bindValue(':pass', $Admin->getPass());
+    $request->bindValue(':email', $Admin->getEmail());
     $request->bindValue(':id', $Admin->id(), \PDO::PARAM_INT);
  
     $request->execute();
+  }  
+
+  public function checkPseudo($pseudo)
+  {
+    $sql =$this->dao->prepare('SELECT pseudo FROM admin WHERE pseudo = :pseudo');
+    $sql->bindValue(':pseudo', $pseudo);
+    $sql->execute();
+
+    $pseudo = $sql->fetch();
+
+    $sql->closeCursor();
+
+    return $pseudo;
   }
 }

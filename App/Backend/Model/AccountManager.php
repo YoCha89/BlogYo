@@ -2,7 +2,7 @@
 namespace App\Backend\Model;
  
 use OCFram\Manager;
-use Entity\Account;
+use App\Backend\Entity\Account;
  
 abstract class AccountManager extends Manager
 {
@@ -15,7 +15,11 @@ abstract class AccountManager extends Manager
   {
     if ($account->isValid())
     {
-      $account->isNew() ? $this->add($account) : $this->modify($account);
+      if($account->isNew() == false){
+        $this->add($account);
+      }else{
+         $this->modify($account);
+      }
     }
     else
     {
@@ -24,7 +28,7 @@ abstract class AccountManager extends Manager
   }
 
   //updating user password
-  abstract public function updatePass($id);
+  abstract public function updatePass($id, $pass);
 
   abstract public function delete($id);
 
