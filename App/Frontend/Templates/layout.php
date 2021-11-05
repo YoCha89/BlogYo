@@ -21,7 +21,7 @@
             <?php
 //affichage dynamique du bloc compte utilisateur en cas de connexion
 if ($_SESSION['auth'] == true) {
-	?>
+  ?>
             <div id="userBloc">
               <div id="user">
                   <a href="bootstrap.php?action=seeAccount"><img src="images/logoUser.png" alt="logoUser" id="logoUser"/></a>
@@ -33,17 +33,26 @@ if ($_SESSION['auth'] == true) {
                   </form>
               </div>
             <?php
-}?>
+}
+
+if ($_SESSION['admin'] == true) {
+  ?>
+  <div id="ModButton">
+    <form method="post" action="bootstrap.php?app=Backend&action=backModerateComment">
+    <button type="submit" id="boutonDeco">Modération des commentaires</button>
+    </form>
+  </div>
+  <?php
+} ?>
 
       </header>
 <!-- FIN DU HEADER LAYOUT -->
       <section id="main">
           <?php if ($user->hasFlash()) {
-	echo '<p><div class="flash">', $user->getFlash(), '</div></p>';
-}
-//Affichage des feedbacks utilisateurs pour confirmer la réussite d'une requête ou lui permettre de corriger ses erreurs ?>
+  echo '<p><div class="flash">', $user->getFlash(), '</div></p>';
+} ?>
 
-          <?=$content?>
+          <?= $content ?>
         </section>
 
 <!-- DEBUT DU FOOTER LAYOUT -->
@@ -53,17 +62,3 @@ if ($_SESSION['auth'] == true) {
 
   </body>
 </html>
-
-
-<!-- © 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About -->

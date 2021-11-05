@@ -8,7 +8,6 @@ class BlogPosts extends Entity
 	protected $id,
             $adminId,
             $content,
-            $dateP,
             $title,
             $slug,
             $media,
@@ -20,7 +19,7 @@ class BlogPosts extends Entity
   const TITLE_NOT_VALIDE = 2;
 
   public function isValid(){
-    if (!empty($this->getAdminId()) && !empty($this->getDateP()) && !empty($this->getContent()) && !empty($this->getTitle()) && !empty($this->getCreatedAt()) && !empty($this->getSlug())){
+    if (!empty($this->getAdminId()) && !empty($this->getContent()) && !empty($this->getTitle()) && !empty($this->getSlug())){
       return true;
     }else{
       return false;
@@ -36,11 +35,6 @@ class BlogPosts extends Entity
   public function getAdminId()
   {
     return $this->adminId;
-  }
-
-  public function getDateP()
-  {
-   return $this->dateP;
   }
 
   public function getContent()
@@ -80,11 +74,6 @@ class BlogPosts extends Entity
     $this->adminId = $adminId;
   }
 
-  public function setDateP($dateP)
-  {
-    $this->dateP = $dateP;
-  }
-
   public function setContent($content)
   {
     if (!is_string($content) || empty($content))
@@ -99,7 +88,7 @@ class BlogPosts extends Entity
   {
     if (!is_string($title) || empty($title))
     {
-      $this->erreurs[] = self::TITLE_INVALIDE;
+      $this->erreurs[] = self::TITLE_NOT_VALIDE;
     }
 
     $this->title = $title;

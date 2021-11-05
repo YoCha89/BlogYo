@@ -2,6 +2,7 @@
 namespace OCFram;
 
 use App\Frontend\Modules\Account\AccountController;
+use App\Backend\Modules\Blog\BlogController;
 
 abstract class Application
 {
@@ -28,8 +29,6 @@ abstract class Application
       return new AccountController($this, 'Account', 'index');
 
     } else {
-      // $test = preg_match('/back/', $action);
-      // var_dump($action);
       if(preg_match('/back/', $action) == 0){
         $router = new Router;
         $file = dirname(__FILE__).'/../../App/Frontend/config/routes.json';
@@ -44,8 +43,10 @@ abstract class Application
         $data = file_get_contents($file);
 
         $routes = json_decode($data, true);
+
+
       }
-// var_dump($routes);
+
       foreach ($routes as $route)
         {
           $vars = [];
@@ -58,14 +59,13 @@ abstract class Application
         }
 
        try
-        {   
-         $matchedRoute = $router->getRoute($this->httpRequest->getData('action'));
+        {
+          $matchedRoute = $router->getRoute($this->httpRequest->getData('action'));
         }
         catch (\RuntimeException $e)
         {
           if ($e->getCode() == Router::NO_ROUTE)
           {
-
             $this->httpResponse->redirect404();
           }
         }
@@ -76,6 +76,7 @@ abstract class Application
         }
         
         $controllerClass = 'App\\'.$this->name.'\\Modules\\'.$matchedRoute->module().'\\'.$matchedRoute->module().'Controller';
+        // var_dump($controllerClass);die;
         return new $controllerClass($this, $matchedRoute->module(), $matchedRoute->action());     
       }
        

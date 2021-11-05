@@ -1,27 +1,25 @@
 <?php
-namespace App\Frontend\Modules\Account;
+namespace App\Backend\Modules\Admin;
 
 use OCFram\BackController;
 use OCFram\HTTPRequest;
 use Entity\Admin;
 
 
-class AccountController extends BackController
+class AdminController extends BackController
 {
 	//Admin connexion
 	public function executeBackConnectAdmin (HTTPRequest $request){
-
-		if ($request->postExists('pseudo')) {
-			
-	     	$passEntered = $request->postData('pass');
-	    	$PseudoEntered = $request->postData('pseudo');
+		if ($request->getExists('pseudo')) {
+	     	$passEntered = $request->getData('pass');
+	    	$PseudoEntered = $request->getData('pseudo');
 
 	    	$managerA = $this->managers->getManagerOf('Admin');
-	    	$admin = $managerA->getAAdminPerPseudo($PseudoEntered);
+	    	$admin = $managerA->getAdminPerPseudo($PseudoEntered);
 
 	    	if(!empty($admin)){
 		    	$registeredPass = $admin['pass'];
-
+		    	
 		    	//confirming pass entered
 		    	if(password_verify($passEntered, $registeredPass)) {
 				    //setup connexion indicator and other session variable
@@ -34,31 +32,45 @@ class AccountController extends BackController
 				    $this->app->user()->setFlash('Vous êtes connecté, nous sommes ravis de votre retour !');
 
 				    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList');
-			    }
-
-			    else {
+			    }else {
 			    	$this->app->user()->setFlash('Votre nom d\'utilisateur ou votre mot de passe sont incorrect.');
+		   			$this->app->httpResponse()->redirect('bootstrap.php?action=index');
 			    }	    		
 	    	}else{
-	    		$this->app->httpResponse()->redirect('bootstrap.php?action=backConnectAdmin');
+				$this->app->user()->setFlash('Votre nom d\'utilisateur ou votre mot de passe sont incorrect.');
+		    	$this->app->httpResponse()->redirect('bootstrap.php?action=index');
 	    	}
 	    }
 	}
+
+	//See admin account informations
+	public function executeBackSeeAdmin (HTTPRequest $request) {
+
+    	$this->page->addVar('title', 'Paramètre du compte');
+
+	    $managerA = $this->managers->getManagerOf('Admin');
+
+	    $admin = $managerA->getUnique($this->app->user()->getAttribute('id'));
+
+	    $this->page->addVar('admin', $admin);
+	}
+
 	//Create an admin account
 	public function executeBackCreateAdminAccount (HTTPRequest $request) {
 		 $this->page->addVar('title', 'Nouveau compte'); 
+		 $this->page->addVar('key1', 'key1'); 
 
-		if ($request->postExists('newMail')) {
-			if ($this->user->isAuthenticated()){
+		if ($request->postData('key') == 'step1') {
+			if ($this->user->isAdmin()){
 				$managerA = $this->managers->getManagerOf('Admin');
 
-				$clearTmpPass = TempoBlogYo21;
-
-				$cryptedTmpPass = password_hash($clearTmpPass, PASSWORD_DEFAULT)
+				$clearTmpPass = 'Temp&blog8';
+				$cryptedTmpPass = password_hash($clearTmpPass, PASSWORD_DEFAULT);
 
 				$this->processForm($request, $clearTmpPass, $cryptedTmpPass, $managerA);
+
 			}
-		} elseif($request->postExists('pass')){
+		} elseif($request->postData('key') == 'step2'){
 
 		}
 	}
@@ -99,12 +111,6 @@ class AccountController extends BackController
 		}
 	}
 
-	public function executeBackDisconnectAdmin (HTTPRequest $request)
-	{
-	
-	}
-
-
 	//Ask for a new account password
 	public function executeBackAskAdminPass (HTTPRequest $request)
 	{
@@ -120,8 +126,8 @@ class AccountController extends BackController
 	protected function processForm(HTTPRequest $request, $clearpass, $pass, $managerA) {
 
 		//if we are on the 'new mail' step, pseudo and name are null and hidden in the corresponding form
-		$admin = new Admin([
-			'email' => $request->postData('newMail'),
+		$admin = new Admin([ 
+			'email' => $request->postData('email'),
 			'pseudo' => $request->postData('pseudo'),
 			'name' => $request->postData('name'),
 			'pass' => $request->postData('pass'),
@@ -152,7 +158,7 @@ class AccountController extends BackController
 			    $this->app->user()->setAttribute('pseudo', $admin['pseudo']);
 			    $this->app->user()->setAttribute('firstName', $admin['firstName']);
 
-			    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList') 
+			    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList');
 		} else {
 			$this->app->user()->setFlash('Entrez au moins un caractère autre q\'un espace pour valider chaque champ');
 

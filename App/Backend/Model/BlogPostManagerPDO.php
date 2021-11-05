@@ -2,7 +2,6 @@
 namespace App\Backend\Model;
  
 use Entity\BlogPosts;
-use Entity\Comments;
  
 class BlogPostManagerPDO extends BlogPostManager
 {

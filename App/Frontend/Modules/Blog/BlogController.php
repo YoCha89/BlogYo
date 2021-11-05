@@ -3,9 +3,8 @@ namespace App\Frontend\Modules\Blog;
 
 use OCFram\BackController;
 use OCFram\HTTPRequest;
-use Entity\Likes;
 use App\Backend\Entity\Comments;
-use App\Backend\Entity\BlogPost;
+use App\Backend\Entity\BlogPosts;
 use App\Backend\Model\BlogPostManagerPDO;
 
 class BlogController extends BackController
