@@ -20,6 +20,9 @@ $entityLoader->register();
 $accountLoader = new SplClassLoader('App', dirname(__FILE__).'/..');
 $accountLoader->register();
 
+$adminLoader = new SplClassLoader('hello', dirname(__FILE__).'/../App/Backend');
+$adminLoader->register();
+
 $appClass = 'App\\'.$_GET['app'].'\\'.$_GET['app'].'Application';
 $app = new $appClass; 
 

@@ -19,7 +19,7 @@ class Comments extends Entity
   const CONTENU_INVALIDE = 1;
 
   public function isValid(){
-    // var_dump($this->getBlogPostId(), $this->getContent(), $this->getAuthor());die;
+    
     if (!empty($this->getBlogPostId()) && !empty($this->getContent()) && !empty($this->getAuthor())){
       return true;
     }else{

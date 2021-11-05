@@ -1,4 +1,4 @@
-<form method="post" action="bootstrap.php?action=postBlog">
+<form method="post" action="bootstrap.php?app=backend&action=modifyBlog">
 	<div class="champ">
 		<label for="title">Titre :</label>
 		<input type="text" name="title" value="<?php echo $blogPost['title'] ?>"><br/>

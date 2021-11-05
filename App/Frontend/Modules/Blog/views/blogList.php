@@ -6,8 +6,8 @@ et un lien vers le blog post. -->
 <?php
 if ($this->app->user()->isAdmin() == true) { ?>
 	<div class="Add">
-		<form method="post" action="bootstrap.php?action=postBlog?>">
-			<button type="submit" class="bouton">Éditer</button>
+		<form method="post" action="bootstrap.php?app=backend&action=backPostBlog">
+			<button type="submit" class="bouton">Ajouter un article</button>
 		</form>
 	</div>	
 <?php } ?>
@@ -38,10 +38,10 @@ foreach ($listBlogPost as $blogPost) {
 			<?php
 			if ($this->app->user()->isAdmin() == true) { ?>
 				<div class="edition">
-					<form method="post" action="bootstrap.php?action=modifyBlog&id=<?=$blogPost['id']?>">
+					<form method="post" action="bootstrap.php?app=backend&action=modifyBlog&id=<?=$blogPost['id']?>">
 						<button type="submit" class="bouton">Éditer</button>
 					</form>
-					<form method="post" action="bootstrap.php?action=deleteBlog&id=<?=$blogPost['id']?>">
+					<form method="post" action="bootstrap.php?app=backend&action=deleteBlog&id=<?=$blogPost['id']?>">
 						<button type="submit" class="bouton">Supprimer</button>
 					</form>
 				</div>				

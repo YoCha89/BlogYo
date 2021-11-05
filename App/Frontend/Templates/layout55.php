@@ -33,26 +33,17 @@ if ($_SESSION['auth'] == true) {
                   </form>
               </div>
             <?php
-}
-
-if ($_SESSION['admin'] == true) {
-  ?>
-  <div id="ModButton">
-    <form method="post" action="bootstrap.php?app=Backend&action=backModerateComment">
-    <button type="submit" id="boutonDeco">Modération des commentaires</button>
-    </form>
-  </div>
-  <?php
-} ?>
+}?>
 
       </header>
 <!-- FIN DU HEADER LAYOUT -->
       <section id="main">
           <?php if ($user->hasFlash()) {
   echo '<p><div class="flash">', $user->getFlash(), '</div></p>';
-} ?>
+}
+//Affichage des feedbacks utilisateurs pour confirmer la réussite d'une requête ou lui permettre de corriger ses erreurs ?>
 
-          <?= $content ?>
+          <?=$content?>
         </section>
 
 <!-- DEBUT DU FOOTER LAYOUT -->

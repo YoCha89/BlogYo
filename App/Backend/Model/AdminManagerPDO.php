@@ -8,7 +8,7 @@ class AdminManagerPDO extends AdminManager
   public function getAdminPerPseudo($pseudo){
 
     $sql =$this->dao->prepare('SELECT id, name, pseudo, email, pass FROM admin WHERE pseudo = :pseudo');
-
+    
     $sql->bindValue(':pseudo', $pseudo);
 
     $sql->execute();
@@ -57,11 +57,11 @@ class AdminManagerPDO extends AdminManager
  
     $AdminList = $request->fetchAll();
  
-    foreach ($listeAdmin as $Admin)
+   /* foreach ($listeAdmin as $Admin)
     {
       $Admin->setCreated_at(new \DateTime($Admin->created_at()));
       $Admin->setUpdated_at(new \DateTime($Admin->updated_at()));
-    }
+    }*/
  
     $request->closeCursor();
  
@@ -75,16 +75,10 @@ class AdminManagerPDO extends AdminManager
     $request->execute();
  
     $request->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Admin');
- 
-    if ($Admin = $request->fetch())
-    {
-      $Admin->setCreated_at(new \DateTime($Admin->created_at()));
-      $Admin->setUpdated_at(new \DateTime($Admin->updated_at()));
- 
-      return $Admin;
-    }
- 
-    return null;
+
+    $Admin = $request->fetch();
+
+    return $Admin;
   }
  
   protected function modify(Admin $admin)

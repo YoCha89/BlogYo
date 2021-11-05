@@ -10,11 +10,6 @@
   	"Action":"backConnectAdmin",
     "params":[]
   },
-  "backDisconnectAdmin":{
-  	"url":"/back_disconnect_admin",
-  	"Module":"Admin",
-  	"Action":"backDisconnectAdmin"
-  },
   "backPostBlog":{
   	"url":"/back_post_blog",
   	"Module":"Blog",
@@ -55,5 +50,5 @@
   	"Module":"Admin",
   	"Action":"backFurnishPass",
     "params":[]
-  },
+  }
 }

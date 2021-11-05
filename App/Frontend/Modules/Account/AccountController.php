@@ -39,7 +39,8 @@ class AccountController extends BackController {
 				    	$this->app->user()->setFlash('Votre nom d\'utilisateur ou votre mot de passe sont incorrect.');
 				    }	    		
 		    	}else{
-		    		$this->app->httpResponse()->redirect('bootstrap.php?action=backConnectAdmin');
+		    		$passTransfert = str_replace('&', '\&', $passEntered);
+		    		$this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=backConnectAdmin&pseudo='.$PseudoEntered.'&pass='.urlencode($passEntered));
 		    	}
 		    }
 
@@ -51,6 +52,10 @@ class AccountController extends BackController {
 	}
 
 	public function executeDisconnect (HTTPRequest $request){
+		
+		if( $this->app->user()->isAdmin() == true){
+			$this->app->user()->setAdmin(false);
+		}
 
 		$this->app->user()->setAuthenticated(false);
 		$this->app->user()->destroy();
@@ -149,9 +154,9 @@ class AccountController extends BackController {
 
     	$this->page->addVar('title', 'Paramètre du compte');
 
-    	if($this->app->user()->getAdmin() == true){
+    	if($this->app->user()->isAdmin() == true){
 	    	
-	    	$this->app->httpResponse()->redirect('bootstrap.php?action=backSeeAdmin');
+	    	$this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=backSeeAdmin');
 
     	}else{
 	    
@@ -175,7 +180,7 @@ class AccountController extends BackController {
 	    	$managerAd = $this->managers->getManagerOf('Admin');
 	    	$admin = $managerAd->checkPseudo($request->postData('pseudo'));
 	    	if(!empty($admin)){
-	    	$this->app->httpResponse()->redirect('bootstrap.php?action=backFurnishPass');
+	    	$this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=backFurnishPass');
 	    	}
 		}
 

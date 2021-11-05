@@ -3,7 +3,6 @@ namespace App\Backend\Model;
  
 use OCFram\Manager;
 use Entity\BlogPosts;
-use Entity\Comments;
 
 abstract class BlogPostManager extends Manager
 {
