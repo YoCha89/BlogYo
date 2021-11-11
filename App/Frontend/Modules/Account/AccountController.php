@@ -53,8 +53,8 @@ class AccountController extends BackController {
 
 	public function executeDisconnect (HTTPRequest $request){
 		
-		if( $this->app->user()->isAdmin() == true){
-			$this->app->user()->setAdmin(false);
+		if( $this->app->user()->isAdmin() == 'isCo'){
+			$this->app->user()->setAdmin('isDec');
 		}
 
 		$this->app->user()->setAuthenticated(false);
@@ -132,7 +132,7 @@ class AccountController extends BackController {
 				//if a pseudo is found, we check its his pseudo
 				if ($request->postData('pseudo') == $this->app->user()->getAttribute('pseudo')){
 
-					$pass = $formAccount['pass'];
+					$pass = password_hash($request->postData('pass'), PASSWORD_DEFAULT);;
 					$secretA = password_hash($request->postData('secretA'), PASSWORD_DEFAULT);
 
 					$this->processForm($request, $pass, $secretA, $managerA);
@@ -140,7 +140,7 @@ class AccountController extends BackController {
 					$this->app->user()->setFlash('Ce nom d\'utilisateur n\'est pas disponible.');
 				}	
 			} else {//pseudo is new and unique
-				$pass = $formAccount['pass']; 
+				$pass = password_hash($request->postData('pass'), PASSWORD_DEFAULT);; 
 				$secretA = password_hash($request->postData('secretA'), PASSWORD_DEFAULT);
 
 				$this->processForm($request, $pass, $secretA, $managerA);
@@ -154,7 +154,7 @@ class AccountController extends BackController {
 
     	$this->page->addVar('title', 'Paramètre du compte');
 
-    	if($this->app->user()->isAdmin() == true){
+    	if($this->app->user()->isAdmin() == 'isCo' || $this->app->user->isAdmin() == 'toConf'){
 	    	
 	    	$this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=backSeeAdmin');
 

@@ -1,20 +1,18 @@
 <?php
 namespace App\Backend\Model;
  
-use Entity\BlogPosts;
+use App\Backend\Entity\BlogPosts;
  
 class BlogPostManagerPDO extends BlogPostManager
 {
   protected function add(BlogPosts $BlogPosts)
   {
-    $request = $this->dao->prepare('INSERT INTO blog_posts SET admin_id = :admin_id, date_p = :date_p, title = :title, content = :content, media = :media, slug = :slug, created_at = NOW(), updated_at = NOW()');
+    $request = $this->dao->prepare('INSERT INTO blog_posts SET admin_id = :admin_id, title = :title, content = :content, slug = :slug, created_at = NOW(), updated_at = NOW()');
     
-    $request->bindValue(':admin_id', $BlogPosts->adminId());
-    $request->bindValue(':date_p', $BlogPosts->dateP());
-    $request->bindValue(':title', $BlogPosts->title());
-    $request->bindValue(':content', $BlogPosts->content());
-    $request->bindValue(':media', $BlogPosts->media());
-    $request->bindValue(':slug', $BlogPosts->slug());
+    $request->bindValue(':admin_id', $BlogPosts->getAdminId());
+    $request->bindValue(':title', $BlogPosts->getTitle());
+    $request->bindValue(':content', $BlogPosts->getContent());
+    $request->bindValue(':slug', $BlogPosts->getSlug());
  
     $request->execute();
   }
@@ -31,7 +29,7 @@ class BlogPostManagerPDO extends BlogPostManager
  
   public function getList($debut = -1, $limite = -1)
   {
-    $request = 'SELECT id, admin_id, media, date_p, title, content, slug, created_at FROM blog_posts ORDER BY id DESC';
+    $request = 'SELECT id, admin_id, title, content, slug, created_at FROM blog_posts ORDER BY id DESC';
  
     if ($debut != -1 || $limite != -1)
     {
@@ -56,7 +54,7 @@ class BlogPostManagerPDO extends BlogPostManager
  
   public function getUnique($id)
   {
-    $request = $this->dao->prepare('SELECT id, admin_id, media, date_p, title, content, slug FROM blog_posts WHERE id = :id');
+    $request = $this->dao->prepare('SELECT id, admin_id, title, content, slug FROM blog_posts WHERE id = :id');
     $request->bindValue(':id', (int) $id, \PDO::PARAM_INT);
     $request->execute();
  
@@ -76,15 +74,13 @@ class BlogPostManagerPDO extends BlogPostManager
  
   protected function modify(BlogPosts $BlogPosts)
   {
-    $request = $this->dao->prepare('UPDATE blog_posts SET admin_id = :admin_id, date_p = :date_p, title = :title, content = :content, media = :media, slug = :slug, updated_at = NOW() WHERE id = :id');
+    $request = $this->dao->prepare('UPDATE blog_posts SET admin_id = :admin_id, title = :title, content = :content, slug = :slug, updated_at = NOW() WHERE id = :id');
     
-    $request->bindValue(':admin_id', $BlogPosts->adminId());
-    $request->bindValue(':date_p', $BlogPosts->dateP());
-    $request->bindValue(':title', $BlogPosts->title());
-    $request->bindValue(':content', $BlogPosts->content());
-    $request->bindValue(':media', $BlogPosts->media());
-    $request->bindValue(':slug', $BlogPosts->slug());
-    $request->bindValue(':id', $BlogPosts->id(), \PDO::PARAM_INT);
+    $request->bindValue(':admin_id', $BlogPosts->getAdminId());
+    $request->bindValue(':title', $BlogPosts->getTitle());
+    $request->bindValue(':content', $BlogPosts->getContent());
+    $request->bindValue(':slug', $BlogPosts->getSlug());
+    $request->bindValue(':id', $BlogPosts->getId(), \PDO::PARAM_INT);
  
     $request->execute();
   }

@@ -11,5 +11,5 @@
 </form>
 
 
-<a href="bootstrap.php?action=seeBlog"><div id="lienArticles">Les articles</div></a>
+<a href="bootstrap.php?action=blogList"><div id="lienArticles">Les articles</div></a>
 <a href="bootstrap.php?app=Backend&action=backCreateAdminAccount"><div id="lienArticles">Créer un compte Admin</div></a>

@@ -1,7 +1,4 @@
 
-<div class="image">
-	<img src="<?=$blogPost['media']?>" alt="media" id="media"/>
-</div>
 
 <div class="articleOne">
 	<div class="txtActeur">
@@ -12,12 +9,12 @@
 	</div>
 
 	<?php
-		if ($this->app->user()->isAdmin() == true) { ?>
+		if ($this->app->user()->isAdmin() == 'isCo') { ?>
 			<div class="edition">
-				<form method="post" action="bootstrap.php?app=backend&action=modifyBlog&id=<?=$blogPost['id']?>">
+				<form method="post" action="bootstrap.php?app=backend&action=backModifyBlog&id=<?=$blogPost['id']?>">
 					<button type="submit" class="bouton">Éditer</button>
 				</form>
-				<form method="post" action="bootstrap.php?action=app=backend&deleteBlog&id=<?=$blogPost['id']?>">
+				<form method="post" action="bootstrap.php?action=app=backend&backDeleteBlog&id=<?=$blogPost['id']?>">
 					<button type="submit" class="bouton">Supprimer</button>
 				</form>
 			</div>				

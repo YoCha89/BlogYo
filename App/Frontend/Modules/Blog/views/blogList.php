@@ -4,7 +4,7 @@ le châpo ;
 et un lien vers le blog post. -->
 
 <?php
-if ($this->app->user()->isAdmin() == true) { ?>
+if ($this->app->user()->isAdmin() == 'isCo') { ?>
 	<div class="Add">
 		<form method="post" action="bootstrap.php?app=backend&action=backPostBlog">
 			<button type="submit" class="bouton">Ajouter un article</button>
@@ -19,9 +19,6 @@ if ($this->app->user()->isAdmin() == true) { ?>
 foreach ($listBlogPost as $blogPost) {
 	?>
 	<div class="article">
-		<div class="image">
-			<img src="<?=$blogPost['media']?>" alt="media" id="media"/>
-		</div>
 
 		<div class="articleTxt">
 			<div class="txtActeur">
@@ -36,12 +33,12 @@ foreach ($listBlogPost as $blogPost) {
 				</form>
 			</div>
 			<?php
-			if ($this->app->user()->isAdmin() == true) { ?>
+			if ($this->app->user()->isAdmin() == 'isco') { ?>
 				<div class="edition">
-					<form method="post" action="bootstrap.php?app=backend&action=modifyBlog&id=<?=$blogPost['id']?>">
+					<form method="post" action="bootstrap.php?app=backend&action=backModifyBlog&id=<?=$blogPost['id']?>">
 						<button type="submit" class="bouton">Éditer</button>
 					</form>
-					<form method="post" action="bootstrap.php?app=backend&action=deleteBlog&id=<?=$blogPost['id']?>">
+					<form method="post" action="bootstrap.php?app=backend&action=backDeleteBlog&id=<?=$blogPost['id']?>">
 						<button type="submit" class="bouton">Supprimer</button>
 					</form>
 				</div>				

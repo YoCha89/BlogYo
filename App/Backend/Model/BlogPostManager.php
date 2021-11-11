@@ -2,7 +2,7 @@
 namespace App\Backend\Model;
  
 use OCFram\Manager;
-use Entity\BlogPosts;
+use App\Backend\Entity\BlogPosts;
 
 abstract class BlogPostManager extends Manager
 {
@@ -13,7 +13,11 @@ abstract class BlogPostManager extends Manager
   {
     if ($BlogPosts->isValid())
     {
-      $BlogPosts->isNew() ? $this->add($BlogPosts) : $this->modify($BlogPosts);
+      if ($BlogPosts->isNew() == true){
+        $this->add($BlogPosts);
+      }else{
+        $this->modify($BlogPosts);
+      }
     }
     else
     {
