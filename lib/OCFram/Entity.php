@@ -25,10 +25,6 @@ abstract class Entity implements \ArrayAccess
   }
 
 
-  public function id()
-  {
-    return $this->id;
-  }
   public function setId($id)
   {
     $this->id = (int) $id;

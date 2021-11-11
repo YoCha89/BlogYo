@@ -10,4 +10,4 @@
 	<button type="submit" class="bouton">Mettre à jour</button>
 </form>
 
-<a href="bootstrap.php?action=seeBlog"><div id="lienArticles">Les articles</div></a>
+<a href="bootstrap.php?action=blogList"><div id="lienArticles">Les articles</div></a>

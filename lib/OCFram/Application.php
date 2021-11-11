@@ -57,7 +57,7 @@ abstract class Application
           $router->addRoute(new Route($route['Module'], $route['Action'], $route['params']));
 
         }
-
+        // var_dump($routes,'------------------------', $this->httpRequest->getData('action'));die;
        try
         {
           $matchedRoute = $router->getRoute($this->httpRequest->getData('action'));

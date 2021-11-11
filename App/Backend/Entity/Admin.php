@@ -10,6 +10,7 @@ class Admin extends Entity
             $pseudo,
             $pass,
             $email,
+            $confirmed,
             $createdAt,
             $updatedAt;
 
@@ -17,18 +18,6 @@ class Admin extends Entity
 	const PSEUDO_NOT_VALIDE = 2;
 	const PASS_NOT_VALIDE = 3;
 	const EMAIL_NOT_VALIDE = 4;
-
-  protected function createAdmin(){
-
-  }
-
-  protected function suppressAdmin(){
-
-  }
-
-  protected function modifyAdmin(){
-
-  }
 
   // GETTERS //
   public function getId()
@@ -106,7 +95,7 @@ class Admin extends Entity
     }
     $this->pass = $pass;
   }
-  
+
   public function setCreatedAt(\DateTime $creationDate)
   {
     $this->createdAt = $createdAt;

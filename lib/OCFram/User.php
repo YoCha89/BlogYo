@@ -42,15 +42,15 @@ class User extends ApplicationComponent
 
   public function isAdmin()
   {
-    return isset($_SESSION['admin']) && $_SESSION['admin'] === true;
+    return $_SESSION['admin'];
   }
  
 
   public function setAdmin($admin)
   {
-    if (!is_bool($admin))
+    if ($admin != 'isCo' && $admin != 'toConf' && $admin != 'isDec')
     {
-      throw new \InvalidArgumentException('La valeur spécifiée à la méthode User::setAuthenticated() doit être un boolean');
+      throw new \InvalidArgumentException('La valeur spécifiée à la méthode User::setAuthenticated() doit être une des string définie');
     }
 
     $_SESSION['admin'] = $admin;

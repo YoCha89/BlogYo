@@ -16,7 +16,7 @@ class BackendApplication extends Application
 
 	public function run()
 	{
-		if ($this->user->isAuthenticated() && $this->user->isAdmin())
+		if ($this->user->isAdmin() == 'isCo' || $this->user->isAdmin() == 'toConf')
 		{ 
 			$controller=$this->getcontroller();
 		}

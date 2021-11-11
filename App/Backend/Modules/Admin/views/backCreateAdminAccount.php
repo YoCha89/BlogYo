@@ -5,6 +5,7 @@
 		
 
 <?php if (isset($key1)) { ?>
+	<P>Veuillez renseigner le pseudo et l'adresse email du nouvel administrateur</P><br/>
 		<?=isset($erreurs) && in_array(\Entity\Account::PRENOM_INVALIDE, $erreurs) ? 'Veuillez saisir un prénom.<br />' : ''?>
 	<form method="post" action="bootstrap.php?app=backend&action=backCreateAdminAccount">
 		<div class="champ">
@@ -38,7 +39,7 @@
 		</div>
 
 		<input type="hidden" name="step" value="step2">
-		<button type="submit" class="bouton">Créer</button>
+		<button type="submit" class="bouton">Finaliser mon compte</button>
 	</form>
 <?php } ?>
 

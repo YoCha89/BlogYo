@@ -10,7 +10,6 @@ class BlogPosts extends Entity
             $content,
             $title,
             $slug,
-            $media,
             $createdAt,
             $updatedAt;
 
@@ -24,6 +23,13 @@ class BlogPosts extends Entity
     }else{
       return false;
     }
+  }
+
+  public function isNew(){
+    if($this->getId() != null){
+      return false;
+    }
+    return true;
   }
 
   // GETTERS //
@@ -57,11 +63,6 @@ class BlogPosts extends Entity
     return $this->updatedAt;
   }
 
-  public function getMedia()
-  {
-   return $this->media;
-  }
-
   public function getSlug()
   {
    return $this->slug;
@@ -92,11 +93,6 @@ class BlogPosts extends Entity
     }
 
     $this->title = $title;
-  }
-
-  public function setMedia($media)
-  {
-    $this->media = $media;
   }
   
   public function setSlug($slug)

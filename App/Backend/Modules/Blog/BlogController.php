@@ -10,75 +10,30 @@ class BlogController extends BackController{
 
   public function executeBackPostBlog(HTTPRequest $request){
     if ($request->postExists('content')){
-        $slug = $this->app->user()->getAttribute('pseudo') .'-'. $request->getData('title');
-
-        $blogPost = new Blogposts ([
-        'adminId' => $this->app->user()->getAttribute('id'),
-        'title' => $request->postData('title'),
-        'content' => $request->postData('content'),     
-        'media' => $request->getData('media'),
-        'slug' => $slug
-        ]);
-
-        $managerB = $this->managers->getManagerOf('blogPost');
-
-        if($blogPost->isValid())
-        {
-            $managerB->save($blogPost);
-
-            $this->app->user()->setFlash('Votre article est publié !');
-
-            $this->app->httpResponse()->redirect('bootstrap.php?action=seeBlog&id='.$request->getdata('id'));
-
-        } else {
-
-            $this->app->user()->setFlash('Entrez au moins un caractère autre q\'un espace pour valider chaque champ');
-            $this->app->httpResponse()->redirect('bootstrap.php?action=blogList');
-        }
-        
+        $slug = $this->app->user()->getAttribute('pseudo') .'-'. $request->postData('title');
+        $this->processForm($request, $slug, $managerB);        
     } else {
-
         $this->page->addVar('title', 'Nouvelle publication');
     }  
   }
 
   public function executeBackModifyBlog(HTTPRequest $request){
     $managerB = $this->managers->getManagerOf('blogPost');
-    //modKey is a hidden field of the modify form to check if the user is submitting the form or is arriving on the view. Checking the actual field content won't wor for we'll put old values as default values
+    //modKey is a hidden field of the modify form to check if the user is submitting the form or is arriving on the view. Checking the actual field content won't work for we'll put old values as default values
     if ($request->postExists('modKey')){
-        
-        $blogPost = new Blogposts ([
-        'adminId' => $this->app->user()->getAttribute('id'),
-        'title' => $request->postData('title'),
-        'content' => $request->postData('content'),     
-        'media' => $request->getData('media'),
-        'slug' => $slug
-        ]);
-
-        if($blogPost->isValid())
-        {
-            $managerB->save($blogPost);
-
-            $this->app->user()->setFlash('Votre article a été mis à jour !');
-            $this->app->httpResponse()->redirect('bootstrap.php?action=blogList');
-
-        } else {
-
-            $this->app->user()->setFlash('Entrez au moins un caractère autre q\'un espace pour valider chaque champ');
-            $this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=modifyBlog&id='.$request->getdata('id'));
-        }
-        
+        $slug = $this->app->user()->getAttribute('pseudo') .'-'. $request->postData('title');
+        $this->processForm($request, $slug, $managerB);
     } else {
         
         $blogPost = $managerB->getUnique($request->getdata('id'));
 
         $this->page->addVar('title', 'Editez votre article');
-        $this->page->addVar('Blogpost', $blogPost);
+        $this->page->addVar('blogPost', $blogPost);
     }       
-
   }
 
   public function executeBackDeleteBlog(HTTPRequest $request){
+    
     $managerB = $this->managers->getManagerOf('blogPost');
     $managerB->delete($request->getdata('id'));
 
@@ -148,6 +103,35 @@ class BlogController extends BackController{
     $this->page->addVar('title', 'Commentaires à modérer');
     $this->page->addVar('comments', $commentsToModerate);
   }
+
+    protected function processForm(HTTPRequest $request, $slug, $managerB) {
+
+        $blogPost = new Blogposts ([
+            'adminId' => $this->app->user()->getAttribute('id'),
+            'title' => $request->postData('title'),
+            'content' => $request->postData('content'),  
+            'slug' => $slug
+        ]);
+
+        // if id exist, its an update
+        $id = $request->postData('id');
+        if ($id != null){
+            $blogPost->setId($id);
+            //update indicator for flash message mgmt
+            $flashInd="id";
+        }
+
+        if ($blogPost->isValid()){
+            $managerB->save($blogPost);
+
+            $this->app->user()->setFlash(!empty($flashInd) ? 'Votre article a été mis à jour !' : 'Votre article est publié !');
+
+            $this->app->httpResponse()->redirect('bootstrap.php?action=blogList'); 
+        } else {
+            $this->app->user()->setFlash('Entrez au moins un caractère autre q\'un espace pour valider chaque champ');
+        }
+    }
 }
+
 
 ?>
