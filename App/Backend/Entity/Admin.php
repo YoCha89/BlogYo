@@ -6,7 +6,6 @@ use OCFram\Entity;
 class Admin extends Entity
 {
 	protected $id,
-            $name,
             $pseudo,
             $pass,
             $email,
@@ -14,10 +13,18 @@ class Admin extends Entity
             $createdAt,
             $updatedAt;
 
-  const NAME_NOT_VALIDE = 1;
 	const PSEUDO_NOT_VALIDE = 2;
 	const PASS_NOT_VALIDE = 3;
 	const EMAIL_NOT_VALIDE = 4;
+
+  public function isValid(){
+
+    if (!empty($this->getEmail()) && !empty($this->getPseudo()) && !empty($this->getPass())){
+      return true;
+    }else{
+      return false;
+    }
+  }
 
   // GETTERS //
   public function getId()
@@ -25,17 +32,12 @@ class Admin extends Entity
     return $this->id;
   }
 
-  public function getName()
-  {
-   return $this->name;
-  }
-
   public function getPseudo()
   {
     return $this->pseudo;
   }
 
-  public function getPmail()
+  public function getEmail()
   {
    return $this->email;
   }
@@ -56,44 +58,37 @@ class Admin extends Entity
   }
 
  // SETTERS //
-  public function setName($name)
-  {
-    if (!is_string($name) || empty($name))
-    {
-      $this->erreurs[] = self::NOM_NON_VALIDE;
-    }
-    $this->name = $name;
-  }
 
-  public function setPseudo($pseudo)
-  {
+  public function setPseudo($pseudo) {
     if (!is_string($pseudo) || empty($pseudo))
     {
       $this->erreurs[] = self::PSEUDO_NOT_VALIDE;
     }
-    $this->firstName = $firstName;
+    $this->pseudo = $pseudo;
   }
 
-  public function setEmail($email)
-  {
-    if (!is_string($email) || empty($email))
-    {
-      if(!preg_match("/^([w-.]+)@((?:[w]+.)+)([a-zA-Z]{2,4})/i", $email)){
+  public function setEmail($email) {
+    if (is_string($email) || !empty($email)) {
+      if(!preg_match("/^([w\-.]+)@((?:[w]+.)+)([a-zA-Z]{2,4})/i", $email)){
         $this->erreurs[] = self::EMAIL_NOT_VALIDE;
       }
+
+      $this->email = $email;
     }
-    $this->email = $email;
   }
 
-  public function setPass($pass)
-  {
-    if (!is_string($pass) || empty($pass))
-    {
-      if(!preg_match("/^([w-.]+)@((?:[w]+.)+)([a-zA-Z]{2,4})/i", $pass)){
-        $this->erreurs[] = self::PASS_NOT_VALIDE;
+  public function setPass($pass) {
+    if (is_string($pass) || !empty($pass)) {
+      if((strlen($pass) > 40) != true){
+        if(!preg_match("/^([w\-.]+)@((?:[w]+.)+)([a-zA-Z]{2,4})/i", $pass)) {
+          $this->erreurs[] = self::PASS_NOT_VALIDE;
+        }        
+
+        $this->pass = $pass;
       }
+
+      $this->pass = $pass;
     }
-    $this->pass = $pass;
   }
 
   public function setCreatedAt(\DateTime $creationDate)

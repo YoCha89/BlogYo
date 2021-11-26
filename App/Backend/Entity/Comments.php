@@ -19,7 +19,6 @@ class Comments extends Entity
   const CONTENU_INVALIDE = 1;
 
   public function isValid(){
-    
     if (!empty($this->getBlogPostId()) && !empty($this->getContent()) && !empty($this->getAuthor())){
       return true;
     }else{
@@ -79,6 +78,10 @@ class Comments extends Entity
   }
 
  // SETTERS //
+  public function setId($id)
+  {
+    $this->id = $id;
+  }
 
   public function setAuthor($author)
   {
@@ -120,7 +123,7 @@ class Comments extends Entity
     $this->validated = $validated;
   }
 
-  public function setAccountId($account)
+  public function setAccountId($accountId)
   {
     $this->accountId = $accountId;
   }

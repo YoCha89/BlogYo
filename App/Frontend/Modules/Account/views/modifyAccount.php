@@ -20,7 +20,7 @@
 			<input type="text" name="email" value="<?= $account['email'] ?>">
 			</div>
 
-			<button type="submit" class="bouton">Mettre à jour</button>
+			<button type="submit" class="btn btn-secondary">Mettre à jour</button>
 		</form>
 	</div>
 </div>

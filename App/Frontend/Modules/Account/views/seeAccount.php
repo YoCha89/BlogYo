@@ -7,7 +7,27 @@
 </p>
 
 <form method="post" action="bootstrap.php?action=modifyAccount&id=<?=$account['id']?>">
-	<button type="submit" class="bouton">Mettre à jour</button>
+	<button type="submit" class="btn btn-primary">Mettre à jour</button>
 </form>
 
-<a href="bootstrap.php?action=blogList"><div id="lienArticles">Les articles</div></a>
+<div class="AccChoice">  
+<form method="post" action="bootstrap.php?action=deleteAccount&id=<?=$account['id']?>">
+	<button type="submit" class="btn btn-danger">Supprimer votre compte</button>
+</form>
+</div>
+
+<hr>
+
+<div class="AccOtherChoice">
+	<form method="post" action="bootstrap.php?action=seeMyComments">
+		<button type="submit" class="btn btn-dark">Voir mes commentaires</button>
+	</form>
+
+	<form method="post" action="bootstrap.php?action=contactAdmin">
+		<button type="submit" class="btn btn-dark">Contacter le bloggeur</button>
+	</form>
+</div>
+
+<form method="post" action="bootstrap.php?action=blogList">
+	<button type="submit" class="btn btn-link">Les articles</button>
+</form>

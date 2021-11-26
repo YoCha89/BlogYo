@@ -5,7 +5,7 @@ use App\Backend\Entity\Account;
  
 class AccountManagerPDO extends AccountManager
 {
-   //used for connexion (id still unknown)
+  //used for connexion (id still unknown)
   public function getAccountPerPseudo($pseudo){
 
     $sql =$this->dao->prepare('SELECT id, name, pseudo, email, pass, secret_q, secret_a FROM account WHERE pseudo = :pseudo');
@@ -85,13 +85,12 @@ class AccountManagerPDO extends AccountManager
     return $pseudo;
   }
 
-  public function updatePass($id, $pass){
+  public function updatePass($pseudo, $pass){
 
-    $sql->bindValue(':id', $account->getId(), \PDO::PARAM_INT);
-    $sql = $this->dao->prepare('UPDATE account SET pass = :pass, updated_at = NOW() WHERE id= :id');
+    $sql = $this->dao->prepare('UPDATE account SET pass = :pass, updated_at = NOW() WHERE pseudo= :pseudo');
 
-    $sql->bindValue(':id', $id, \PDO::PARAM_INT);
-    $sql->bindValue(':pass', $pass->getPass());
+    $sql->bindValue(':pseudo', $pseudo);
+    $sql->bindValue(':pass', $pass);
     
     $sql->execute();
 

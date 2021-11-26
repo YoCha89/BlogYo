@@ -27,12 +27,6 @@
   	"Action":"backDeleteBlog",
     "params":[]
   },
-  "backAskPass":{
-  	"url":"/back_ask_pass",
-    "Module":"Admin",
-    "Action":"backAskPass",
-    "params":[]
-  },
   "backModerateComment":{
     "url":"/back_moderate_comment",
     "Module":"Blog",
@@ -49,6 +43,12 @@
   	"url":"/back_furnish_pass",
   	"Module":"Admin",
   	"Action":"backFurnishPass",
+    "params":[]
+  },
+  "backModifyAdminAccount":{
+    "url":"/back_modify_admin_account",
+    "Module":"Admin",
+    "Action":"backModifyAdminAccount",
     "params":[]
   }
 }

@@ -12,14 +12,14 @@
 					<label for="pass">Mot de passe :</label>
 					<input type="password" name="pass">
 				</div>
-					<br/><button type="submit" class="bouton">Connexion</button>
+					<br/><button type="submit" class="btn btn-secondary">Connexion</button>
 			</form>
 
 			<div id="separeVert"></div>
 			<hr id="separeHori">
 
 			<form method="post" action="bootstrap.php?action=blogList"><!--Bloc de connexion-->
-				<button type="submit" class="bouton">Continuer hors connexion</button>
+				<button type="submit" class="btn btn-secondary">Continuer hors connexion</button>
 			</form>
 		</div>
 	</div>
@@ -34,7 +34,7 @@
 						<label for="pseudo">Pseudo :</label><br/>
 						<input type="text" name="pseudo">
 					</div>
-					<br/><button type="submit" class="boutonOp2">Mot de passe oublié</button>
+					<br/><button type="submit" class="btn btn-dark">Mot de passe oublié</button>
 				</form>
 			</div>
 
@@ -44,9 +44,8 @@
 
 			<div id="blocCrea"><!--Bloc de création de compte-->
 				<p>Vous n'avez pas encore de compte ?</p><br/>
-				<p>Créez votre compte dès maintenant !</p><br/>
 				<form method="post" action="bootstrap.php?action=createAccount ">
-					<br/><button type="submit" class="boutonOp2">Créer mon compte</button>
+					<br/><button type="submit" class="btn btn-secondary">Créer mon compte</button>
 				</form>
 			</div>
 		</div>

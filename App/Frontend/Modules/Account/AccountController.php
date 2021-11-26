@@ -5,11 +5,18 @@ use OCFram\BackController;
 use OCFram\HTTPRequest;
 use App\Backend\Entity\Account;
 use App\Backend\Model\AccountManagerPDO;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 class AccountController extends BackController {
 
 	//access to connexion form 
 	public function executeIndex (HTTPRequest $request){
+		if ($this->app->user()->isAuthenticated() == true){
+			$this->app->user()->setFlashInfo('Vous êtes déja connecté.');
+			$this->app->httpResponse()->redirect('bootstrap.php?action=blogList');
+		}
 
 		if ($request->postExists('pseudo')) {
 			if ($request->postData('pseudo') !== null || $request->postData('pass') !== null){
@@ -29,14 +36,15 @@ class AccountController extends BackController {
 
 						$this->app->user()->setAttribute('id', $account['id']);
 					    $this->app->user()->setAttribute('pseudo', $account['pseudo']);
+					    $this->app->user()->setAttribute('email', $account['email']);
 
-					    $this->app->user()->setFlash('Vous êtes connecté, nous sommes ravis de votre retour !');
+					    $this->app->user()->setFlashSuccess('Vous êtes connecté, nous sommes ravis de votre retour !');
 
 					    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList');
 				    }
 
 				    else {
-				    	$this->app->user()->setFlash('Votre nom d\'utilisateur ou votre mot de passe sont incorrect.');
+				    	$this->app->user()->setFlashError('Votre nom d\'utilisateur ou votre mot de passe sont incorrect.');
 				    }	    		
 		    	}else{
 		    		$passTransfert = str_replace('&', '\&', $passEntered);
@@ -45,7 +53,7 @@ class AccountController extends BackController {
 		    }
 
 		    $this->app->httpResponse()->redirect('bootstrap.php?action=index');
-		    $this->app->user()->setFlash('saisissez votre pseudo et votre mot de passe pour vous connecter.'); 
+		    $this->app->user()->setFlashInfo('saisissez votre pseudo et votre mot de passe pour vous connecter.'); 
 		}
 			
 
@@ -67,7 +75,7 @@ class AccountController extends BackController {
 	public function executeCreateAccount (HTTPRequest $request){
 
 		if(!empty($this->app->user()->getAttribute('id'))){
-			$this->app->user()->setFlash('Vous avez déja un compte.');
+			$this->app->user()->setFlashInfo('Vous avez déja un compte.');
 	    	$this->app->httpResponse()->redirect('bootstrap.php?action=index');
 		}else{
 		    $this->page->addVar('title', 'Créez votre compte');
@@ -82,7 +90,7 @@ class AccountController extends BackController {
 				$pseudoAd=$managerAd->checkPseudo($request->postData('pseudo'));
 				//checking pseudo availability (must be unique for connexion mgmt)
 				if ($pseudo != null || $pseudoAd != null){
-					$this->app->user()->setFlash('Ce pseudo n\'est pas disponible.');					  		
+					$this->app->user()->setFlashError('Ce pseudo n\'est pas disponible.');					  		
 				} else {
 					$uppercase = preg_match('@[A-Z]@', $request->postData('pass'));
 					$lowercase = preg_match('@[a-z]@', $request->postData('pass'));
@@ -90,11 +98,11 @@ class AccountController extends BackController {
 					$password = $request->postData('pass');
 
 					if(!$uppercase || !$lowercase || !$number || strlen($password) < 8) {
-						$this->app->user()->setFlash('Votre mot de passe doit contenir au moins 8 caractères dont 1 majuscule, 1 minuscule, un nombre et un caractère spécial.');
+						$this->app->user()->setFlashError('Votre mot de passe doit contenir au moins 8 caractères dont 1 majuscule, 1 minuscule, un nombre et un caractère spécial.');
 					} else {
 						//checking the 2 form pass matching
 						if ( $request->postData('pass') != $request->postData('confPass')){
-							$this->app->user()->setFlash('Vous avez saisie 2 mots de passe différents.');
+							$this->app->user()->setFlashError('Vous avez saisie 2 mots de passe différents.');
 						} else {
 							//pass encryption
 							$pass = password_hash($request->postData('pass'), PASSWORD_DEFAULT);
@@ -110,6 +118,10 @@ class AccountController extends BackController {
 
 	//Update the account
 	public function executeModifyAccount (HTTPRequest $request){
+
+		if($this->app->user()->isAdmin() == 'isCo'){
+			$this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=backModifyAdminAccount');
+		}
 
 		$this->page->addVar('title', 'Mise à jour de votre compte');
 
@@ -137,7 +149,7 @@ class AccountController extends BackController {
 
 					$this->processForm($request, $pass, $secretA, $managerA);
 				} else {
-					$this->app->user()->setFlash('Ce nom d\'utilisateur n\'est pas disponible.');
+					$this->app->user()->setFlashError('Ce nom d\'utilisateur n\'est pas disponible.');
 				}	
 			} else {//pseudo is new and unique
 				$pass = password_hash($request->postData('pass'), PASSWORD_DEFAULT);; 
@@ -154,7 +166,7 @@ class AccountController extends BackController {
 
     	$this->page->addVar('title', 'Paramètre du compte');
 
-    	if($this->app->user()->isAdmin() == 'isCo' || $this->app->user->isAdmin() == 'toConf'){
+    	if($this->app->user()->isAdmin() == 'isCo' || $this->app->user()->isAdmin() == 'toConf'){
 	    	
 	    	$this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=backSeeAdmin');
 
@@ -180,7 +192,7 @@ class AccountController extends BackController {
 	    	$managerAd = $this->managers->getManagerOf('Admin');
 	    	$admin = $managerAd->checkPseudo($request->postData('pseudo'));
 	    	if(!empty($admin)){
-	    	$this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=backFurnishPass');
+	    		$this->askAdminPass($request);
 	    	}
 		}
 
@@ -189,7 +201,7 @@ class AccountController extends BackController {
 		}
 
 	    if (empty($account) && empty($request->postData('newPass')))  {
-	    	$this->app->user()->setFlash('Entrez un nom d\'utilisateur valide pour modifier votre mot de passe.');
+	    	$this->app->user()->setFlashError('Entrez un nom d\'utilisateur valide pour modifier votre mot de passe.');
 	    	$this->app->httpResponse()->redirect('bootstrap.php?action=index');
 	    }elseif(!empty($account)){
 				$secretQ = $account['secret_q'];
@@ -202,31 +214,32 @@ class AccountController extends BackController {
 			$number = preg_match('@[0-9]@', $newPass);
 
 			if(!$uppercase || !$lowercase || !$number || strlen($newPass) < 8) {
-				$this->app->user()->setFlash('Votre mot de passe doit contenir au moins 8 caractères dont 1 majuscule, 1 minuscule, un nombre et un caractère spécial.');
+				$this->app->user()->setFlashError('Votre mot de passe doit contenir au moins 8 caractères dont 1 majuscule, 1 minuscule, un nombre et un caractère spécial.');
 			} else {
 
 				//checking the 2 form pass matching
 				if ( $request->postData('newPass') != $request->postData('confNewPass')){
-					$this->app->user()->setFlash('Vous avez saisie 2 mots de passe différents.');
+					$this->app->user()->setFlashError('Vous avez saisie 2 mots de passe différents.');
 				} else {
 					//security question validation
-		        	$secretA = password_hash($request->postData('secretA'), PASSWORD_DEFAULT);
+		        	$secretA = $request->postData('secretA');
 
 					if (!password_verify($secretA, $accountStep2['secret_a'])){
-		            	$this->app->user()->setFlash('Vous n\'avez pas entré la bonne réponse à votre question secrète.');
+		            	$this->app->user()->setFlashError('Vous n\'avez pas entré la bonne réponse à votre question secrète.');
 		        		$this->app->httpResponse()->redirect('bootstrap.php?action=index');
 		            } else {
 						$pass = password_hash($request->postData('newPass'), PASSWORD_DEFAULT);
 
-		            	$managerA->updatePass($request->postData('pseudo'), $pass);
+		            	$managerA->updatePass($request->postData('hiddenPseudo'), $pass);
 
-		            	$this->app->user()->setFlash('Votre mot de passe a bien été mis à jour !');
+// $this->app->user()->setFlashInfo($pass);
+		            	$this->app->user()->setFlashSuccess('Votre mot de passe a bien été mis à jour !');
 
 					    $this->app->user()->setAuthenticated(true);
 
 						$this->app->user()->setAttribute('id', $formAccount['id']);
 					    $this->app->user()->setAttribute('pseudo', $formAccount['pseudo']);
-					    $this->app->user()->setAttribute('firstName', $formAccount['firstName']);
+					    $this->app->user()->setAttribute('email', $formAccount['email']);
 
 
 						//On redirigre sur la page "Paramètre du compte" ou l'utilisateur voit les infos à jour
@@ -239,30 +252,34 @@ class AccountController extends BackController {
 
 	//Contact the site admin
 	public function executeContactAdmin (HTTPRequest $request) {
-	   	//getting back the mail data 
-	   	$firstName = $request->postData('firstName');
-	   	$name = $request->postData('name');
-		$title = $request->postData('title');
-		$content = $request->postData('content');
 
-		if($this->app->user()->getAuthenticated() == true){
-			$managerA = $this->managers->getManagerOf('Account');
-	    	$account = $managerA->getAccount($this->app->user()->getId());
-			$userMail = $account->email();
-		} else {
-			$userMail = $request->postData('userMail');
+		$managerA = $this->managers->getManagerOf('Account');
+    	$account = $managerA->getAccount($this->app->user()->getAttribute('id'));
+
+		if($request->postExists('body')){
+			$userMail = $account['email'];
+			$AdminMail = 'ychardel@gmail.com';
+
+			$title = $request->postData('title');
+			$body = $request->postData('body');
+
+			$titleConf = 'Confirmation d\'envoi de message :'. $title;
+			$bodyConf = 'Votre message a bien été envoyé à l\'administrateur de BlogYo !<br/>
+			<i>Ceci est un message automatique de confirmation. N\'essayez pas de répondre à ce mail.<\i>';
+
+			//Message for Admin
+			$this->sendMail($userMail, $AdminMail, $title, $body);
+			//Confirmation email
+			$this->sendMail($AdminMail, $userMail, $bodyConf);
+
+		}elseif($this->app->user()->isAuthenticated() == true){
+	
+    		$this->page->addVar('title', 'Contactez l\'administrateur');
+    		$this->page->addVar('email', $userMail);
+
+		}else{
+			$this->app->user()->setFlashError('Vous devez posséder un compte pour contacter l\'administrateur.');
 		}
-
-		// creating 2 mail within the mailer
-		$file = dirname(__FILE__).'/../../App/'.$this->name.'/config/param.json';
-
-	    $data = file_get_contents($file);
-
-	    $confirm = json_decode($data);
-
-		$this->app->user()->setFlash('Votre message a été envoyé, vous allez recevoir un mail de confirmation');
-		
-
 	}
 
 	protected function processForm(HTTPRequest $request, $pass, $secretA, $managerA) {
@@ -297,21 +314,77 @@ class AccountController extends BackController {
 	    if ($formAccount->isValid()){
 			$managerA->save($formAccount);
 
-			$this->app->user()->setFlash(!empty($flashInd) ? 'Votre compte a été mis à jour !' : 'Votre compte a été créé, bienvenue sur BlogYo !');
+			$this->app->user()->setFlashSuccess(!empty($flashInd) ? 'Votre compte a été mis à jour !' : 'Votre compte a été créé, bienvenue sur BlogYo !');
 
+			$accountProcessed = $managerA->getAccountPerPseudo($request->postData('pseudo'));
 			//connexion if previous step successful
 			    $this->app->user()->setAuthenticated(true);
 
-				$this->app->user()->setAttribute('id', $formAccount['id']);
-			    $this->app->user()->setAttribute('pseudo', $formAccount['pseudo']);
-			    $this->app->user()->setAttribute('firstName', $formAccount['firstName']);
+				$this->app->user()->setAttribute('id', $accountProcessed['id']);
+			    $this->app->user()->setAttribute('pseudo', $accountProcessed['pseudo']);
+			    $this->app->user()->setAttribute('email', $accountProcessed['email']);
 
 			    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList'); 
 		} else {
-			$this->app->user()->setFlash('Entrez au moins un caractère autre q\'un espace pour valider chaque champ');
+			$this->app->user()->setFlashError('Entrez au moins un caractère autre qu\'un espace pour valider chaque champ');
 			//different redirection based on creration or update of account
 			!empty($idCheck) ? $this->app->httpResponse()->redirect('bootstrap.php?action=blogList'): $this->app->httpResponse()->redirect('bootstrap.php?action=index'); 
 		}
+	}
+
+	protected function sendMail($senderMail, $receiverMail, $title, $body){
+		$mailAdmin = new PHPMailer(true);
+		try {
+		    $mailAdmin->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+		    $mailAdmin->isSMTP();                                            //Send using SMTP
+		    $mailAdmin->Host       = 'smtp-relay.gmail.com';                     //Set the SMTP server to send through
+		    $mailAdmin->SMTPAuth   = true;                                   //Enable SMTP authentication
+		    $mailAdmin->Username   = 'yoaoc89@gmail.com';                     //SMTP username
+		    $mailAdmin->Password   = 'afzatdagefukgzdh';                               //SMTP password
+		    $mailAdmin->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+		    $mailAdmin->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+		    //Recipients
+		    $mailAdmin->setFrom($senderMail);
+		    $mailAdmin->addAddress($receiverMail);
+
+		    if($senderMail != 'yoachar@gmail.com'){
+		    	$mailAdmin->addReplyTo($senderMail);
+		    }
+
+		    //Content
+		    $mailAdmin->isHTML(true);                 
+
+		    $mailAdmin->Subject = $title;
+		    $mailAdmin->Body    = $body;
+
+var_dump($mailAdmin);die;
+		    $mailAdmin->send();		
+
+		    $this->app->user()->setFlashSuccess('Votre message a été envoyé, vous allez recevoir un mail de confirmation');
+		} catch (Exception $e) {
+			$this->app->user()->setFlashError('Votre message n\'a pas pu être envoyé');
+		}
+	}
+
+	//Ask for a new admin account password through frontend
+	protected function askAdminPass (HTTPRequest $request) {
+		$managerA = $this->managers->getManagerOf('Admin');
+		$admin = $managerA->getAdminPerPseudo($request->postData('pseudo'));
+
+		$emailAdmin = $admin['email'];
+		$masterAdmin = 'ychardel@gmail.com';
+		$pseudo = $admin['pseudo'];
+
+		$title = 'Demande de renouvellement de mot de passe';
+		$body = "Une demande de renouvellement de mot de passe a été envoyé par ". $emailAdmin.".<br/> Cliquez sur le lien pour permettre le renouvellement : <a href=\"http://localhost/web/bootstrap.php?app=backend&action=backFurnishPass&pseudo=".$pseudo."\">Autoriser le changement de mot de passe</a>";
+
+		$titleConf = 'Confirmation de demande de renouvellement de mot de passe';
+		$bodyConf = 'Votre demande de renouvellement de mot de passe a été envoyé à l\'administrateur principal du site">';
+
+		$this->sendMail($emailAdmin, $masterAdmin, $title, $body);
+		$this->sendMail($emailAdmin, $masterAdmin, $titleConf, $bodyConf);
+
 	}
 }
 

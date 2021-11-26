@@ -19,7 +19,7 @@
 			<input type="text" name="secretA">
 			</div>
 			<input id="hiddenPseudo" name="hiddenPseudo" type="hidden" value="<?= $pseudo ?>">
-			<button type="submit" class="bouton">Mettre à jour</button>
+			<button type="submit" class="btn btn-secondary">Mettre à jour</button>
 		</form>
 	</div>
 </div>

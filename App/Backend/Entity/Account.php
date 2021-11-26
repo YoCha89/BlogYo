@@ -114,24 +114,28 @@ class Account extends Entity
 
   public function setEmail($email)
   {
-    if (!is_string($email) || empty($email))
-    {
+    if (is_string($email) || !empty($email)) {
       if(!preg_match("/^([w\-.]+)@((?:[w]+.)+)([a-zA-Z]{2,4})/i", $email)){
         $this->erreurs[] = self::EMAIL_NOT_VALIDE;
       }
+
+     $this->email = $email;
     }
-    $this->email = $email;
   }
 
   public function setPass($pass)
   {
-    if (!is_string($pass) || empty($pass))
-    {
-      if(!preg_match("/^([w\-.]+)@((?:[w]+.)+)([a-zA-Z]{2,4})/i", $pass)){
+    if (is_string($pass) || !empty($pass)) {
+      if((strlen($pass) > 40) != true){
+              if(!preg_match("/^([w\-.]+)@((?:[w]+.)+)([a-zA-Z]{2,4})/i", $pass)){
         $this->erreurs[] = self::PASS_NOT_VALIDE;
       }
+
+      $this->pass = $pass;
+    } 
+
+      $this->pass = $pass;
     }
-    $this->pass = $pass;
   }
 
    public function setSecretQ($secretQ)

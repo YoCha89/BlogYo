@@ -1,29 +1,21 @@
 <?php
 namespace App\Backend\Model;
  
-use Entity\Comments;
+use App\Backend\Entity\Comments;
  
 class CommentsManagerPDO extends CommentsManager
 {
-  protected function add(Comments $comments)
-  {
+  protected function add(Comments $comments) {
+        // var_dump('mmp',$comments);die;
     $request = $this->dao->prepare('INSERT INTO comments SET account_id = :account_id, author = :author, content = :content, blog_post_id = :blog_post_id, validated = :validated, created_at = NOW()');
     
     $request->bindValue(':account_id', $comments->getAccountId());
     $request->bindValue(':blog_post_id', $comments->getblogPostId());
     $request->bindValue(':author', $comments->getAuthor());
     $request->bindValue(':content', $comments->getContent());
+    $request->bindValue(':validated', null);
  
     $request->execute();
-  }
-
-  public function countA($id)
-  {
-    $request = $this->dao->query('SELECT COUNT(*) FROM comments WHERE account_id :account_id')->fetchColumn();
-
-    $request->bindValue(':account_id', (int) $account_id, \PDO::PARAM_INT);
- 
-     return $this->dao->query($request);
   }
  
   public function delete($id)
@@ -53,10 +45,10 @@ class CommentsManagerPDO extends CommentsManager
  
   public function getCommentsList($accountId)
   {
-    $request = 'SELECT id, account_id, date_p, author, content, validated FROM comments WHERE account_id = :account_id ORDER BY id DESC';
-    $request->bindValue(':account_id', (int) $account_id, \PDO::PARAM_INT);
+    $request = $this->dao->prepare('SELECT id, account_id, date_p, author, content, validated, blog_post_id FROM comments WHERE account_id = :account_id ORDER BY id DESC');
+    $request->bindValue('account_id', (int)$accountId, \PDO::PARAM_INT);
  
-    $request = $this->dao->query($request);
+    $request->execute();
     $request->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Comments');
  
     $commentsList = $request->fetchAll();
@@ -74,7 +66,7 @@ class CommentsManagerPDO extends CommentsManager
  
   public function getUnique($id)
   {
-    $request = $this->dao->prepare('SELECT id, account_id, date_p, author, content, validated FROM comments WHERE id = :id');
+    $request = $this->dao->prepare('SELECT id, account_id, date_p, author, content, validated, blog_post_id FROM comments WHERE id = :id');
     $request->bindValue(':id', (int) $id, \PDO::PARAM_INT);
     $request->execute();
  
@@ -92,8 +84,8 @@ class CommentsManagerPDO extends CommentsManager
     return $comment;
   }
  
-  protected function modify(Comments $comments)
-  {
+  protected function modify(Comments $comments) {
+
     $request = $this->dao->prepare('UPDATE comments SET account_id = :account_id, date_p = :date_p, author = :author, content = :content, validated = :validated, updated_at = NOW() WHERE id = :id');
     
     $request->bindValue(':account_id', $comments->getAccountId());
@@ -120,7 +112,7 @@ class CommentsManagerPDO extends CommentsManager
   }
 
   public function moderate($verdict, $id){
-    $request = $this->dao->prepare('UPDATE comments SET validated = :validated WHERE id = :id');
+    $request = $this->dao->prepare('UPDATE comments SET validated = :validated, date_p = NOW() WHERE id = :id');
 
     $request->bindValue(':validated', $verdict);
     $request->bindValue(':id', $id);

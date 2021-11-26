@@ -21,12 +21,14 @@ if(isset($comments)){
             <input id="<?php echo $com ?>" name="<?php echo $com ?>" type="hidden" value="<?php echo $comment['id']?>">
 
             <input type="radio" id="<?php echo $verdict ?>"
-             name="<?php echo $verdict ?>" value="true">
+             name="<?php echo $verdict ?>" value="true" class="form-check-input">
             <label for="contactChoice1">Valider</label>
 
             <input type="radio" id="<?php echo $verdict ?>"
-             name="<?php  echo $verdict ?>" value="false">
+             name="<?php  echo $verdict ?>" value="false" class="form-check-input">
             <label for="contactChoice2">Rejeter</label>
+
+            <hr>
 <?php $i++;
 }
                       
@@ -34,5 +36,5 @@ if(isset($comments)){
     <p>Aucun nouveau commentaire à modérer...</p>
 <?php } ?>
 
-    <button type="submit" class="bouton">Appliquer les choix</button>
+    <br/><button type="submit" class="btn btn-secondary">Appliquer les choix</button>
 </form>

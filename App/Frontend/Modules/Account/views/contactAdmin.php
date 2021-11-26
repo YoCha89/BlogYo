@@ -1,11 +1,10 @@
 <form method="post" action="bootstrap.php?action=contactAdmin">
-	<div class="champ">
-		<label for="title">Titre :</label>
-		<input type="text" name="title"><br/>
-	</div>
 
-	<div class="champ">
-		<label for="content">Votre message :</label>
-		<input type="textarea" name="content"><br/>
-	</div>
+	<label for="title">Titre :</label>
+	<input type="text" name="title"><br/>
+
+	<label for="content">Votre message :</label>
+	<input type="textarea" name="body" rows="8"><br/>
+
+	<button type="submit" class="btn btn-secondary">Envoyer le message</button>
 </form>

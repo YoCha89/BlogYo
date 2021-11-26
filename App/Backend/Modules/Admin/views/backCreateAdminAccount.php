@@ -4,7 +4,7 @@
 	<div class="blocForm">
 		
 
-<?php if (isset($key1)) { ?>
+<?php if ($this->app->user()->isAdmin() == 'isCo') { ?>
 	<P>Veuillez renseigner le pseudo et l'adresse email du nouvel administrateur</P><br/>
 		<?=isset($erreurs) && in_array(\Entity\Account::PRENOM_INVALIDE, $erreurs) ? 'Veuillez saisir un prénom.<br />' : ''?>
 	<form method="post" action="bootstrap.php?app=backend&action=backCreateAdminAccount">
@@ -20,11 +20,11 @@
 		</div>
 
 			<input type="hidden" name="step" value="step1">
-		<button type="submit" class="bouton">Créer</button>
+		<button type="submit" class="btn btn-secondary">Créer</button>
 	</form>
 <?php } ?>
 
-<?php if (isset($key2)) { ?>
+<?php if ($this->app->user()->isAdmin() == 'toConf') { ?>
 	<p>Votre mot de passe doit contenir au moins 8 caractères dont : une minuscule, une majuscule, un chiffe et un caractère spécial.</p><br/>
 	<form method="post" action="bootstrap.php?app=backend&action=backCreateAdminAccount">
 		<?=isset($erreurs) && in_array(\Entity\Account::MOT_DE_PASSE_INVALIDE, $erreurs) ? 'Veuillez saisir un autre mot de passe.<br />' : ''?>
@@ -39,7 +39,7 @@
 		</div>
 
 		<input type="hidden" name="step" value="step2">
-		<button type="submit" class="bouton">Finaliser mon compte</button>
+		<button type="submit" class="btn btn-secondary">Finaliser mon compte</button>
 	</form>
 <?php } ?>
 

@@ -50,6 +50,6 @@
 				<input type="text" name="secretA"><br/>
 			</div>
 
-			<button type="submit" class="bouton">Créer</button>
+			<button type="submit" class="btn btn-secondary">Créer</button>
 		</form>
 </div>

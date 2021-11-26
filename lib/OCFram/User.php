@@ -11,17 +11,43 @@ class User extends ApplicationComponent
     return isset($_SESSION[$attr]) ? $_SESSION[$attr] : null;
   }
  
-  public function getFlash()
+  public function getFlashInfo()
   {
-    $flash = $_SESSION['flash'];
-    unset($_SESSION['flash']);
+    $flash = $_SESSION['flashInfo'];
+    unset($_SESSION['flashInfo']);
  
     return $flash;
   }
  
-  public function hasFlash()
+  public function hasFlashInfo()
   {
-    return isset($_SESSION['flash']);
+    return isset($_SESSION['flashInfo']);
+  }
+
+  public function getFlashSuccess()
+  {
+    $flash = $_SESSION['flashSuccess'];
+    unset($_SESSION['flashSuccess']);
+ 
+    return $flash;
+  }
+ 
+  public function hasFlashSuccess()
+  {
+    return isset($_SESSION['flashSuccess']);
+  }
+
+  public function getFlashError()
+  {
+    $flash = $_SESSION['flashError'];
+    unset($_SESSION['flashError']);
+ 
+    return $flash;
+  }
+ 
+  public function hasFlashError()
+  {
+    return isset($_SESSION['flashError']);
   }
  
   public function isAuthenticated()
@@ -61,9 +87,19 @@ class User extends ApplicationComponent
     $_SESSION[$attr] = $value;
   } 
 
-  public function setFlash($value)
+  public function setFlashInfo($value)
   {
-    $_SESSION['flash'] = $value;
+    $_SESSION['flashInfo'] = $value;
+  }
+
+  public function setFlashSuccess($value)
+  {
+    $_SESSION['flashSuccess'] = $value;
+  }
+
+  public function setFlashError($value)
+  {
+    $_SESSION['flashError'] = $value;
   }
 
   public function destroy()

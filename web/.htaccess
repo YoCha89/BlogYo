@@ -1,5 +1,10 @@
 RewriteEngine On
  
+<files .env>
+Order allow,deny
+Deny from all
+</files>
+
 RewriteRule ^admin/ bootstrap.php?app=Backend [QSA,L]
  
 RewriteCond %{REQUEST_FILENAME} !-f
