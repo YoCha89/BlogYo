@@ -10,6 +10,7 @@ class BlogController extends BackController{
 
   public function executeBackPostBlog(HTTPRequest $request){
     if ($request->postExists('content')){
+        $managerB = $this->managers->getManagerOf('blogPost');
         $slug = $this->app->user()->getAttribute('pseudo') .'-'. $request->postData('title');
         $this->processForm($request, $slug, $managerB);        
     } else {
@@ -74,26 +75,26 @@ class BlogController extends BackController{
             }
         }    
 
-    foreach($verdicts as $v){
-        $comment = $managerC->getUnique($v[2]);
+        foreach($verdicts as $v){
+            $comment = $managerC->getUnique($v[2]);
 
-        if($comment != null){
-             if($v[3] == true){
-                $managerC->moderate(1, $v[2]);
-                $done = 'done';
-                unset($v);
-            }elseif($v[3] == false){
-                $managerC->moderate(0, $v[2]);
-                $done = 'done';
-                unset($v);
-            }else{
-                unset($v);
-            }   
+            if($comment != null){
+                 if($v[3] == true){
+                    $managerC->moderate(1, $v[2]);
+                    $done = 'done';
+                    unset($v);
+                }elseif($v[3] == false){
+                    $managerC->moderate(0, $v[2]);
+                    $done = 'done';
+                    unset($v);
+                }else{
+                    unset($v);
+                }   
+            }
         }
-    }
 
         if(isset($done)){
-            $this->app->user()->setFlash('Choix appliqués !');
+            $this->app->user()->setFlashSuccess('Choix appliqués !');
         }
         $this->app->httpResponse()->redirect('bootstrap.php?app=Backend&action=backModerateComment');
     }
@@ -124,11 +125,11 @@ class BlogController extends BackController{
         if ($blogPost->isValid()){
             $managerB->save($blogPost);
 
-            $this->app->user()->setFlash(!empty($flashInd) ? 'Votre article a été mis à jour !' : 'Votre article est publié !');
+            $this->app->user()->setFlashSuccess(!empty($flashInd) ? 'Votre article a été mis à jour !' : 'Votre article est publié !');
 
             $this->app->httpResponse()->redirect('bootstrap.php?action=blogList'); 
         } else {
-            $this->app->user()->setFlash('Entrez au moins un caractère autre q\'un espace pour valider chaque champ');
+            $this->app->user()->setFlashError('Entrez au moins un caractère autre qu\'un espace pour valider chaque champ');
         }
     }
 }

@@ -2,7 +2,7 @@
 namespace App\Backend\Model;
  
 use OCFram\Manager;
-use Entity\Comments;
+use App\Backend\Entity\Comments;
  
 abstract class CommentsManager extends Manager
 {
@@ -11,9 +11,9 @@ abstract class CommentsManager extends Manager
   //add or modify 
   public function save(Comments $comments)
   {
-    if ($Comments->isValid())
+    if ($comments->isValid())
     {
-      $Comments->isNew() ? $this->add($Comments) : $this->modify($Comments);
+      $comments->isNew() ? $this->add($comments) : $this->modify($comments);
     }
     else
     {
@@ -31,9 +31,6 @@ abstract class CommentsManager extends Manager
 
   //used to get the Comments list of a specific account
   abstract public function getCommentsList($accountId);
-
-  //counts the number of comments for a blogPost or from a subscriber
-  abstract public function countA($id);
 
   //used to get the Comments to moderate
   abstract public function getCommentsToModerate();

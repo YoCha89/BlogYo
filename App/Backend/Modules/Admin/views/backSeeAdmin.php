@@ -1,7 +1,6 @@
 <h2>Paramètre du compte</h2>
 
 <p>
-<div id='champSeeA'>Nom : <?=$admin['name']?></div><br/>
 <div id='champSeeA'>Pseudo : <?=$admin['pseudo']?></div><br/>
 <div id='champSeeA'>Email : <?=$admin['email']?></div><br/>
 </p>
@@ -10,6 +9,10 @@
 	<button type="submit" class="bouton">Mettre à jour</button>
 </form>
 
+<form method="post" action="bootstrap.php?action=blogList">
+	<button type="submit" class="btn btn-link">Les articles</button>
+</form>
 
-<a href="bootstrap.php?action=blogList"><div id="lienArticles">Les articles</div></a>
-<a href="bootstrap.php?app=Backend&action=backCreateAdminAccount"><div id="lienArticles">Créer un compte Admin</div></a>
+<form method="post" action="bootstrap.php?app=backend&action=backCreateAdminAccount">
+	<button type="submit" class="btn btn-link">Créer un compte Admin</button>
+</form>

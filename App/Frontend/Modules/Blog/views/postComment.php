@@ -3,15 +3,12 @@
 	if ($this->app->user()->isAuthenticated() == false) { ?>
 		<div class="champ">
 			<label for="author">Auteur :</label>
-			<input type="text" name="author"><br/>
+			<input type="text" name="author" class="form-control-plaintext"><br/>
 		</div>
 	<?php } ?>
 
+	<label for="content" class="form-label mt-4">Message</label>
+    <textarea class="form-control" id="content" name="content" rows="8"></textarea><br/>
 
-	<div class="champ">
-		<label for="content">Contenu :</label>
-		<input type="textarea" name="content"><br/>
-	</div>
-
-	<button type="submit" class="bouton">Publier</button>
+	<button type="submit" class="btn btn-secondary">Publier</button>
 </form>

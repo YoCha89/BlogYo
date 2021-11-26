@@ -77,5 +77,11 @@
     "Module":"Account",
     "Action":"seeAccount",
     "params":[]
+  },
+  "askAdminPass":{
+    "url":"/ask_admin_pass",
+    "Module":"Account",
+    "Action":"askAdminPass",
+    "params":[]
   }
 }

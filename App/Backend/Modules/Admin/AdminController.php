@@ -3,11 +3,12 @@ namespace App\Backend\Modules\Admin;
 
 use OCFram\BackController;
 use OCFram\HTTPRequest;
-use Entity\Admin;
+use App\Backend\Entity\Admin;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
-
-class AdminController extends BackController
-{
+class AdminController extends BackController{
 	//Admin connexion
 	public function executeBackConnectAdmin (HTTPRequest $request){
 		if ($request->getExists('pseudo')) {
@@ -17,39 +18,41 @@ class AdminController extends BackController
 
 	    	$admin = $managerA->getAdminPerPseudo($PseudoEntered);
 
+     		$passEntered = $request->getData('pass');
+	    	$registeredPass = $admin['pass'];
+
 	    	if(!empty($admin)){
-	    		if(password_verify($admin['pass'], 'Temp&blog8')){
+	    		if($request->getData('pass') == 'TempEtBlog89'){
 				    $this->app->user()->setAuthenticated(true);
 				    $this->app->user()->setAdmin('toConf');
+
 				    $this->app->user()->setAttribute('id', $admin['id']);
 				    $this->app->user()->setAttribute('pseudo', $admin['pseudo']);
+				    $this->app->user()->setAttribute('email', $admin['email']);
 
-				    $this->app->user()->setFlash('Plus qu\'une étape pour confirmez la création de votre compte administrateur !');
+				    $this->app->user()->setFlashInfo('Plus qu\'une étape pour confirmez la création de votre compte administrateur !');
 
-				    $this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=backCreateAdminAccount&key2=key2');
+				    $this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=backCreateAdminAccount');
+	    		}else{
+			    	//confirming pass entered
+			    	if(password_verify($passEntered, $registeredPass)) {
+					    //setup connexion indicator and other session variable
+					    $this->app->user()->setAuthenticated(true);
+					    $this->app->user()->setAdmin('isCo');
+
+						$this->app->user()->setAttribute('id', $admin['id']);
+					    $this->app->user()->setAttribute('pseudo', $admin['pseudo']);
+					    $this->app->user()->setAttribute('email', $admin['email']);
+
+					    $this->app->user()->setFlashSuccess('Vous êtes connecté, nous sommes ravis de votre retour !');
+					    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList');
+				    }else {
+				    	$this->app->user()->setFlashError('Votre nom d\'utilisateur ou votre mot de passe sont incorrect.');
+			   			$this->app->httpResponse()->redirect('bootstrap.php?action=index');
+				    }	
 	    		}
-
-	     		$passEntered = $request->getData('pass');
-		    	$registeredPass = $admin['pass'];
-		    	
-		    	//confirming pass entered
-		    	if(password_verify($passEntered, $registeredPass)) {
-				    //setup connexion indicator and other session variable
-				    $this->app->user()->setAuthenticated(true);
-				    $this->app->user()->setAdmin('isCo');
-
-					$this->app->user()->setAttribute('id', $admin['id']);
-				    $this->app->user()->setAttribute('pseudo', $admin['pseudo']);
-
-				    $this->app->user()->setFlash('Vous êtes connecté, nous sommes ravis de votre retour !');
-
-				    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList');
-			    }else {
-			    	$this->app->user()->setFlash('Votre nom d\'utilisateur ou votre mot de passe sont incorrect.');
-		   			$this->app->httpResponse()->redirect('bootstrap.php?action=index');
-			    }	    		
 	    	}else{
-				$this->app->user()->setFlash('Votre nom d\'utilisateur ou votre mot de passe sont incorrect.');
+				$this->app->user()->setFlashError('Votre nom d\'utilisateur ou votre mot de passe sont incorrect.');
 		    	$this->app->httpResponse()->redirect('bootstrap.php?action=index');
 	    	}
 	    }
@@ -57,84 +60,39 @@ class AdminController extends BackController
 
 	//Create an admin account
 	public function executeBackCreateAdminAccount (HTTPRequest $request) {
-
 		if ($request->postData('step') == 'step1') { //form sent by established admin
 			if ($this->app->user()->isAdmin() == 'isCo'){
 				$managerA = $this->managers->getManagerOf('Admin');
 
-				$clearTmpPass = 'Temp&blog8';
+				$clearTmpPass = 'TempEtBlog89';
 				$cryptedTmpPass = password_hash($clearTmpPass, PASSWORD_DEFAULT);
 
-				$this->processForm($request->postData('email'), $request->postData('pseudo'), $cryptedTmpPass, $managerA);
-
-				$newAdmin = $managerA->getAdminPerPseudo($request->postData('pseudo'));
-
-				if($newAdmin != null){
-					$message = "Bonjour". $request->postData('pseudo')."! Votre compte administrateur a été créé sur le site Blogyo ! Connectez vous dès à présent avec le lien ci-dessous pour personnaliser votre mot de passe et finaliser la création.<br/> 
-						Identifiant :".$request->postData('email')."<br/>Mot de passe : Temp&blog8 <br/><a href=\"http://localhost/web/bootstrap.php?app=Backend&action=backConnectAdmin&pseudo=".$request->postData('pseudo')."\"> Finaliser la création de compte </a>";
-
-/*					mail(
-					    string $request->postData('email'),
-					    string 'Création de votre compte administrateur BlogYo !',
-					    string $message
-					);
-
-					$currentAdmin = $managerA->getUnique($this->app->user()->getAttribute('id'));
-					$email = $currentAdmin->getEmail();
-					$message2 = "Le compte de ".$request->postData('pseudo')."a été créé et est en attente de finalisation";
-
-					mail(
-					    string $email,
-					    string 'Création de votre compte administrateur BlogYo !',
-					    string $message2
-					);*/
-
-			   		$this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=backSeeAdmin');				
-				}
+				$this->processForm($request, $request->postData('email'), $request->postData('pseudo'), $cryptedTmpPass, $managerA);
 			}
-		}elseif ($request->getData('key2') != null){ //creates confirmation form for new admin
-
-			$this->page->addVar('title', 'Confirmation de votre compte'); 
-			$this->page->addVar('key', 'key2'); 
-
-			$managerA = $this->managers->getManagerOf('Admin');
-			$newAdmin = $managerA->getAdminPerPseudo($request->getData('pseudo'));
-
-			$this->app->user()->setAuthenticated(true);
-		    $this->app->user()->setAdmin('toConf');
-
-			$this->app->user()->setAttribute('id', $admin['id']);
-		    $this->app->user()->setAttribute('pseudo', $admin['pseudo']);
-
-		} elseif ($request->postData('key') == 'step2') { // form sent by new admin to finalize the account creation
-
+		} elseif ($request->postData('step') == 'step2') { // form sent by new admin to finalize the account creation
 			$uppercase = preg_match('@[A-Z]@', $request->postData('pass'));
 			$lowercase = preg_match('@[a-z]@', $request->postData('pass'));
 			$number    = preg_match('@[0-9]@', $request->postData('pass'));
 			$password = $request->postData('pass');
 
 			if(!$uppercase || !$lowercase || !$number || strlen($password) < 8) {
-				$this->app->user()->setFlash('Votre mot de passe doit contenir au moins 8 caractères dont 1 majuscule, 1 minuscule, un nombre et un caractère spécial.');
+				$this->app->user()->setFlashError('Votre mot de passe doit contenir au moins 8 caractères dont 1 majuscule, 1 minuscule, un nombre et un caractère spécial.');
 			} else {
 				//checking the 2 form pass matching
 				if ( $request->postData('pass') != $request->postData('confPass')){
-					$this->app->user()->setFlash('Vous avez saisie 2 mots de passe différents.');
+					$this->app->user()->setFlashError('Vous avez saisie 2 mots de passe différents.');
 				} else {
-
-					$managerA = $this->managers->getManagerOf('Admin');
 					$pseudo = $this->app->user()->getAttribute('pseudo');
-					$admin = $managerA->getAdminPerPseudo($pseudo);
-					$email = $admin['email'];
-
+					$email = $this->app->user()->getAttribute('email');
+					$managerA = $this->managers->getManagerOf('Admin');
 					//pass encryption
 					$pass = password_hash($request->postData('pass'), PASSWORD_DEFAULT);
 
-					$this->processForm($email, $pseudo, $pass, $managerA);
+					$this->processForm($request, $email, $pseudo, $pass, $managerA);
 				}
 			}
 		} else { // creates form to begin creation for established admin admin
-			$this->page->addVar('title', 'Nouveau compte'); 
-			$this->page->addVar('key1', 'key1'); 
+			$this->page->addVar('title', 'Nouveau compte');
 		}
 	}
 
@@ -150,73 +108,105 @@ class AdminController extends BackController
 	    $this->page->addVar('admin', $admin);
 	}
 
+	// Modifying a pseudo or an email
 	public function executeBackModifyAdminAccount (HTTPRequest $request) {
-		$id = $this->app->user()->getAttribute('id');
 		$managerA = $this->managers->getManagerOf('Admin');
-
-		$admin = $managerA->getUnique($id);
-		$mail = $admin->getEmail();
-
-		$this->page->addVar('title', 'Modifiez votre compte');
-		$this->page->addVar('mail', $mail);
 
 		if ($request->postExists('pseudo')) {
 			//checking pseudo availability (must be unique for connexion mgmt)
 			if (!empty ($managerA->checkPseudo($request->postData('pseudo')))){
-				$this->app->user()->setFlash('Ce pseudo n\'est pas disponible.');					  		
+				$this->app->user()->setFlashError('Ce pseudo n\'est pas disponible.');					  		
 			} else {
-				$uppercase = preg_match('@[A-Z]@', $request->postData('pass'));
-				$lowercase = preg_match('@[a-z]@', $request->postData('pass'));
-				$number    = preg_match('@[0-9]@', $request->postData('pass'));
+				$id = $this->app->user()->getAttribute('id');
+				$admin = $managerA->getUnique($id);
 
-				if(!$uppercase || !$lowercase || !$number || strlen($password) < 8) {
-					$this->app->user()->setFlash('Votre mot de passe doit contenir au moins 8 caractères dont 1 majuscule, 1 minuscule, un nombre et un caractère spécial.');
+				$pass = $admin['pass'];
+
+				$this->processForm($request, $request->postData('email'), $request->postData('pseudo'), $pass, $managerA);
+			}
+		} else {
+			$id = $this->app->user()->getAttribute('id');
+			$admin = $managerA->getUnique($id);
+
+			$this->page->addVar('title', 'Modifiez votre compte');
+			$this->page->addVar('admin', $admin);
+		}
+	}
+
+	//Ask for a new account password. Communicates with askAdlinPass in front account controller
+	public function executeBackFurnishPass (HTTPRequest $request) {
+		if($request->getExists('pseudo') && $request->getExists('renKey')){	// displays the form for updating the password
+
+			$managerA = $this->managers->getManagerOf('Admin');
+			$admin = $managerA->getAdminPerPseudo($request->getData('pseudo'));
+
+			$this->page->addVar('title', 'Renouvellement de mot de passe');	
+			$id = $admin['id'];
+			$this->page->addVar('id', $id);	
+		}elseif($request->getExists('pseudo')){ //triggered throught the mail by the master admin, gives the admin the link to udpdate the password
+			$managerA = $this->managers->getManagerOf('Admin');
+			$admin = $managerA->getAdminPerPseudo($request->getData('pseudo'));
+
+			$emailAdmin = $admin['email'];
+			$masterAdmin = 'ychardel@gmail.com';
+
+			$title = 'Demande de renouvellement de mot de passe';
+			$body = "Votre de renouvellement de mot de passe a été autorisé.<br/> Cliquez sur le lien pour renouvellemer votre mot de passe : <a href=\"http://localhost/web/bootstrap.php?app=backend&action=backFurnishPass&renKey=renkey&pseudo=" . $request->getData('pseudo')."\">Renouvellement du pass</a>";
+
+			$titleConf = 'Confirmation de renouvellement autorisé pour :'.$request->getData('pseudo');
+			$bodyConf = 'Votre demande de renouvellement de mot de passe a été envoyé à l\'administrateur principal du site">';
+
+			$this->sendMail($masterAdmin, $emailAdmin, $title, $body);
+			$this->sendMail($emailAdmin, $masterAdmin, $titleConf, $bodyConf);	
+
+		}elseif($request->postExists('pass')){// form sending the new password to update 
+			$id = $request->postData('id');
+
+			$pass = $request->postData('pass');
+			$confPass = $request->postData('confPass');
+
+			$managerA = $this->managers->getManagerOf('Admin');
+			$admin = $managerA->getUnique($id);
+
+			if(!empty($admin)) {
+				$uppercase = preg_match('@[A-Z]@', $pass);
+				$lowercase = preg_match('@[a-z]@', $pass);
+				$number    = preg_match('@[0-9]@', $pass);
+
+				if(!$uppercase || !$lowercase || !$number || strlen($pass) < 8) {
+					$this->app->user()->setFlashError('Votre mot de passe doit contenir au moins 8 caractères dont 1 majuscule, 1 minuscule, un nombre et un caractère spécial.');
 				} else {
 					//checking the 2 form pass matching
 					if ( $request->postData('pass') != $request->postData('confPass')){
-						$this->app->user()->setFlash('Vous avez saisie 2 mots de passe différents.');
+						$this->app->user()->setFlashError('Vous avez saisie 2 mots de passe différents.');
 					} else {
 						//pass encryption
-						$pass = password_hash($request->postData('pass'), PASSWORD_DEFAULT);
+						$pass = password_hash($pass, PASSWORD_DEFAULT);
+						$email = $admin['email'];
+						$pseudo = $admin['pseudo'];
 
-						$this->processForm($request, $request->postData('pass'), $Pass, $managerA);
+						$this->processForm($request, $email, $pseudo, $pass, $managerA);
 					}
 				}
 			}
 		}
 	}
 
-	//Ask for a new account password
-	public function executeBackAskAdminPass (HTTPRequest $request)
-	{
-		
-	}
+	protected function processForm(HTTPRequest $request, $email, $pseudo, $pass, $managerA) {
 
-	//Ask for a new account password
-	public function executeBackFurnishPass (HTTPRequest $request)
-	{
-		
-	}
-
-	protected function processForm($email, $pseudo, $pass, $managerA) {
-
-		//if we are on the 'new mail' step, pseudo and name are null and hidden in the corresponding form
 		$admin = new Admin([ 
-			'email' => $request->postData('email'),
-			'pseudo' => $request->postData('pseudo'),
-			'pass' => $request->postData('pass'),
+			'email' => $email,
+			'pseudo' => $pseudo,
+			'pass' => $pass,
 		]);
 
 	    // if id exist, its an update 
 	    $idCheck = $this->app->user()->getAttribute('id');
 	    if (!empty($idCheck)){
 	      $admin->setId($idCheck);
-	      $adminCheck = $managerA->getAdminPerPseudo($pseudo);
-
-	      if(password_verify($adminCheck['pass'], 'Temp&blog8')){
-	      	$flashInd="conf";
-	      }
-
+	      $flashInd="id";
+	    }elseif($request->postData('id') != null){
+	      $admin->setId($request->postData('id'));
 	      $flashInd="id";
 	    }
 
@@ -226,29 +216,82 @@ class AdminController extends BackController
 
 			if(isset($flashInd)){
 				if($flashInd == 'id'){
-					$this->app->user()->setFlash('Votre compte a été mis à jour !');
+					$this->app->user()->setFlashSuccess('Votre compte a été mis à jour !');
 				}elseif($flashInd == 'conf'){
-					$this->app->user()->setFlash('Votre compte est finalisé ! Bienvenu au nouvel administrateur :) !');
+					$this->app->user()->setFlashSuccess('Votre compte est finalisé ! Bienvenu au nouvel administrateur :) !');
 				}
 			}else{
-				$this->app->user()->setFlash('Le compte est créé ! Le nouvel administrateur doit confirmer la création en personalisant son mot de passe.');
+				$this->app->user()->setFlashSuccess('Le compte est créé ! Le nouvel administrateur doit confirmer la création en personalisant son mot de passe.');
 			}
 
-			$this->app->user()->setFlash(!empty($flashInd) ? 'Votre compte a été mis à jour !' : 'Le compte est créé ! Des mails de confirmations ont été envoyés aux nouvel admin et à votre adresse mail.');
+			//If we are on the first step of a Admin Account creation
+			if($request->postData('step') == 'step1'){
+				$body = "Bonjour". $pseudo."! Votre compte administrateur a été créé sur le site Blogyo ! Connectez vous dès à présent avec le lien ci-dessous pour personnaliser votre mot de passe et finaliser la création.<br/> 
+						Identifiant :".$pseudo."<br/>Mot de passe : TempEtBlog89 <br/><a href=\"http://localhost/web/bootstrap.php?action=index\"> Finaliser la création de compte </a>";
+				$title = 'Création de votre compte administrateur BlogYo !';
+				$currentAdminMail = $this->app->user()->getAttribute('email');
+				$newAdminMail = $email;
 
-			//connexion if previous step successful
+				$title2 = "le mail de confirmation de compte a été envoyé à ".$request->postData('pseudo');
+				$body2 = "Le compte de ".$request->postData('pseudo')."a été créé et est en attente de finalisation";
+
+				$this->sendMail($currentAdminMail, $newAdminMail, $title, $body);
+				$this->sendMail($newAdminMail, $currentAdminMail, $title2, $body2);
+
+				$this->app->user()->setFlashInfo('Un mail de confirmation de création a du vous être envoyé.');
+				$this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=backSeeAdmin');
+			}else{
 			    $this->app->user()->setAuthenticated(true);
 				$this->app->user()->setAdmin('isCo');
 
 				$this->app->user()->setAttribute('id', $admin['id']);
 			    $this->app->user()->setAttribute('pseudo', $admin['pseudo']);
-			    $this->app->user()->setAttribute('firstName', $admin['firstName']);
+			    $this->app->user()->setAttribute('email', $admin['email']);
 
-			    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList');
+			    $this->app->httpResponse()->redirect('bootstrap.php?action=blogList');				
+			}
+
 		} else {
-			$this->app->user()->setFlash('Entrez au moins un caractère autre q\'un espace pour valider chaque champ');
+			$this->app->user()->setFlashError('Entrez au moins un caractère autre qu\'un espace pour valider chaque champ');
 
 			$this->app->httpResponse()->redirect('bootstrap.php?action=index'); 
+		}
+	}
+
+	protected function sendMail($senderMail, $receiverMail, $title, $body){
+		$mailAdmin = new PHPMailer(true);
+		try {
+		    // $mailAdmin->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+		    $mail->SMTPDebug  = 2;
+		    $mailAdmin->isSMTP();                                            //Send using SMTP
+		    $mailAdmin->Host       = 'smtp-relay.gmail.com';                     //Set the SMTP server to send through
+		    $mailAdmin->SMTPAuth   = true;                                   //Enable SMTP authentication
+		    //$mailAdmin->Username   = getenv('MAIL_ADMIN');                     //SMTP username
+		    //$mailAdmin->Password   = getenv('MAIL_PASS');                               //SMTP password
+		    $mailAdmin->Username   = 'yoaoc89@gmail.com';                     //SMTP username
+		    $mailAdmin->Password   = 'afzatdagefukgzdh';                               //SMTP password
+		    $mailAdmin->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+		    $mailAdmin->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+		    //Recipients
+		    $mailAdmin->setFrom($senderMail);
+		    $mailAdmin->addAddress($receiverMail);
+
+		    if($senderMail != 'yoachar@gmail.com'){
+		    	$mailAdmin->addReplyTo($senderMail);
+		    }
+
+		    //Content
+		    $mailAdmin->isHTML(true);                 
+
+		    $mailAdmin->Subject = $title;
+		    $mailAdmin->Body    = $body;
+var_dump($mailAdmin);die;
+		    $mailAdmin->send();		
+
+		    $this->app->user()->setFlashSuccess('Votre message a été envoyé, vous allez recevoir un mail de confirmation');
+		} catch (Exception $e) {
+			$this->app->user()->setFlashError('Votre message n\'a pas pu être envoyé');
 		}
 	}
 }

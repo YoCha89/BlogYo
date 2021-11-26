@@ -23,6 +23,8 @@ $accountLoader->register();
 $adminLoader = new SplClassLoader('hello', dirname(__FILE__).'/../App/Backend');
 $adminLoader->register();
 
+require dirname(__FILE__).'/../vendor/autoload.php';
+
 $appClass = 'App\\'.$_GET['app'].'\\'.$_GET['app'].'Application';
 $app = new $appClass; 
 

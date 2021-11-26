@@ -54,7 +54,7 @@ class BlogPostManagerPDO extends BlogPostManager
  
   public function getUnique($id)
   {
-    $request = $this->dao->prepare('SELECT id, admin_id, title, content, slug FROM blog_posts WHERE id = :id');
+    $request = $this->dao->prepare('SELECT id, admin_id, title, content, slug, created_at FROM blog_posts WHERE id = :id');
     $request->bindValue(':id', (int) $id, \PDO::PARAM_INT);
     $request->execute();
  

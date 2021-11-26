@@ -24,10 +24,19 @@ class BlogController extends BackController
     {
         $managerB = $this->managers->getManagerOf('BlogPost');
         $managerC = $this->managers->getManagerOf('Comments');
+        $managerA = $this->managers->getManagerOf('Admin');
 
-        $blogPost = $managerB->getUnique($request->getdata('id'));
-        $leadParagraphe = substr($blogPost['content'], 0, 300) . '...';
-        $listComments = $managerC-> getComments($request->getdata('id'));
+        $blogPost = $managerB->getUnique($request->getData('id'));
+
+        $tmp = $managerA->getUnique($blogPost['admin_id']);
+        $author = $tmp['pseudo'];
+
+        $c = stristr($blogPost['content'], '.');
+        $content = substr($c, 1);
+
+        $leadParagraphe = stristr($blogPost['content'], '.', true).'.';
+
+        $listComments = $managerC-> getComments($request->getData('id'));
 
         $comments=[];
         foreach ($listComments as $comment){
@@ -38,22 +47,22 @@ class BlogController extends BackController
 
         $commentsNumber = count($comments);
 
-        $this->page->addVar('title', $blogPost['title']); 
-        $this->page->addVar('blogPost', $blogPost);     
-        $this->page->addVar('leadParagraphe', $leadParagraphe);   
+        $this->page->addVar('blogPost', $blogPost);
+        $this->page->addVar('content', $content);     
+        $this->page->addVar('leadParagraphe', $leadParagraphe);
+        $this->page->addVar('author', $author);
         $this->page->addVar('comments', $comments);
         $this->page->addVar('commentsNumber', $commentsNumber);
     }
 
-    public function executePostComment (HTTPRequest $request)
-    {
-        if ($request->postExists('content'))
-        {
+    public function executePostComment (HTTPRequest $request) {
+        if ($request->postExists('content')) {
             if ($this->app->user()->isAuthenticated() == false){
                 $author = $request->postData('author');
                 $accountId = null;
             }else{
                 $author = $this->app->user()->getAttribute('pseudo');
+                
                 $accountId = $this->app->user()->getAttribute('id');
             }
 
@@ -68,24 +77,24 @@ class BlogController extends BackController
 
             $managerC = $this->managers->getManagerOf('comments');
 
-            if($comment->isValid())
-            {
+            if($comment->isValid()) {
                 $managerC->save($comment);
 
-                $this->app->user()->setFlash('Votre commentaire a été enregistré. Il sera validé ou rejeté aprés un court délai !');
+                $this->app->user()->setFlashSuccess('Votre commentaire a été enregistré. Il sera validé ou rejeté aprés un court délai !');
 
-                $this->app->httpResponse()->redirect('bootstrap.php?action=seeBlog&id='.$request->getdata('id'));
+                $this->app->httpResponse()->redirect('bootstrap.php?action=seeBlog&id='.$request->getData('id'));
 
             } else {
 
-                $this->app->user()->setFlash('Entrez au moins un caractère autre q\'un espace pour valider chaque champ');
-                $this->app->httpResponse()->redirect('bootstrap.php?action=executePostComment&id='.$request->getdata('id'));
+                $this->app->user()->setFlashError('Entrez au moins un caractère autre qu\'un espace pour valider chaque champ');
+                $this->app->httpResponse()->redirect('bootstrap.php?action=executePostComment&id='.$request->getData('id'));
             }
             
         } else {
             $managerB = $this->managers->getManagerOf('BlogPost');
 
-            $blogPost = $managerB->getUnique($request->getdata('id'));
+            $blogPost = $managerB->getUnique($request->getData('id'));
+
             $accountId = $this->app->user()->getAttribute('id');
             $pseudo = $this->app->user()->getAttribute('pseudo');
 
@@ -95,57 +104,70 @@ class BlogController extends BackController
         }  
     }
 
-    public function executeModifyComment (HTTPRequest $request)
-    {   
+    public function executeModifyComment (HTTPRequest $request) {   
         //modKey is a hidden field of the modify form to check if the user is submitting the form or is arriving on the view. Checking the actual field content won't wor for we'll put old values as default values
         if ($request->postExists('modKey')){
             $comment = new Comments ([
+            'id' => $request->postData('idC'),                
             'accountId' => $this->app->user()->getAttribute('id'),
             'author' => $this->app->user()->getAttribute('pseudo'),
-            'blogPostId' => $request->getData('id'),
+            'blogPostId' => $request->getData('idB'),
             'content' => $request->postData('content'),
             'validated' => null
             ]);
 
             $managerC = $this->managers->getManagerOf('comments');
 
-            if($comment->isValid())
-            {
+            if($comment->isValid()) {
                 $managerC->save($comment);
 
-                $this->app->user()->setFlash('Votre commentaire a été enregistré. Il sera validé ou rejeté aprés un court délai !');
+                $this->app->user()->setFlashSuccess('Votre commentaire a été enregistré. Il sera validé ou rejeté aprés un court délai !');
 
-                $this->app->httpResponse()->redirect('bootstrap.php?action=seeBlog&id='.$request->getdata('id'));
+                $this->app->httpResponse()->redirect('bootstrap.php?action=seeBlog&id='.$request->getData('id'));
 
             } else {
 
-                $this->app->user()->setFlash('Entrez au moins un caractère autre q\'un espace pour valider chaque champ');
-                $this->app->httpResponse()->redirect('bootstrap.php?action=executePostComment&id='.$request->getdata('id'));
+                $this->app->user()->setFlashError('Entrez au moins un caractère autre qu\'un espace pour valider chaque champ');
+                $this->app->httpResponse()->redirect('bootstrap.php?action=executePostComment&id='.$request->getData('id'));
             }
             
         } else {
-            $managerC = $this->managers->getManagerOf('Comment');
-            $comment = $managerC->getUnique($request->getdata('id'));
+            $managerC = $this->managers->getManagerOf('comments');
+            $managerB = $this->managers->getManagerOf('BlogPost');
+            $comment = $managerC->getUnique($request->getData('id'));
+            $blogPost = $managerB->getUnique($comment['blog_post_id']);
 
+            $c = stristr($blogPost['content'], '.');
+            $content = substr($c, 1);
+            $leadParagraphe = stristr($blogPost['content'], '.', true).'.';
+
+            $this->page->addVar('title', 'Mettre à jour votre commentaire');
+            $this->page->addVar('blogPost', $blogPost);
+            $this->page->addVar('content', $content);     
+            $this->page->addVar('leadParagraphe', $leadParagraphe);
             $this->page->addVar('comment', $comment);
+            $this->page->addVar('blogPost', $blogPost);
         }       
     }
 
         public function executeDeleteComment (HTTPRequest $request)
     {
-        $managerC = $this->managers->getManagerOf('Comment');
-        $managerC->delete($request->getdata('id'));
+        $managerC = $this->managers->getManagerOf('comments');
+        $managerC->delete($request->getData('id'));
 
-        $this->app->httpResponse()->redirect('bootstrap.php?action=seeBlog&id='.$request->getdata('id'));
+        $this->app->httpResponse()->redirect('bootstrap.php?action=seeBlog&id='.$request->getData('id'));
     }
 
         public function executeSeeMyComments (HTTPRequest $request)
     {
         $this->page->addVar('title', 'Mes commentaires');
+        $accId = $this->app->user()->getAttribute('id');
+        $managerC = $this->managers->getManagerOf('comments');
 
-        $managerC = $this->managers->getManagerOf('Comment');
-        $myComments = $managerC->getAccountList($this->app->user()->getAttribute('id'));
-        $myCommentsNumber = $managerC->countA($this->app->user()->getAttribute('id'));
+        $myComments = $managerC->getCommentsList($accId);
+        $myCommentsNumber = count($myComments);
+
+// var_dump($myComments , $myCommentsNumber);die;
 
         $this->page->addVar('myComments', $myComments);
         $this->page->addVar('myCommentsNumber', $myCommentsNumber);
