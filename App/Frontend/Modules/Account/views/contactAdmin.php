@@ -1,10 +1,22 @@
 <form method="post" action="bootstrap.php?action=contactAdmin">
+	
+<?php
+if ($_SESSION['auth'] != true) {
+  ?>
+  	<label for="content">Votre email :</label>
+	<input type="text" name="email"><br/>
+ <?php
+}else{ ?>
 
 	<label for="title">Titre :</label>
 	<input type="text" name="title"><br/>
 
-	<label for="content">Votre message :</label>
-	<input type="textarea" name="body" rows="8"><br/>
+
+	<input id="email" name="email" type="hidden" value="<? echo nl2br(htmlspecialchars($userMail)) ?>">
+
+<?php } ?>
+	<label for="content" class="form-label mt-4">Votre message :</label>
+  <textarea class="form-control" id="body" name="body" rows="12"></textarea>
 
 	<button type="submit" class="btn btn-secondary">Envoyer le message</button>
 </form>

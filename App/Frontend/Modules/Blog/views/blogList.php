@@ -18,13 +18,13 @@ foreach ($listBlogPost as $blogPost) {
 	?>
 
 	<div class="card border-secondary mb-3">
-	  <div class="card-header"><?=nl2br($blogPost['created_at']); nl2br($blogPost['created_at'])?></div>
+	  <div class="card-header"><?=nl2br(htmlspecialchars($blogPost['created_at'])); nl2br(htmlspecialchars($blogPost['created_at']))?></div>
 	  <div class="card-body">
-	    <h4 class="card-title"><?=nl2br($blogPost['title'])?></h4>
-	    <p class="card-text"><?=nl2br($leadParagraphe)?></p>
+	    <h4 class="card-title"><?=nl2br(htmlspecialchars($blogPost['title']))?></h4>
+	    <p class="card-text"><?=nl2br(htmlspecialchars($leadParagraphe))?></p>
 
 	    <div class="lire">
-		<form method="post" action="bootstrap.php?action=seeBlog&id=<?=$blogPost['id']?>">
+		<form method="post" action="bootstrap.php?action=seeBlog&id=<?= nl2br(htmlspecialchars($blogPost['id']))?>">
 			<button type="submit" class="btn btn-secondary">Lire</button>
 		</form>
 	    </div>

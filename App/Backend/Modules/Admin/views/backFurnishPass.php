@@ -12,6 +12,6 @@
 			<input type="password" name="confPass"><br/>
 		</div>
 
-		<input type="hidden" name="id" value="<?=$id?>">
+		<input type="hidden" name="id" value="<?=nl2br(htmlspecialchars($id))?>">
 		<button type="submit" class="btn btn-secondary">Mettre à jour mon mot de passe</button>
 	</form>

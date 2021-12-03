@@ -6,6 +6,7 @@ use App\Backend\Entity\Admin;
  
 abstract class AdminManager extends Manager
 {
+  // add an account in DB
   abstract protected function add(Admin $admin);
  
   //add or modify 
@@ -20,7 +21,7 @@ abstract class AdminManager extends Manager
       throw new \RuntimeException('Respectez la forme des données à saisir');
     }
   }
-
+  //Deletes an account
   abstract public function delete($id);
 
   //used for connexion and disconnexion
@@ -29,10 +30,9 @@ abstract class AdminManager extends Manager
   //used to get the admin list
   abstract public function getList($id);
 
-  //counts the number of admin
-  abstract public function count();
- 
+  // modify an account in DB
   abstract protected function modify(Admin $admin);
 
+  // Checks if a pseudo is unique when creating an account
   abstract public function checkPseudo($pseudo);
 }

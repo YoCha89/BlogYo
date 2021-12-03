@@ -8,7 +8,7 @@
 	<?php } ?>
 
 	<label for="content" class="form-label mt-4">Message</label>
-    <textarea class="form-control" id="content" name="content" rows="8"></textarea><br/>
+    <textarea class="form-control" id="content" name="content" rows="12"></textarea><br/>
 
 	<button type="submit" class="btn btn-secondary">Publier</button>
 </form>

@@ -6,6 +6,7 @@ use App\Backend\Entity\BlogPosts;
 
 abstract class BlogPostManager extends Manager
 {
+  // add a blogpost in DB
   abstract protected function add(BlogPosts $BlogPosts);
  
   //add or modify 
@@ -25,6 +26,7 @@ abstract class BlogPostManager extends Manager
     }
   }
 
+  //delete a blogpost from DB
   abstract public function delete($id);
 
   //used for connexion and disconnexion
@@ -36,5 +38,6 @@ abstract class BlogPostManager extends Manager
   //counts the number of subscribers
   abstract public function count();
  
+  // modify a blogpost in DB
   abstract protected function modify(BlogPosts $blogPosts);
 }

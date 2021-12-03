@@ -6,11 +6,13 @@ use App\Backend\Entity\Account;
  
 abstract class AccountManager extends Manager
 {
+  // add an account in DB
   abstract protected function add(Account $account);
 
+  //modify an account in DB
   abstract protected function modify(Account $account);
  
-  //add or modify 
+  //Guides through add or modify  
   public function save(Account $account)
   {
     if ($account->isValid())
@@ -40,11 +42,5 @@ abstract class AccountManager extends Manager
 
   //used for connexion (id still unknown)
   abstract public function getAccountPerPseudo($peuso); 
-
-  //used to get the account list
-  abstract public function getList($id);
-
-  //counts the number of Accounts
-  abstract public function count($id);
  
 }

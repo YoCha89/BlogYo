@@ -140,6 +140,8 @@ class AdminController extends BackController{
 			$managerA = $this->managers->getManagerOf('Admin');
 			$admin = $managerA->getAdminPerPseudo($request->getData('pseudo'));
 
+			$this->app->user()->unsetFlash();
+
 			$this->page->addVar('title', 'Renouvellement de mot de passe');	
 			$id = $admin['id'];
 			$this->page->addVar('id', $id);	
@@ -149,15 +151,16 @@ class AdminController extends BackController{
 
 			$emailAdmin = $admin['email'];
 			$masterAdmin = 'ychardel@gmail.com';
+			$decoyMail = null;
 
 			$title = 'Demande de renouvellement de mot de passe';
-			$body = "Votre de renouvellement de mot de passe a été autorisé.<br/> Cliquez sur le lien pour renouvellemer votre mot de passe : <a href=\"http://localhost/web/bootstrap.php?app=backend&action=backFurnishPass&renKey=renkey&pseudo=" . $request->getData('pseudo')."\">Renouvellement du pass</a>";
+			$body = "Votre demande de renouvellement de mot de passe a été autorisé.<br/> Cliquez sur le lien pour renouveller votre mot de passe : <a href=\"http://localhost/web/bootstrap.php?app=backend&action=backFurnishPass&renKey=renkey&pseudo=" . $request->getData('pseudo')."\">Renouvellement du pass</a>";
 
 			$titleConf = 'Confirmation de renouvellement autorisé pour :'.$request->getData('pseudo');
 			$bodyConf = 'Votre demande de renouvellement de mot de passe a été envoyé à l\'administrateur principal du site">';
 
-			$this->sendMail($masterAdmin, $emailAdmin, $title, $body);
-			$this->sendMail($emailAdmin, $masterAdmin, $titleConf, $bodyConf);	
+			$this->sendMail($decoyMail, $emailAdmin, $title, $body);
+			$this->sendMail($decoyMail, $masterAdmin, $titleConf, $bodyConf);	
 
 		}elseif($request->postExists('pass')){// form sending the new password to update 
 			$id = $request->postData('id');
@@ -192,6 +195,7 @@ class AdminController extends BackController{
 		}
 	}
 
+	// A common private method for creation and uptate of an account
 	protected function processForm(HTTPRequest $request, $email, $pseudo, $pass, $managerA) {
 
 		$admin = new Admin([ 
@@ -224,19 +228,21 @@ class AdminController extends BackController{
 				$this->app->user()->setFlashSuccess('Le compte est créé ! Le nouvel administrateur doit confirmer la création en personalisant son mot de passe.');
 			}
 
-			//If we are on the first step of a Admin Account creation
+			//If we are on the first step of a Admin Account creation 
 			if($request->postData('step') == 'step1'){
 				$body = "Bonjour". $pseudo."! Votre compte administrateur a été créé sur le site Blogyo ! Connectez vous dès à présent avec le lien ci-dessous pour personnaliser votre mot de passe et finaliser la création.<br/> 
 						Identifiant :".$pseudo."<br/>Mot de passe : TempEtBlog89 <br/><a href=\"http://localhost/web/bootstrap.php?action=index\"> Finaliser la création de compte </a>";
 				$title = 'Création de votre compte administrateur BlogYo !';
+
 				$currentAdminMail = $this->app->user()->getAttribute('email');
 				$newAdminMail = $email;
+				$decoyMail = null;
 
 				$title2 = "le mail de confirmation de compte a été envoyé à ".$request->postData('pseudo');
 				$body2 = "Le compte de ".$request->postData('pseudo')."a été créé et est en attente de finalisation";
 
-				$this->sendMail($currentAdminMail, $newAdminMail, $title, $body);
-				$this->sendMail($newAdminMail, $currentAdminMail, $title2, $body2);
+				$this->sendMail($decoyMail, $newAdminMail, $title, $body);
+				$this->sendMail($decoyMail, $currentAdminMail, $title2, $body2);
 
 				$this->app->user()->setFlashInfo('Un mail de confirmation de création a du vous être envoyé.');
 				$this->app->httpResponse()->redirect('bootstrap.php?app=backend&action=backSeeAdmin');
@@ -258,27 +264,34 @@ class AdminController extends BackController{
 		}
 	}
 
-	protected function sendMail($senderMail, $receiverMail, $title, $body){
-		$mailAdmin = new PHPMailer(true);
+	// private function for sending mail through the app 	
+	protected function sendMail($replyTo, $receiverMail, $title, $body){
+
+		$mailAdmin = new PHPMailer();
 		try {
-		    // $mailAdmin->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-		    $mail->SMTPDebug  = 2;
-		    $mailAdmin->isSMTP();                                            //Send using SMTP
-		    $mailAdmin->Host       = 'smtp-relay.gmail.com';                     //Set the SMTP server to send through
-		    $mailAdmin->SMTPAuth   = true;                                   //Enable SMTP authentication
-		    //$mailAdmin->Username   = getenv('MAIL_ADMIN');                     //SMTP username
-		    //$mailAdmin->Password   = getenv('MAIL_PASS');                               //SMTP password
-		    $mailAdmin->Username   = 'yoaoc89@gmail.com';                     //SMTP username
-		    $mailAdmin->Password   = 'afzatdagefukgzdh';                               //SMTP password
-		    $mailAdmin->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-		    $mailAdmin->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+			$mailAdmin->SMTPOptions = array(
+			    'ssl' => array(
+			    'verify_peer' => false,
+			    'verify_peer_name' => false,
+			    'allow_self_signed' => true
+			    )
+		    );
+		    $mailAdmin->SMTPDebug = 2;                      //Enable verbose debug output
+		    $mailAdmin->IsSMTP();                           //Send using SMTP
+		    $mailAdmin->Mailer = "smtp";
+		    $mailAdmin->Host  = 'smtp.gmail.com';           //Set the SMTP server to send through
+		    $mailAdmin->SMTPSecure = "tls";
+		    $mailAdmin->SMTPAuth   = true;                  //Enable SMTP authentication
+		    $mailAdmin->Username   = 'yoaoc89@gmail.com';   //SMTP username
+		    $mailAdmin->Password   = 'zpbPD&89';            //SMTP password
+		    $mailAdmin->Port       = 587;                   //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
 		    //Recipients
-		    $mailAdmin->setFrom($senderMail);
+		    $mailAdmin->setFrom('yoaoc89@gmail.com');
 		    $mailAdmin->addAddress($receiverMail);
 
-		    if($senderMail != 'yoachar@gmail.com'){
-		    	$mailAdmin->addReplyTo($senderMail);
+		    if($replyTo != null){
+		    	$mailAdmin->addReplyTo($replyTo);
 		    }
 
 		    //Content
@@ -286,7 +299,7 @@ class AdminController extends BackController{
 
 		    $mailAdmin->Subject = $title;
 		    $mailAdmin->Body    = $body;
-var_dump($mailAdmin);die;
+
 		    $mailAdmin->send();		
 
 		    $this->app->user()->setFlashSuccess('Votre message a été envoyé, vous allez recevoir un mail de confirmation');

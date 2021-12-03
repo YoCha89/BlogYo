@@ -5,7 +5,7 @@ use App\Backend\Entity\Account;
  
 class AccountManagerPDO extends AccountManager
 {
-  //used for connexion (id still unknown)
+  
   public function getAccountPerPseudo($pseudo){
 
     $sql =$this->dao->prepare('SELECT id, name, pseudo, email, pass, secret_q, secret_a FROM account WHERE pseudo = :pseudo');
@@ -98,12 +98,6 @@ class AccountManagerPDO extends AccountManager
   }
 
   public function delete($id){
-    
-  }
-  public function getList($id){
-    
-  }
-  public function count($id){
-    
+    $this->dao->exec('DELETE FROM account WHERE id = '.(int) $id);
   }
 }

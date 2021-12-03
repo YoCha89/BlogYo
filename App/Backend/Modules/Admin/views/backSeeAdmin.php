@@ -1,11 +1,11 @@
 <h2>Paramètre du compte</h2>
 
 <p>
-<div id='champSeeA'>Pseudo : <?=$admin['pseudo']?></div><br/>
-<div id='champSeeA'>Email : <?=$admin['email']?></div><br/>
+<div id='champSeeA'>Pseudo : <?= nl2br(htmlspecialchars($admin['pseudo'])) ?></div><br/>
+<div id='champSeeA'>Email : <?= nl2br(htmlspecialchars($admin['email'])) ?></div><br/>
 </p>
 
-<form method="post" action="bootstrap.php?action=modifyAccount&id=<?=$admin['id']?>">
+<form method="post" action="bootstrap.php?action=modifyAccount&id=<?= nl2br(htmlspecialchars($admin['id'])) ?>">
 	<button type="submit" class="bouton">Mettre à jour</button>
 </form>
 

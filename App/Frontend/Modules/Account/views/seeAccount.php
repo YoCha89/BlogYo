@@ -11,7 +11,7 @@
 </form>
 
 <div class="AccChoice">  
-<form method="post" action="bootstrap.php?action=deleteAccount&id=<?=$account['id']?>">
+<form method="post" action="bootstrap.php?action=deleteAccount">
 	<button type="submit" class="btn btn-danger">Supprimer votre compte</button>
 </form>
 </div>
