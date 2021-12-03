@@ -51,10 +51,6 @@ abstract class Application
         $router->addRoute(new Route($route['Module'], $route['Action'], $route['params']));
       }
 
-/*      if($this->httpRequest->getData('action') != 'modifyAccount'){
-        var_dump($routes,'------------------------', $this->httpRequest->getData('action'));die; 
-      }*/
-
       try {
         $matchedRoute = $router->getRoute($this->httpRequest->getData('action'));
       }
@@ -71,7 +67,7 @@ abstract class Application
       }
       
       $controllerClass = 'App\\'.$this->name.'\\Modules\\'.$matchedRoute->module().'\\'.$matchedRoute->module().'Controller';
-      // var_dump($controllerClass);die;
+      
       return new $controllerClass($this, $matchedRoute->module(), $matchedRoute->action());     
     }
   }

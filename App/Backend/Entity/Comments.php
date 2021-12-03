@@ -17,7 +17,8 @@ class Comments extends Entity
 
 
   const CONTENU_INVALIDE = 1;
-
+  
+  //Checks minimum data existence to create a comment
   public function isValid(){
     if (!empty($this->getBlogPostId()) && !empty($this->getContent()) && !empty($this->getAuthor())){
       return true;

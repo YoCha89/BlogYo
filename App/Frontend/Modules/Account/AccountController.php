@@ -11,7 +11,7 @@ use PHPMailer\PHPMailer\Exception;
 
 class AccountController extends BackController {
 
-	//access to connexion form 
+	//access to entry choices off the app : connexion, account creation, pass forgotten, contact admin
 	public function executeIndex (HTTPRequest $request){
 		if ($this->app->user()->isAuthenticated() == true){
 			$this->app->user()->setFlashInfo('Vous êtes déja connecté.');
@@ -55,10 +55,9 @@ class AccountController extends BackController {
 		    $this->app->httpResponse()->redirect('bootstrap.php?action=index');
 		    $this->app->user()->setFlashInfo('saisissez votre pseudo et votre mot de passe pour vous connecter.'); 
 		}
-			
-
 	}
 
+	// Disconnect user from session
 	public function executeDisconnect (HTTPRequest $request){
 		
 		if( $this->app->user()->isAdmin() == 'isCo'){
@@ -164,6 +163,11 @@ class AccountController extends BackController {
 	//See account informations
 	public function executeSeeAccount (HTTPRequest $request) {
 
+		if($this->app->user()->isAuthenticated() == false){
+			$this->app->user()->setFlashError('Connectez-vous ou créez un compte pour accéder à cet interface.');
+	    	$this->app->httpResponse()->redirect('bootstrap.php?action=index');
+		}
+
     	$this->page->addVar('title', 'Paramètre du compte');
 
     	if($this->app->user()->isAdmin() == 'isCo' || $this->app->user()->isAdmin() == 'toConf'){
@@ -232,7 +236,6 @@ class AccountController extends BackController {
 
 		            	$managerA->updatePass($request->postData('hiddenPseudo'), $pass);
 
-// $this->app->user()->setFlashInfo($pass);
 		            	$this->app->user()->setFlashSuccess('Votre mot de passe a bien été mis à jour !');
 
 					    $this->app->user()->setAuthenticated(true);
@@ -241,13 +244,21 @@ class AccountController extends BackController {
 					    $this->app->user()->setAttribute('pseudo', $formAccount['pseudo']);
 					    $this->app->user()->setAttribute('email', $formAccount['email']);
 
-
-						//On redirigre sur la page "Paramètre du compte" ou l'utilisateur voit les infos à jour
 						$this->app->httpResponse()->redirect('bootstrap.php?action=blogList');
 			        }
 		        }
 			}
 	    }
+	}
+
+	//Deletes a user account
+	public function executeDeleteAccount (HTTPRequest $request){
+        $managerA = $this->managers->getManagerOf('account');
+        $managerA->delete($this->app->user()->getAttribute('id'));
+
+        $this->app->user()->destroy();
+
+        $this->app->httpResponse()->redirect('bootstrap.php?action=index');
 	}
 
 	//Contact the site admin
@@ -257,8 +268,14 @@ class AccountController extends BackController {
     	$account = $managerA->getAccount($this->app->user()->getAttribute('id'));
 
 		if($request->postExists('body')){
-			$userMail = $account['email'];
+			if($request->postExists('email')){
+				$userMail = $request->postData('email');
+			}else{
+				$userMail = $account['email'];
+			}
+			
 			$AdminMail = 'ychardel@gmail.com';
+			$decoyMail = null;
 
 			$title = $request->postData('title');
 			$body = $request->postData('body');
@@ -269,19 +286,21 @@ class AccountController extends BackController {
 
 			//Message for Admin
 			$this->sendMail($userMail, $AdminMail, $title, $body);
-			//Confirmation email
-			$this->sendMail($AdminMail, $userMail, $bodyConf);
 
-		}elseif($this->app->user()->isAuthenticated() == true){
-	
-    		$this->page->addVar('title', 'Contactez l\'administrateur');
-    		$this->page->addVar('email', $userMail);
+			//Confirmation email
+			$this->sendMail($decoyMail, $userMail, $titleConf, $bodyConf);
 
 		}else{
-			$this->app->user()->setFlashError('Vous devez posséder un compte pour contacter l\'administrateur.');
+
+			if($this->app->user()->isAuthenticated() == true){
+				$this->page->addVar('email', $userMail);
+			}
+
+    		$this->page->addVar('title', 'Contactez l\'administrateur');
 		}
 	}
 
+	// A common private method for creation and uptate of an account
 	protected function processForm(HTTPRequest $request, $pass, $secretA, $managerA) {
 
     	$formAccount = new Account ([
@@ -332,25 +351,35 @@ class AccountController extends BackController {
 		}
 	}
 
-	protected function sendMail($senderMail, $receiverMail, $title, $body){
-		$mailAdmin = new PHPMailer(true);
+	// private function for sending mail through the app
+	protected function sendMail($replyTo, $receiverMail, $title, $body){
+		$mailAdmin = new PHPMailer();
 		try {
-		    $mailAdmin->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-		    $mailAdmin->isSMTP();                                            //Send using SMTP
-		    $mailAdmin->Host       = 'smtp-relay.gmail.com';                     //Set the SMTP server to send through
-		    $mailAdmin->SMTPAuth   = true;                                   //Enable SMTP authentication
-		    $mailAdmin->Username   = 'yoaoc89@gmail.com';                     //SMTP username
-		    $mailAdmin->Password   = 'afzatdagefukgzdh';                               //SMTP password
-		    $mailAdmin->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-		    $mailAdmin->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+			$mailAdmin->SMTPOptions = array(
+			    'ssl' => array(
+			    'verify_peer' => false,
+			    'verify_peer_name' => false,
+			    'allow_self_signed' => true
+			    )
+		    );
+		    $mailAdmin->SMTPDebug = 2;                      //Enable verbose debug output
+		    $mailAdmin->IsSMTP();                           //Send using SMTP
+		    $mailAdmin->Mailer = "smtp";
+		    $mailAdmin->Host  = 'smtp.gmail.com';           //Set the SMTP server to send through
+		    $mailAdmin->SMTPSecure = "tls";
+		    $mailAdmin->SMTPAuth   = true;                  //Enable SMTP authentication
+		    $mailAdmin->Username   = 'yoaoc89@gmail.com';   //SMTP username
+		    $mailAdmin->Password   = 'zpbPD&89';            //SMTP password
+		    $mailAdmin->Port       = 587;                   //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
 		    //Recipients
-		    $mailAdmin->setFrom($senderMail);
+		    $mailAdmin->setFrom('yoaoc89@gmail.com');
 		    $mailAdmin->addAddress($receiverMail);
 
-		    if($senderMail != 'yoachar@gmail.com'){
-		    	$mailAdmin->addReplyTo($senderMail);
+		    if($replyTo != null){
+		    	$mailAdmin->addReplyTo($replyTo);
 		    }
+		    
 
 		    //Content
 		    $mailAdmin->isHTML(true);                 
@@ -358,7 +387,6 @@ class AccountController extends BackController {
 		    $mailAdmin->Subject = $title;
 		    $mailAdmin->Body    = $body;
 
-var_dump($mailAdmin);die;
 		    $mailAdmin->send();		
 
 		    $this->app->user()->setFlashSuccess('Votre message a été envoyé, vous allez recevoir un mail de confirmation');
@@ -367,23 +395,25 @@ var_dump($mailAdmin);die;
 		}
 	}
 
-	//Ask for a new admin account password through frontend
+	//Ask for a new admin account password, going to backend through frontend when the user is registered as an admin
 	protected function askAdminPass (HTTPRequest $request) {
 		$managerA = $this->managers->getManagerOf('Admin');
-		$admin = $managerA->getAdminPerPseudo($request->postData('pseudo'));
+		$pseudo = $request->postData('pseudo');
+
+		$admin = $managerA->getAdminPerPseudo($pseudo);
 
 		$emailAdmin = $admin['email'];
 		$masterAdmin = 'ychardel@gmail.com';
-		$pseudo = $admin['pseudo'];
+		$decoyMail = null;
 
 		$title = 'Demande de renouvellement de mot de passe';
 		$body = "Une demande de renouvellement de mot de passe a été envoyé par ". $emailAdmin.".<br/> Cliquez sur le lien pour permettre le renouvellement : <a href=\"http://localhost/web/bootstrap.php?app=backend&action=backFurnishPass&pseudo=".$pseudo."\">Autoriser le changement de mot de passe</a>";
 
 		$titleConf = 'Confirmation de demande de renouvellement de mot de passe';
-		$bodyConf = 'Votre demande de renouvellement de mot de passe a été envoyé à l\'administrateur principal du site">';
+		$bodyConf = 'Votre demande de renouvellement de mot de passe a été envoyé à l\'administrateur principal du site';
 
-		$this->sendMail($emailAdmin, $masterAdmin, $title, $body);
-		$this->sendMail($emailAdmin, $masterAdmin, $titleConf, $bodyConf);
+		$this->sendMail($decoyMail, $masterAdmin, $title, $body);
+		$this->sendMail($decoyMail, $emailAdmin, $titleConf, $bodyConf);
 
 	}
 }

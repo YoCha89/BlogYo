@@ -1,5 +1,12 @@
 <div id="principal">
-	<div id="bandeauAccueil"><p><span id="txtBandeauAccueil">Bienvenu sur BlogYo !</span></p></div>
+
+	<div class="acceuilHead">
+		<h1>Bienvenu sur BlogYo ! </h1><br/>
+		<img src="images/IconeOriginal.png" alt="logo" id="logoHeadAcc"/><br/>
+		<h2><span id="txtBandeauAccueil">Vous venez d'arriver sur Le blog de <a href="../..\..\..\..\web\CV_YChardel_2021.pdf">Yoann Chardel</a>, développeur passioné à l'écoute de vos besoins !</h2><br/>
+	</div>
+
+	<hr>
 
 	<div class="form">
 		<div id="option1">
@@ -50,6 +57,28 @@
 			</div>
 		</div>
 	</div>
+
+	<hr>
+
+	<form method="post" action="bootstrap.php?action=contactAdmin">
+		
+		<?php
+		if ($_SESSION['auth'] != true) {
+		  ?>
+		  	<label for="content">Votre email :</label>
+			<input type="text" name="email"><br/>
+		 <?php
+		} ?>
+		
+	<label for="title">Titre :</label>
+	<input type="text" name="title"><br/>
+
+
+	<label for="content">Votre message :</label>
+	<textarea name="body" class="form-control"></textarea><br/>
+
+	<button type="submit" class="btn btn-secondary">Contacter l'administrateur</button>
+</form>
 </div>
 
 

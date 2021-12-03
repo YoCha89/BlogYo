@@ -6,6 +6,7 @@ use App\Backend\Entity\Comments;
  
 abstract class CommentsManager extends Manager
 {
+  //add comment in DB
   abstract protected function add(Comments $comments);
  
   //add or modify 
@@ -21,22 +22,24 @@ abstract class CommentsManager extends Manager
     }
   }
 
+  //delete comment in DB
   abstract public function delete($id);
 
-  //used for connexion and disconnexion
+  //Fetch a specific comment
   abstract public function getUnique($id);
 
-  //used to get the Comments list of a blogPost
+  // fetch the comments of a blogpost
   abstract public function getComments($id);
 
-  //used to get the Comments list of a specific account
+  //fetch the comments of a user
   abstract public function getCommentsList($accountId);
 
   //used to get the Comments to moderate
   abstract public function getCommentsToModerate();
  
+  // Modify a comment in DB
   abstract protected function modify(Comments $comments);
 
-  //apply validation or rejection status to a comment
+  // Setup the "validated" attribute of comment, deciding if its displayed
   abstract public function moderate($verdict, $id);
 }

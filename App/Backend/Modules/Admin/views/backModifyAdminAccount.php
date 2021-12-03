@@ -5,13 +5,13 @@
 			<?=isset($erreurs) && in_array(\Entity\Account::PRENOM_INVALIDE, $erreurs) ? 'Veuillez saisir un prénom.<br />' : ''?>
 			<div class="champ">
 			<label for="pseudo">Pseudo : </label>
-			<input type="text" name="pseudo" value="<?= $admin['pseudo'] ?>">
+			<input type="text" name="pseudo" value="<?= nl2br(htmlspecialchars($admin['pseudo'])) ?>">
 			</div>
 
 			<?=isset($erreurs) && in_array(\Entity\Account::ALIAS_INVALIDE, $erreurs) ? 'Veuillez saisir un nom d\'utilisateur.<br />' : ''?>
 			<div class="champ">
 			<label for="email">Email : </label>
-			<input type="text" name="email" value="<?= $admin['email'] ?>">
+			<input type="text" name="email" value="<?= nl2br(htmlspecialchars($admin['email'])) ?>">
 			</div>
 
 			<button type="submit" class="btn btn-secondary">Mettre à jour</button>

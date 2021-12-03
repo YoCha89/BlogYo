@@ -6790,6 +6790,24 @@ input:focus,
   height: 20%;
 }
 
+.acceuilHead{
+  display : flex;
+  flex-direction: column;
+}
+
+#txtBandeauAccueil{
+  display: block;
+  width: 85%;
+  margin: auto;
+  text-align: center;
+}
+
+#logoHeadAcc{
+  height: 17rem;
+  width: auto;
+  margin: auto;
+}
+
 .logo{
   margin:  auto;
   margin-left: 6rem;
@@ -6831,6 +6849,13 @@ header {
   width: 100%;
   height: 50%;
   margin: 0;
+}
+
+.backFoot{
+  display: block;
+  height: 10%;
+  background-color: #98978b;
+  color: ;
 }
 
 .logoTitle{
@@ -6917,5 +6942,72 @@ footer{
 
 .AccOtherChoice{
   display: flex;
+}
 
+
+@media (min-width: 300px) and (max-width: 767px)/*Smartphone*/{
+
+  #txtBandeauAccueil{
+    font-size: 3rem;
+  }
+
+  h2{
+    font-size: 3rem;
+    text-align: center;
+  }
+
+  #logoHeadAcc{
+    height: 7rem;
+    width: auto;
+  }
+
+  button{
+    width : 70%;
+  }
+
+  input{
+    margin : auto;
+  }
+
+  textarea{
+    margin: auto;
+  }
+
+  .AccOtherChoice{
+    flex-direction: column;
+  }
+
+  #champSeeA{
+    margin-top: 2rem;
+  }
+
+  .logoTitle{
+    display: none;
+  }
+
+  .logo{
+    margin-left: 2rem;
+  }
+
+  .but{
+    display : none;
+  }
+  
+  .dropSmart{
+    display: none;
+  }
+
+}
+
+@media (min-width: 768px) and (max-width: 1023px)/*Tablette*/{
+
+}
+
+@media all and (min-width: 1024px) {
+  .butSmart{
+    display : none;
+  }
+  .navPc{
+    display: none;
+  }
 }

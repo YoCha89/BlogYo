@@ -102,6 +102,13 @@ class User extends ApplicationComponent
     $_SESSION['flashError'] = $value;
   }
 
+    public function unsetFlash()
+  {
+    unset($_SESSION['flashError']);
+    unset($_SESSION['flashInfo']);
+    unset($_SESSION['flashSuccess']);
+  }
+
   public function destroy()
   {
     $_SESSION=array();

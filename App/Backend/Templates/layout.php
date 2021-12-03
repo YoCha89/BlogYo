@@ -10,7 +10,7 @@
     <link rel="icon" href="images/Favico.ico" />
   </head>
 
- <body>
+  <body>
       <header>
 
            
@@ -30,17 +30,29 @@ if ($_SESSION['auth'] == true) {
               <div class="userbutton">
               <div id="decButton">
                   <form method="post" action="bootstrap.php?action=disconnect">
-                  <button type="submit" class="btn btn-secondary">Déconnexion</button>
+                  <div class  = "but"><button type="submit" class="btn btn-secondary">Déconnexion</button></div>
+                  <div class  = "butSmart"><button type="submit" class="btn btn-secondary">Déco</button></div>
                   </form>
               </div>
             <?php
 }
 
-if ($_SESSION['admin'] == 'isCo') {
+if ($_SESSION['auth'] == true && $_SESSION['admin'] != 'isCo') {
+  ?>
+  <div id="ModButton">
+    <form method="post" action="bootstrap.php?action=seeMyComments">
+    <div class  = "but"><button type="submit" class="btn btn-secondary">Mes commentaires</button></div>
+    <div class  = "butSmart"><button type="submit" class="btn btn-secondary">Mes Coms</button></div>
+    </form>
+  </div>
+</div>
+  <?php
+}elseif ($_SESSION['admin'] == 'isCo') {
   ?>
   <div id="ModButton">
     <form method="post" action="bootstrap.php?app=Backend&action=backModerateComment">
-    <button type="submit" id="btn btn-secondary">Modération</button>
+    <div class  = "but"><button type="submit" class="btn btn-secondary">Modération</button></div>
+    <div class  = "butSmart"><button type="submit" class="btn btn-secondary">Mod</button></div>
     </form>
   </div>
 </div>
@@ -48,6 +60,56 @@ if ($_SESSION['admin'] == 'isCo') {
 } ?>
         </div>
       </header>
+<div class="dropSmart">  
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="true">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="bootstrap.php?action=index">BlogYo</a>
+      </div>
+
+      <div class="navbar-collapse collapse in" id="bs-example-navbar-collapse-1" aria-expanded="true" style="">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="bootstrap.php?action=blogList">Articles <span class="sr-only">(current)</span></a></li>
+          <li><a href="bootstrap.php?action=seeAccount">Mon compte</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="navPc">  
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="true">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="bootstrap.php?action=index">BlogYo</a>
+      </div>
+
+      <div class="navbar-collapse collapse in" id="bs-example-navbar-collapse-1" aria-expanded="true" style="">
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="bootstrap.php?action=blogList">Articles</a></li>
+              <li><a href="bootstrap.php?action=seeAccount">Mon compte</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
 <!-- FIN DU HEADER LAYOUT -->
      <div class="backMain"> 
       <section id="main" class="container">
@@ -64,12 +126,10 @@ if ($_SESSION['admin'] == 'isCo') {
             <?= $content ?>
       </section>
     </div>    
-    
 
-<!-- DEBUT DU FOOTER LAYOUT -->
 <div class="backFoot">
       <footer>
-
+        <p>BlogYo : le bloge de Yoann Chardel</p>
       </footer>
 </div>
   </body>
