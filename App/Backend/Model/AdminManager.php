@@ -12,13 +12,8 @@ abstract class AdminManager extends Manager
   //add or modify 
   public function save(Admin $admin)
   {
-    if ($admin->isValid())
-    {
+    if ($admin->isValid())  {
       $admin->isNew() ? $this->add($admin) : $this->modify($admin);
-    }
-    else
-    {
-      throw new \RuntimeException('Respectez la forme des données à saisir');
     }
   }
   //Deletes an account

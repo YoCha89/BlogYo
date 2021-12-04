@@ -30,7 +30,11 @@ class HTTPRequest extends ApplicationComponent
  
   public function postData($key)
   {
-    return isset($_POST[$key]) ? $_POST[$key] : null;
+    if($key == 'all'){
+      return $_POST;
+    }else{
+      return isset($_POST[$key]) ? $_POST[$key] : null;
+    }
   }
  
   public function postExists($key)

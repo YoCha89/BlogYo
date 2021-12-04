@@ -63,7 +63,7 @@
 	<form method="post" action="bootstrap.php?action=contactAdmin">
 		
 		<?php
-		if ($_SESSION['auth'] != true) {
+		if ($this->app->user()->isAuthenticated() != true) {
 		  ?>
 		  	<label for="content">Votre email :</label>
 			<input type="text" name="email"><br/>

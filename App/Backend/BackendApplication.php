@@ -16,16 +16,7 @@ class BackendApplication extends Application
 
 	public function run()
 	{
-		if ($this->user->isAdmin() == 'isCo' || $this->user->isAdmin() == 'toConf')
-		{ 
-			$controller=$this->getcontroller();
-		}
-
-		else
-		{	
-			//with no define action in request, redirection towards index
-			$controller = $this->getcontroller();
-		}
+		$controller = $this->getcontroller();
 		
 		$controller->execute(); 
 

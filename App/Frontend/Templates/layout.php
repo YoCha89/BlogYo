@@ -18,12 +18,12 @@
             </div>
             <?php
 //affichage dynamique du bloc compte utilisateur en cas de connexion
-if ($_SESSION['auth'] == true) {
+if ($this->app->user()->isAuthenticated() == true) {
   ?>
             <div class="userBloc">
               <div class="user">
                   <a href="bootstrap.php?action=seeAccount"><img src="images/logoUser.png" alt="logoUser" id="logoUser"/></a>
-                  <p> <a href="bootstrap.php?action=seeAccount"><span id="userSelf"><?=$_SESSION['pseudo']?></span></a></p>
+                  <p> <a href="bootstrap.php?action=seeAccount"><span id="userSelf"><?=$this->app->user()->getAttribute('pseudo')?></span></a></p>
               </div>
               <div class="userbutton">
               <div id="decButton">
@@ -35,7 +35,7 @@ if ($_SESSION['auth'] == true) {
             <?php
 }
 
-if ($_SESSION['auth'] == true && $_SESSION['admin'] != 'isCo') {
+if ($this->app->user()->isAuthenticated() == true && $this->app->user()->isAdmin() != 'isCo') {
   ?>
   <div id="ModButton">
     <form method="post" action="bootstrap.php?action=seeMyComments">
@@ -45,7 +45,7 @@ if ($_SESSION['auth'] == true && $_SESSION['admin'] != 'isCo') {
   </div>
 </div>
   <?php
-}elseif ($_SESSION['admin'] == 'isCo') {
+}elseif ($this->app->user()->isAdmin() == 'isCo') {
   ?>
   <div id="ModButton">
     <form method="post" action="bootstrap.php?app=Backend&action=backModerateComment">

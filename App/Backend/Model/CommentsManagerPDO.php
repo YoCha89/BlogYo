@@ -72,7 +72,7 @@ class CommentsManagerPDO extends CommentsManager{
     $request->bindValue(':author', $comments->getAuthor());
     $request->bindValue(':content', $comments->getContent());
     $request->bindValue(':validated', $comments->getValidated());
-    $request->bindValue(':id', $comments->id(), \PDO::PARAM_INT);
+    $request->bindValue(':id', $comments->getId(), \PDO::PARAM_INT);
  
     $request->execute();
   }
