@@ -16,10 +16,6 @@ abstract class CommentsManager extends Manager
     {
       $comments->isNew() ? $this->add($comments) : $this->modify($comments);
     }
-    else
-    {
-      throw new \RuntimeException('Respectez la forme des données à saisir');
-    }
   }
 
   //delete comment in DB

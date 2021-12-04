@@ -12,20 +12,20 @@ if(isset($comments)){
         $com = 'com_'.$i;
         $verdict = 'verdict_'.$i;
         ?>
-        <p><?php echo nl2br(htmlspecialchars($comment['author']))?></p><br/>
-        <p><?php echo nl2br(htmlspecialchars($comment['created_at']))?></p><br/>
-        <p><?php echo nl2br(htmlspecialchars($comment['content']))?></p>
+        <p><?=nl2br(htmlspecialchars($comment['author']))?></p><br/>
+        <p><?=nl2br(htmlspecialchars($comment['created_at']))?></p><br/>
+        <p><?=nl2br(htmlspecialchars($comment['content']))?></p>
             <input id="proof" name="proof" type="hidden" value="proof">
-            <input id="<?php echo nl2br(htmlspecialchars($account)) ?>" name="<?php echo nl2br(htmlspecialchars($account)) ?>" type="hidden" value="<?php echo nl2br(htmlspecialchars($comment['account_id']))?>">
-            <input id="<?php echo nl2br(htmlspecialchars($blogPost)) ?>" name="<?php echo nl2br(htmlspecialchars($blogPost)) ?>" type="hidden" value="<?php echo nl2br(htmlspecialchars($comment['blog_post_id']))?>">
-            <input id="<?php echo nl2br(htmlspecialchars($com)) ?>" name="<?php echo nl2br(htmlspecialchars($com)) ?>" type="hidden" value="<?php echo nl2br(htmlspecialchars($comment['id']))?>">
+            <input id="<?=nl2br(htmlspecialchars($account)) ?>" name="<?=nl2br(htmlspecialchars($account)) ?>" type="hidden" value="<?=nl2br(htmlspecialchars($comment['account_id']))?>">
+            <input id="<?=nl2br(htmlspecialchars($blogPost)) ?>" name="<?=nl2br(htmlspecialchars($blogPost)) ?>" type="hidden" value="<?=nl2br(htmlspecialchars($comment['blog_post_id']))?>">
+            <input id="<?=nl2br(htmlspecialchars($com)) ?>" name="<?=nl2br(htmlspecialchars($com)) ?>" type="hidden" value="<?=nl2br(htmlspecialchars($comment['id']))?>">
 
-            <input type="radio" id="<?php echo nl2br(htmlspecialchars($verdict)) ?>"
-             name="<?php echo nl2br(htmlspecialchars($verdict)) ?>" value="true" class="form-check-input">
+            <input type="radio" id="<?=nl2br(htmlspecialchars($verdict)) ?>"
+             name="<?=nl2br(htmlspecialchars($verdict)) ?>" value="true" class="form-check-input">
             <label for="contactChoice1">Valider</label>
 
-            <input type="radio" id="<?php echo nl2br(htmlspecialchars($verdict)) ?>"
-             name="<?php  echo nl2br(htmlspecialchars($verdict)) ?>" value="false" class="form-check-input">
+            <input type="radio" id="<?=nl2br(htmlspecialchars($verdict)) ?>"
+             name="<?=nl2br(htmlspecialchars($verdict)) ?>" value="false" class="form-check-input">
             <label for="contactChoice2">Rejeter</label>
 
             <hr>

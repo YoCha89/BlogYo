@@ -150,7 +150,7 @@ class AdminController extends BackController{
 			$admin = $managerA->getAdminPerPseudo($request->getData('pseudo'));
 
 			$emailAdmin = $admin['email'];
-			$masterAdmin = 'ychardel@gmail.com';
+			$masterAdmin = '';
 			$decoyMail = null;
 
 			$title = 'Demande de renouvellement de mot de passe';
@@ -287,7 +287,7 @@ class AdminController extends BackController{
 		    $mailAdmin->Port       = 587;                   //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
 		    //Recipients
-		    $mailAdmin->setFrom('yoaoc89@gmail.com');
+		    $mailAdmin->setFrom('');
 		    $mailAdmin->addAddress($receiverMail);
 
 		    if($replyTo != null){

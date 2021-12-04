@@ -14,9 +14,8 @@ class BlogController extends BackController{
             $managerB = $this->managers->getManagerOf('blogPost');
             $slug = $this->app->user()->getAttribute('pseudo') .'-'. $request->postData('title');
             $this->processForm($request, $slug, $managerB);        
-        } else {
-            $this->page->addVar('title', 'Nouvelle publication');
-        }  
+        }
+        $this->page->addVar('title', 'Nouvelle publication');
     }
 
     // Modify a published blogpost
@@ -51,7 +50,7 @@ class BlogController extends BackController{
         if ($request->postExists('proof')){
             $check = [];
             $verdicts = [];
-            foreach($_POST as $key=>$p){
+            foreach($request->postData('all') as $key=>$p){
                 $tmp = preg_split('/_/', $key);
 
                 if(!in_array($tmp[1], $check)){
@@ -120,9 +119,9 @@ class BlogController extends BackController{
         ]);
 
         // if id exist, its an update
-        $id = $request->postData('id');
-        if ($id != null){
-            $blogPost->setId($id);
+        $idB = $request->postData('id');
+        if ($idB != null){
+            $blogPost->setId($idB);
             //update indicator for flash message mgmt
             $flashInd="id";
         }

@@ -1,7 +1,7 @@
 <form method="post" action="bootstrap.php?action=contactAdmin">
 	
 <?php
-if ($_SESSION['auth'] != true) {
+if ($this->app->user()->isAuthenticated() != true) {
   ?>
   	<label for="content">Votre email :</label>
 	<input type="text" name="email"><br/>
@@ -12,7 +12,7 @@ if ($_SESSION['auth'] != true) {
 	<input type="text" name="title"><br/>
 
 
-	<input id="email" name="email" type="hidden" value="<? echo nl2br(htmlspecialchars($userMail)) ?>">
+	<input id="email" name="email" type="hidden" value="<?=nl2br(htmlspecialchars($userMail)) ?>">
 
 <?php } ?>
 	<label for="content" class="form-label mt-4">Votre message :</label>

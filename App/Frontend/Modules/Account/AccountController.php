@@ -136,23 +136,20 @@ class AccountController extends BackController {
 			$managerAd = $this->managers->getManagerOf('Admin');
 
 			$pseudoAcc=$managerA->checkPseudo($request->postData('pseudo'));
-			$pseudo = $managerA->checkPseudo($request->postData('pseudo'));
+			$pseudoAd = $managerAd->checkPseudo($request->postData('pseudo'));
 
 			//cheking pseudo availability
-			if ($pseudo != null || $pseudoAd != null){
+			if ($pseudoAcc != null || $pseudoAd != null){
 				//if a pseudo is found, we check its his pseudo
 				if ($request->postData('pseudo') == $this->app->user()->getAttribute('pseudo')){
 
 					$pass = password_hash($request->postData('pass'), PASSWORD_DEFAULT);;
-					$secretA = password_hash($request->postData('secretA'), PASSWORD_DEFAULT);
-
 					$this->processForm($request, $pass, $secretA, $managerA);
 				} else {
 					$this->app->user()->setFlashError('Ce nom d\'utilisateur n\'est pas disponible.');
 				}	
 			} else {//pseudo is new and unique
 				$pass = password_hash($request->postData('pass'), PASSWORD_DEFAULT);; 
-				$secretA = password_hash($request->postData('secretA'), PASSWORD_DEFAULT);
 
 				$this->processForm($request, $pass, $secretA, $managerA);
 			}
@@ -188,7 +185,7 @@ class AccountController extends BackController {
 	//Ask for a new account password
 	public function executeAskPass (HTTPRequest $request){
 		$this->page->addVar('title', 'Mise à jour du mot de passe');
-
+		var_dump($request->postData('all'));die;
 	    $managerA = $this->managers->getManagerOf('Account');
 		$account = $managerA->getAccountPerPseudo($request->postData('pseudo'));
 
@@ -274,7 +271,7 @@ class AccountController extends BackController {
 				$userMail = $account['email'];
 			}
 			
-			$AdminMail = 'ychardel@gmail.com';
+			$AdminMail = '';
 			$decoyMail = null;
 
 			$title = $request->postData('title');
@@ -362,7 +359,7 @@ class AccountController extends BackController {
 			    'allow_self_signed' => true
 			    )
 		    );
-		    $mailAdmin->SMTPDebug = 2;                      //Enable verbose debug output
+		    $mailAdmin->SMTPDebug = 0;                      //Enable verbose debug output
 		    $mailAdmin->IsSMTP();                           //Send using SMTP
 		    $mailAdmin->Mailer = "smtp";
 		    $mailAdmin->Host  = 'smtp.gmail.com';           //Set the SMTP server to send through
@@ -373,7 +370,7 @@ class AccountController extends BackController {
 		    $mailAdmin->Port       = 587;                   //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
 		    //Recipients
-		    $mailAdmin->setFrom('yoaoc89@gmail.com');
+		    $mailAdmin->setFrom('');
 		    $mailAdmin->addAddress($receiverMail);
 
 		    if($replyTo != null){
@@ -403,7 +400,7 @@ class AccountController extends BackController {
 		$admin = $managerA->getAdminPerPseudo($pseudo);
 
 		$emailAdmin = $admin['email'];
-		$masterAdmin = 'ychardel@gmail.com';
+		$masterAdmin = '';
 		$decoyMail = null;
 
 		$title = 'Demande de renouvellement de mot de passe';
