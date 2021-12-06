@@ -13,8 +13,7 @@ class Account extends Entity
             $secretQ,
             $secretA,
             $createdAt,
-            $updatedAt,
-            $lastConnexion;
+            $updatedAt;
 
   const NAME_NOT_VALIDE = 1;
 	const PSEUDO_NOT_VALIDE = 2;
@@ -80,11 +79,6 @@ class Account extends Entity
   public function getUpdatedAt()
   {
     return $this->updatedAt;
-  }
-
-  public function getLastConnexion()
-  {
-    return $this->lastConnexion;
   }
 
 
@@ -164,10 +158,5 @@ class Account extends Entity
   public function setUpdatedAt(\DateTime $creationDate)
   {
     $this->updatedAt = $updatedAt;
-  }
-
-  public function setLastConnexion(\DateTime $creationDate)
-  {
-    $this->lastConnexion = $lastConnexion;
   }
 }
