@@ -9,7 +9,6 @@ class Admin extends Entity
             $pseudo,
             $pass,
             $email,
-            $confirmed,
             $createdAt,
             $updatedAt;
 
